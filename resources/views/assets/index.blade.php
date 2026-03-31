@@ -62,7 +62,7 @@
                                     <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
                                         @if($asset->status === 'ACTIVE') bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
                                         @elseif($asset->status === 'MAINTENANCE') bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                                        @elseif($asset->status === 'SOLD') bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
+                                        @elseif(in_array($asset->status, ['SOLD', 'RETIRED', 'INACTIVE'], true)) bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         @else bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
                                         @endif">
                                         {{ $asset->status }}

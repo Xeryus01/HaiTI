@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
+    use HasFactory;
     // status constants for improved consistency
     public const STATUS_OPEN = 'OPEN';
     public const STATUS_ASSIGNED_DETECT = 'ASSIGNED_DETECT';

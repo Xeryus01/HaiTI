@@ -90,10 +90,10 @@
                                 </td>
                                 <td class="px-5 py-4 sm:px-6">
                                     <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
-                                        <?php if($ticket->status === \\App\\Models\\Ticket::STATUS_OPEN): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
-                                        <?php elseif($ticket->status === \\App\\Models\\Ticket::STATUS_ASSIGNED_DETECT): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                                        <?php elseif($ticket->status === \\App\\Models\\Ticket::STATUS_SOLVED_WITH_NOTES): ?> bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-400
-                                        <?php elseif($ticket->status === \\App\\Models\\Ticket::STATUS_SOLVED): ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
+                                        <?php if($ticket->status === \App\Models\Ticket::STATUS_OPEN): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
+                                        <?php elseif($ticket->status === \App\Models\Ticket::STATUS_ASSIGNED_DETECT): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
+                                        <?php elseif($ticket->status === \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES): ?> bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-400
+                                        <?php elseif($ticket->status === \App\Models\Ticket::STATUS_SOLVED): ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
                                         <?php else: ?> bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         <?php endif; ?>">
                                         <?php echo e($ticket->status); ?>
@@ -146,4 +146,4 @@
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
 <?php endif; ?>
-<?php /**PATH C:\Users\User\Documents\PMTI\haiti-app\resources\views/tickets/index.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views\tickets\index.blade.php ENDPATH**/ ?>

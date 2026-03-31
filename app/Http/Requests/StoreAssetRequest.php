@@ -8,7 +8,7 @@ class StoreAssetRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->hasRole(['admin', 'technician']);
+        return $this->user()?->hasAnyRole(['Admin', 'Teknisi']) ?? false;
     }
 
     public function rules(): array
@@ -22,7 +22,7 @@ class StoreAssetRequest extends FormRequest
             'serial_number' => 'nullable|string|max:120|unique:assets',
             'specs' => 'nullable|json',
             'location' => 'nullable|string|max:120',
-            'status' => 'required|string|in:ACTIVE,INACTIVE,MAINTENANCE,SOLD',
+            'status' => 'required|string|in:ACTIVE,MAINTENANCE,BROKEN,RETIRED,SOLD,INACTIVE',
             'purchased_at' => 'nullable|date',
         ];
     }

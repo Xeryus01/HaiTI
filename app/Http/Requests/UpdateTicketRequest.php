@@ -8,8 +8,15 @@ class UpdateTicketRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->hasRole(['admin', 'technician']) || 
-               $this->ticket->requester_id === $this->user()->id;
+        $user = $this->user();
+        $ticket = $this->route('ticket');
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasAnyRole(['Admin', 'Teknisi'])
+            || ($ticket && $ticket->requester_id === $user->id);
     }
 
     public function rules(): array

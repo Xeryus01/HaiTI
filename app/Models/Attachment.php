@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Attachment extends Model
 {
     protected $fillable = [
-        'attachable_type',
-        'attachable_id',
+        'ticket_id',
+        'comment_id',
         'uploader_id',
         'file_path',
         'file_name',
@@ -16,9 +16,14 @@ class Attachment extends Model
         'size_bytes',
     ];
 
-    public function attachable()
+    public function ticket()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Ticket::class);
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo(TicketComment::class, 'comment_id');
     }
 
     public function uploader()

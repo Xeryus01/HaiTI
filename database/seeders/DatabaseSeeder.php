@@ -25,6 +25,28 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(10)->create();
 
+        $adminUser = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
+            ]
+        );
+        $adminUser->syncRoles(['Admin']);
+
+        $techUser = User::firstOrCreate(
+            ['email' => 'teknisi@example.com'],
+            [
+                'name' => 'Teknisi IT',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
+            ]
+        );
+        $techUser->syncRoles(['Teknisi']);
+
         $testUser = User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
@@ -34,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ]
         );
+        $testUser->syncRoles(['User']);
 
         // Create sample assets
         $assets = [
@@ -76,8 +99,8 @@ class DatabaseSeeder extends Seeder
                 'code' => 'TKT-2026-001',
                 'title' => 'Printer not working',
                 'description' => 'The printer on floor 2 is not printing documents',
-                'category' => 'Hardware',
-                'status' => 'OPEN',
+                'category' => 'IT_SUPPORT',
+                'status' => Ticket::STATUS_OPEN,
                 'priority' => 'HIGH',
                 'requester_id' => $testUser->id,
                 'asset_id' => Asset::where('asset_code', 'AST-002')->first()->id ?? null,
@@ -86,8 +109,8 @@ class DatabaseSeeder extends Seeder
                 'code' => 'TKT-2026-002',
                 'title' => 'Email configuration issue',
                 'description' => 'Need help configuring email client',
-                'category' => 'Software',
-                'status' => 'IN_PROGRESS',
+                'category' => 'IT_SUPPORT',
+                'status' => Ticket::STATUS_ASSIGNED_DETECT,
                 'priority' => 'MEDIUM',
                 'requester_id' => $testUser->id,
             ],
@@ -95,8 +118,8 @@ class DatabaseSeeder extends Seeder
                 'code' => 'TKT-2026-003',
                 'title' => 'Server backup failed',
                 'description' => 'Automated backup for main server failed last night',
-                'category' => 'Infrastructure',
-                'status' => 'OPEN',
+                'category' => 'MAINTENANCE',
+                'status' => Ticket::STATUS_OPEN,
                 'priority' => 'CRITICAL',
                 'requester_id' => $testUser->id,
             ],
@@ -104,10 +127,12 @@ class DatabaseSeeder extends Seeder
                 'code' => 'TKT-2026-004',
                 'title' => 'Software license renewal',
                 'description' => 'Adobe Creative Suite license needs renewal',
-                'category' => 'License',
-                'status' => 'RESOLVED',
+                'category' => 'OTHER',
+                'status' => Ticket::STATUS_SOLVED,
                 'priority' => 'LOW',
                 'requester_id' => $testUser->id,
+                'assignee_id' => $techUser->id,
+                'resolved_at' => now()->subDay(),
             ],
         ];
 
@@ -123,7 +148,7 @@ class DatabaseSeeder extends Seeder
                 'purpose' => 'Team meeting',
                 'start_time' => now()->addDays(1)->setHour(10)->setMinute(0),
                 'end_time' => now()->addDays(1)->setHour(11)->setMinute(0),
-                'status' => 'CONFIRMED',
+                'status' => 'APPROVED',
                 'requester_id' => $testUser->id,
             ],
             [
@@ -141,13 +166,13 @@ class DatabaseSeeder extends Seeder
                 'purpose' => 'Staff training session',
                 'start_time' => now()->addDays(5)->setHour(9)->setMinute(0),
                 'end_time' => now()->addDays(5)->setHour(12)->setMinute(0),
-                'status' => 'CONFIRMED',
+                'status' => 'APPROVED',
                 'requester_id' => $testUser->id,
-            ],
+            ]
         ];
 
         foreach ($reservations as $reservation) {
-            Reservation::create($reservation);
+            Reservation::firstOrCreate(['code' => $reservation['code']], $reservation);
         }
     }
 }

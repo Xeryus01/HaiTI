@@ -72,7 +72,7 @@
                         Status
                     </label>
                     <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('status') border-red-500 @enderror">
-                        @foreach(['ACTIVE','MAINTENANCE','SOLD','RETIRED'] as $s)
+                        @foreach(['ACTIVE','MAINTENANCE','BROKEN','RETIRED'] as $s)
                             <option value="{{ $s }}" {{ $asset->status === $s ? 'selected' : '' }}>{{ $s }}</option>
                         @endforeach
                     </select>

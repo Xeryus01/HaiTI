@@ -15,7 +15,7 @@ class DashboardController extends Controller
                 'total' => Asset::count(),
                 'active' => Asset::where('status', 'ACTIVE')->count(),
                 'broken' => Asset::where('status', 'BROKEN')->count(),
-                'repair' => Asset::where('status', 'REPAIR')->count(),
+                'repair' => Asset::whereIn('status', ['MAINTENANCE', 'REPAIR'])->count(),
             ],
             'tickets' => [
                 'open' => Ticket::where('status', Ticket::STATUS_OPEN)->count(),

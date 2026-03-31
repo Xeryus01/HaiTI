@@ -29,9 +29,14 @@ class Asset extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function maintenanceLogs()
+    public function logs()
     {
         return $this->hasMany(Log::class, 'entity_id')->where('entity_type', 'Asset');
+    }
+
+    public function maintenanceLogs()
+    {
+        return $this->logs();
     }
 
     public function attachments()
