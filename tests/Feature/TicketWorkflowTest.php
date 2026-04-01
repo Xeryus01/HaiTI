@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Attachment;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TicketWorkflowTest extends TestCase
@@ -180,5 +182,149 @@ class TicketWorkflowTest extends TestCase
             'ticket_id' => $ticket->id,
             'file_name' => 'screenshot.png',
         ]);
+    }
+
+    /** @test */
+    public function requester_and_technician_can_chat_on_the_same_ticket()
+    {
+        $requester = User::factory()->create();
+        $tech = User::factory()->create();
+        $tech->assignRole('Teknisi');
+
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+            'assignee_id' => $tech->id,
+        ]);
+
+        $this->actingAs($requester)
+            ->post("/tickets/{$ticket->id}/comments", [
+                'message' => 'Mohon dibantu, perangkat saya masih bermasalah.',
+            ])
+            ->assertRedirect();
+
+        $this->actingAs($tech)
+            ->post("/tickets/{$ticket->id}/comments", [
+                'message' => 'Baik, sedang kami cek dan tindak lanjuti.',
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('ticket_comments', [
+            'ticket_id' => $ticket->id,
+            'user_id' => $requester->id,
+        ]);
+
+        $this->assertDatabaseHas('ticket_comments', [
+            'ticket_id' => $ticket->id,
+            'user_id' => $tech->id,
+        ]);
+    }
+
+    /** @test */
+    public function unrelated_user_cannot_comment_on_someone_elses_ticket()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        $this->actingAs($otherUser)
+            ->post("/tickets/{$ticket->id}/comments", [
+                'message' => 'Saya tidak seharusnya bisa ikut komentar di sini.',
+            ])
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function ticket_detail_displays_image_and_pdf_previews_from_attachments()
+    {
+        $requester = User::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        \App\Models\TicketComment::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => $requester->id,
+            'message' => 'Berikut screenshot dan dokumen pendukung.',
+            'is_internal' => false,
+        ]);
+
+        \App\Models\Attachment::create([
+            'ticket_id' => $ticket->id,
+            'uploader_id' => $requester->id,
+            'file_path' => 'attachments/photo-example.png',
+            'file_name' => 'photo-example.png',
+            'mime_type' => 'image/png',
+            'size_bytes' => 1200,
+        ]);
+
+        \App\Models\Attachment::create([
+            'ticket_id' => $ticket->id,
+            'uploader_id' => $requester->id,
+            'file_path' => 'attachments/manual.pdf',
+            'file_name' => 'manual.pdf',
+            'mime_type' => 'application/pdf',
+            'size_bytes' => 2400,
+        ]);
+
+        $response = $this->actingAs($requester)->get(route('tickets.show', $ticket));
+
+        $response->assertOk()
+            ->assertSee('Preview Gambar', false)
+            ->assertSee('Preview PDF', false)
+            ->assertSee('photo-example.png', false)
+            ->assertSee('manual.pdf', false);
+    }
+
+    /** @test */
+    public function web_ticket_attachment_upload_redirects_back_and_saves_file()
+    {
+        Storage::fake('public');
+
+        $requester = User::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        $file = \Illuminate\Http\UploadedFile::fake()->image('evidence.png');
+
+        $this->actingAs($requester)
+            ->post("/tickets/{$ticket->id}/attachments", [
+                'file' => $file,
+            ])
+            ->assertRedirect(route('tickets.show', $ticket));
+
+        $attachment = Attachment::query()->where('ticket_id', $ticket->id)->latest('id')->first();
+
+        $this->assertNotNull($attachment);
+        Storage::disk('public')->assertExists($attachment->file_path);
+    }
+
+    /** @test */
+    public function authorized_user_can_open_uploaded_ticket_attachment_preview()
+    {
+        Storage::fake('public');
+
+        $requester = User::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        Storage::disk('public')->put('attachments/preview-image.png', 'fake-image-content');
+
+        $attachment = Attachment::create([
+            'ticket_id' => $ticket->id,
+            'uploader_id' => $requester->id,
+            'file_path' => 'attachments/preview-image.png',
+            'file_name' => 'preview-image.png',
+            'mime_type' => 'image/png',
+            'size_bytes' => 18,
+        ]);
+
+        $this->actingAs($requester)
+            ->get(route('tickets.attachments.show', [$ticket, $attachment]))
+            ->assertOk();
     }
 }

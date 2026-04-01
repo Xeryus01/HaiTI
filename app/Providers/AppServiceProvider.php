@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Events\MigrationsEnded;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
@@ -22,6 +24,15 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
+    {
+        Event::listen(MigrationsEnded::class, function () {
+            $this->syncDefaultRolesAndPermissions();
+        });
+
+        $this->syncDefaultRolesAndPermissions();
+    }
+
+    private function syncDefaultRolesAndPermissions(): void
     {
         if (! Schema::hasTable('roles')) {
             return;

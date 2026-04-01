@@ -132,8 +132,8 @@ class NotificationService
         return $this->notify(
             $user,
             'info',
-            '🏢 Reservasi Ruangan Baru',
-            "Reservasi ruangan '{$reservation->room_name}' pada {$reservation->start_time->format('d/m/Y H:i')} telah dibuat.",
+            '� Pengajuan Zoom Baru',
+            "Pengajuan Zoom '{$reservation->room_name}' pada {$reservation->start_time->format('d/m/Y H:i')} telah dibuat.",
             'reservation',
             $reservation->id,
             $sendWhatsApp
@@ -148,8 +148,8 @@ class NotificationService
         return $this->notify(
             $user,
             'success',
-            '✅ Reservasi Disetujui',
-            "Reservasi ruangan '{$reservation->room_name}' telah disetujui.",
+            '✅ Pengajuan Zoom Ditindaklanjuti',
+            "Pengajuan Zoom '{$reservation->room_name}' telah disetujui." . ($reservation->zoom_link ? " Link: {$reservation->zoom_link}" : ''),
             'reservation',
             $reservation->id,
             $sendWhatsApp

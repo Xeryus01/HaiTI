@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,9 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/exports/tickets', [ExportController::class, 'tickets'])->name('exports.tickets');
+    Route::get('/exports/reservations', [ExportController::class, 'reservations'])->name('exports.reservations');
+
     // simple blade views for our features
     Route::resource('tickets', \App\Http\Controllers\TicketViewController::class);
     Route::post('tickets/{ticket}/comments', [\App\Http\Controllers\TicketViewController::class, 'comment'])->name('tickets.comment');
+    Route::post('tickets/{ticket}/attachments', [\App\Http\Controllers\TicketViewController::class, 'uploadAttachment'])->name('tickets.attachments.store');
+    Route::get('tickets/{ticket}/attachments/{attachment}', [\App\Http\Controllers\TicketViewController::class, 'showAttachment'])->name('tickets.attachments.show');
 
     Route::resource('assets', \App\Http\Controllers\AssetViewController::class);
     Route::resource('reservations', \App\Http\Controllers\ReservationViewController::class);

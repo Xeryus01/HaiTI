@@ -44,7 +44,7 @@ class TicketCommentController extends Controller
         // handle optional attachment
         if (isset($validated['attachment'])) {
             $file = $validated['attachment'];
-            $path = $file->store('attachments');
+            $path = $file->store('attachments', 'public');
             Attachment::create([
                 'ticket_id' => $ticket->id,
                 'comment_id' => $comment->id,

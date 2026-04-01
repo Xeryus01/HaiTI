@@ -69,14 +69,14 @@
             <div x-show="notifOpen" @click.outside="notifOpen = false" class="absolute right-0 mt-2 w-80 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-dark-800 z-50">
                 <!-- Header -->
                 <div class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
-                    <p class="text-sm font-semibold text-gray-900 dark:text-white">Notifications</p>
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">Notifikasi</p>
                 </div>
 
                 <!-- Notifications List -->
                 <div class="max-h-96 overflow-y-auto">
                     <template x-if="notifications.length === 0">
                         <div class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                            No unread notifications
+                            Belum ada notifikasi baru
                         </div>
                     </template>
 
@@ -89,7 +89,7 @@
                                 <div class="flex-1">
                                     <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="notification.title"></p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="notification.message"></p>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2" x-text="new Date(notification.created_at).toLocaleString()"></p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2" x-text="new Date(notification.created_at).toLocaleString('id-ID')"></p>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                 <!-- Footer -->
                 <div class="border-t border-gray-200 px-4 py-2 dark:border-gray-700">
                     <a href="{{ route('notifications.index') }}" class="block text-center text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 py-2">
-                        View All Notifications
+                        Lihat semua notifikasi
                     </a>
                 </div>
             </div>
@@ -122,10 +122,10 @@
 
             <!-- Dropdown Menu -->
             <div x-show="userOpen" @click.outside="userOpen = false" class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-800">
-                <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5">Profile Settings</a>
+                <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5">Profil Saya</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 border-t border-gray-200 dark:border-gray-700">Logout</button>
+                    <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 border-t border-gray-200 dark:border-gray-700">Keluar</button>
                 </form>
             </div>
         </div>

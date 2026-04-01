@@ -16,12 +16,29 @@ class Reservation extends Model
         'status',
         'approver_id',
         'notes',
+        'zoom_link',
     ];
 
     protected $casts = [
         'start_time' => 'datetime',
         'end_time' => 'datetime',
     ];
+
+    public static function statusLabels(): array
+    {
+        return [
+            'PENDING' => 'Menunggu Tindak Lanjut',
+            'APPROVED' => 'Disetujui',
+            'REJECTED' => 'Ditolak',
+            'COMPLETED' => 'Selesai',
+            'CANCELLED' => 'Dibatalkan',
+        ];
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return self::statusLabels()[$this->status] ?? $this->status;
+    }
 
     public function requester()
     {

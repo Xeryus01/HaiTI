@@ -8,121 +8,185 @@
 <?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-<!-- Main Content -->
+<?php
+    $ticketCounts = [
+        'Menunggu' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
+        'Diproses Teknisi' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
+        'Selesai + Catatan' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
+        'Selesai' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
+        'Ditolak' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
+    ];
+
+    $zoomCounts = [
+        'Menunggu' => \App\Models\Reservation::where('status', 'PENDING')->count(),
+        'Disetujui' => \App\Models\Reservation::where('status', 'APPROVED')->count(),
+        'Ditolak' => \App\Models\Reservation::where('status', 'REJECTED')->count(),
+        'Selesai' => \App\Models\Reservation::where('status', 'COMPLETED')->count(),
+        'Dibatalkan' => \App\Models\Reservation::where('status', 'CANCELLED')->count(),
+    ];
+
+    $layananSelesai = \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
+        + \App\Models\Reservation::where('status', 'COMPLETED')->count();
+?>
+
 <div class="ml-64 min-h-screen">
     <div class="p-5 sm:p-7.5 lg:p-9">
-        <!-- Breadcrumb & Page Title -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Dashboard</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Welcome back, <?php echo e(auth()->user()->name); ?>!</p>
+        <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ringkasan Layanan</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Halo, <?php echo e(auth()->user()->name); ?>. Pantau tiket, pengajuan Zoom, dan performa pelayanan dari sini.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="<?php echo e(route('tickets.create')); ?>" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">Ajukan Tiket</a>
+                <a href="<?php echo e(route('reservations.create')); ?>" class="rounded-lg border border-brand-600 px-4 py-2 text-sm font-medium text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-500/10">Ajukan Zoom</a>
+            </div>
         </div>
 
-        <!-- Statistics Cards -->
-        <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
-            <!-- Total Assets -->
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800 md:p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Assets</p>
-                        <h3 class="mt-2 text-3xl font-bold text-gray-900 dark:text-white"><?php echo e(\App\Models\Asset::count()); ?></h3>
-                    </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/15">
-                        <svg class="fill-blue-600 dark:fill-blue-400" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 4C3 2.89543 3.89543 2 5 2H19C20.1046 2 21 2.89543 21 4V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V4Z"></path>
-                        </svg>
-                    </div>
+        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Alur Layanan Sederhana</h2>
+            <div class="mt-4 grid gap-3 md:grid-cols-4">
+                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">1</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">User ajukan tiket perbaikan</p>
                 </div>
-            </div>
-
-            <!-- Active Assets -->
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800 md:p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Active Assets</p>
-                        <h3 class="mt-2 text-3xl font-bold text-green-600 dark:text-green-400"><?php echo e(\App\Models\Asset::where('status', 'ACTIVE')->count()); ?></h3>
-                    </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-500/15">
-                        <svg class="fill-green-600 dark:fill-green-400" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM16.5303 9.46967C16.8232 9.76256 16.8232 10.2374 16.5303 10.5303L10.5303 16.5303C10.2374 16.8232 9.76256 16.8232 9.46967 16.5303L7.46967 14.5303C7.17678 14.2374 7.17678 13.7626 7.46967 13.4697C7.76256 13.1768 8.23744 13.1768 8.53033 13.4697L10 14.9393L15.4697 9.46967C15.7626 9.17678 16.2374 9.17678 16.5303 9.46967Z"></path>
-                        </svg>
-                    </div>
+                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">2</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">Admin/Teknisi tindak lanjuti keluhan</p>
                 </div>
-            </div>
-
-            <!-- Total Tickets -->
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800 md:p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Tickets</p>
-                        <h3 class="mt-2 text-3xl font-bold text-orange-600 dark:text-orange-400"><?php echo e(\App\Models\Ticket::count()); ?></h3>
-                    </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-100 dark:bg-orange-500/15">
-                        <svg class="fill-orange-600 dark:fill-orange-400" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 3C2.89543 3 2 3.89543 2 5V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V5C22 3.89543 21.1046 3 20 3H4ZM4 5H20V19H4V5Z"></path>
-                        </svg>
-                    </div>
+                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">3</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">User ajukan ruang Zoom dan petugas menambahkan link</p>
                 </div>
-            </div>
-
-            <!-- Open Tickets -->
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800 md:p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Open Tickets</p>
-                        <h3 class="mt-2 text-3xl font-bold text-red-600 dark:text-red-400"><?php echo e(\App\Models\Ticket::where('status', 'OPEN')->count()); ?></h3>
-                    </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-500/15">
-                        <svg class="fill-red-600 dark:fill-red-400" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 11C12.5523 11 13 11.4477 13 12V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V12C11 11.4477 11.4477 11 12 11ZM12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7Z"></path>
-                        </svg>
-                    </div>
+                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">4</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">Data bisa diekspor dan dipantau lewat grafik</p>
                 </div>
             </div>
         </div>
 
-        <!-- Latest Tickets -->
-        <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800">
-            <div class="borders-gray-200 border-b px-5 py-4 dark:border-gray-700 sm:px-6">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900 dark:text-white">Latest Tickets</h3>
-                    <a href="<?php echo e(route('tickets.index')); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">View All</a>
+        <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Tiket Menunggu</p>
+                <h3 class="mt-2 text-3xl font-bold text-red-600 dark:text-red-400"><?php echo e($ticketCounts['Menunggu']); ?></h3>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Tiket Diproses</p>
+                <h3 class="mt-2 text-3xl font-bold text-yellow-600 dark:text-yellow-400"><?php echo e($ticketCounts['Diproses Teknisi']); ?></h3>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Pengajuan Zoom Menunggu</p>
+                <h3 class="mt-2 text-3xl font-bold text-blue-600 dark:text-blue-400"><?php echo e($zoomCounts['Menunggu']); ?></h3>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Layanan Selesai</p>
+                <h3 class="mt-2 text-3xl font-bold text-green-600 dark:text-green-400"><?php echo e($layananSelesai); ?></h3>
+            </div>
+        </div>
+
+        <div class="mb-6 grid gap-6 xl:grid-cols-2">
+            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Grafik Tiket Perbaikan</h2>
+                    <a href="<?php echo e(route('exports.tickets')); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700">Ekspor CSV</a>
                 </div>
+                <canvas id="ticketChart" height="220"></canvas>
             </div>
 
-            <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                <?php $__empty_1 = true; $__currentLoopData = \App\Models\Ticket::latest()->take(5)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ticket): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <div class="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-white/5 sm:px-6">
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-900 dark:text-white"><?php echo e($ticket->title); ?></p>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?php echo e($ticket->code); ?></p>
+            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Grafik Pengajuan Zoom</h2>
+                    <a href="<?php echo e(route('exports.reservations')); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700">Ekspor CSV</a>
+                </div>
+                <canvas id="zoomChart" height="220"></canvas>
+            </div>
+        </div>
+
+        <div class="grid gap-6 xl:grid-cols-2">
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800">
+                <div class="border-b border-gray-200 px-5 py-4 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Tiket Terbaru</h3>
+                </div>
+                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <?php $__empty_1 = true; $__currentLoopData = \App\Models\Ticket::latest()->take(5)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ticket): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <div class="flex items-center justify-between gap-3 px-5 py-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white"><?php echo e($ticket->title); ?></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e($ticket->code); ?> • <?php echo e($ticket->category_label); ?></p>
+                            </div>
+                            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"><?php echo e($ticket->status_label); ?></span>
                         </div>
-                        <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
-                            <?php if($ticket->priority === 'CRITICAL'): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
-                            <?php elseif($ticket->priority === 'HIGH'): ?> bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400
-                            <?php elseif($ticket->priority === 'MEDIUM'): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                            <?php else: ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
-                            <?php endif; ?>">
-                            <?php echo e($ticket->priority); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <div class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada tiket.</div>
+                    <?php endif; ?>
+                </div>
+            </div>
 
-                        </span>
-                        <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
-                            <?php if($ticket->status === 'OPEN'): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
-                            <?php elseif($ticket->status === 'IN_PROGRESS'): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                            <?php elseif($ticket->status === 'RESOLVED'): ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
-                            <?php endif; ?>">
-                            <?php echo e($ticket->status); ?>
-
-                        </span>
-                    </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <div class="px-5 py-8 text-center sm:px-6">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">No tickets yet</p>
-                    </div>
-                <?php endif; ?>
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800">
+                <div class="border-b border-gray-200 px-5 py-4 dark:border-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Pengajuan Zoom Terbaru</h3>
+                </div>
+                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <?php $__empty_1 = true; $__currentLoopData = \App\Models\Reservation::latest()->take(5)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reservation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <div class="flex items-center justify-between gap-3 px-5 py-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white"><?php echo e($reservation->room_name); ?></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e(optional($reservation->start_time)->format('d/m/Y H:i')); ?> • <?php echo e(\Illuminate\Support\Str::limit($reservation->purpose, 50)); ?></p>
+                            </div>
+                            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"><?php echo e($reservation->status_label); ?></span>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <div class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada pengajuan Zoom.</div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ticketCtx = document.getElementById('ticketChart');
+        const zoomCtx = document.getElementById('zoomChart');
+
+        if (ticketCtx) {
+            new Chart(ticketCtx, {
+                type: 'bar',
+                data: {
+                    labels: <?php echo json_encode(array_keys($ticketCounts), 15, 512) ?>,
+                    datasets: [{
+                        label: 'Jumlah tiket',
+                        data: <?php echo json_encode(array_values($ticketCounts), 15, 512) ?>,
+                        backgroundColor: ['#ef4444', '#f59e0b', '#6366f1', '#10b981', '#6b7280'],
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+        }
+
+        if (zoomCtx) {
+            new Chart(zoomCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: <?php echo json_encode(array_keys($zoomCounts), 15, 512) ?>,
+                    datasets: [{
+                        data: <?php echo json_encode(array_values($zoomCounts), 15, 512) ?>,
+                        backgroundColor: ['#f59e0b', '#10b981', '#ef4444', '#3b82f6', '#6b7280'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+    });
+</script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>

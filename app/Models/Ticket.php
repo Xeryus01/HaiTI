@@ -29,6 +29,52 @@ class Ticket extends Model
         ];
     }
 
+    public static function statusLabels(): array
+    {
+        return [
+            self::STATUS_OPEN => 'Menunggu',
+            self::STATUS_ASSIGNED_DETECT => 'Diproses Teknisi',
+            self::STATUS_SOLVED_WITH_NOTES => 'Selesai dengan Catatan',
+            self::STATUS_SOLVED => 'Selesai',
+            self::STATUS_REJECTED => 'Ditolak',
+        ];
+    }
+
+    public static function priorityLabels(): array
+    {
+        return [
+            'LOW' => 'Rendah',
+            'MEDIUM' => 'Sedang',
+            'HIGH' => 'Tinggi',
+            'CRITICAL' => 'Darurat',
+        ];
+    }
+
+    public static function categoryLabels(): array
+    {
+        return [
+            'MAINTENANCE' => 'Perawatan',
+            'ZOOM_SUPPORT' => 'Bantuan Zoom',
+            'IT_SUPPORT' => 'Perbaikan IT',
+            'OTHER' => 'Lainnya',
+        ];
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return self::statusLabels()[$this->status] ?? $this->status;
+    }
+
+    public function getPriorityLabelAttribute(): string
+    {
+        return self::priorityLabels()[$this->priority] ?? $this->priority;
+    }
+
+    public function getCategoryLabelAttribute(): string
+    {
+        return self::categoryLabels()[$this->category] ?? $this->category;
+    }
+
     protected $fillable = [
         'code',
         'requester_id',

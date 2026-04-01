@@ -54,7 +54,16 @@ class ReservationController extends Controller
 
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
-        $reservation->update($request->validated());
+        $data = $request->validated();
+        $isHandler = $request->user()->hasAnyRole(['Admin', 'Teknisi']);
+
+        if ($isHandler) {
+            $data['approver_id'] = $request->user()->id;
+        } else {
+            unset($data['status'], $data['zoom_link'], $data['notes'], $data['approver_id']);
+        }
+
+        $reservation->update($data);
 
         Log::create([
             'actor_id' => $request->user()->id,
@@ -64,7 +73,7 @@ class ReservationController extends Controller
             'meta' => $reservation->getChanges(),
         ]);
 
-        return response()->json($reservation);
+        return response()->json($reservation->fresh(['requester', 'approver']));
     }
 
     public function destroy(Request $request, Reservation $reservation)

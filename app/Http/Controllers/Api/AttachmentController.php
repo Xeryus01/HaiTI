@@ -20,7 +20,7 @@ class AttachmentController extends Controller
         ]);
 
         $file = $validated['file'];
-        $path = $file->store('attachments');
+        $path = $file->store('attachments', 'public');
 
         $attachment = Attachment::create([
             'ticket_id' => $ticket->id,

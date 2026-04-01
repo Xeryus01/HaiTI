@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(10)->create();
 
-        $adminUser = User::firstOrCreate(
+        $adminUser = User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Administrator',
@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         );
         $adminUser->syncRoles(['Admin']);
 
-        $techUser = User::firstOrCreate(
+        $techUser = User::updateOrCreate(
             ['email' => 'teknisi@example.com'],
             [
                 'name' => 'Teknisi IT',
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         );
         $techUser->syncRoles(['Teknisi']);
 
-        $testUser = User::firstOrCreate(
+        $testUser = User::updateOrCreate(
             ['email' => 'test@example.com'],
             [
                 'name' => 'Test User',
@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($assets as $asset) {
-            Asset::firstOrCreate(['asset_code' => $asset['asset_code']], $asset);
+            Asset::updateOrCreate(['asset_code' => $asset['asset_code']], $asset);
         }
 
         // Create sample tickets
@@ -137,19 +137,22 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($tickets as $ticket) {
-            Ticket::firstOrCreate(['code' => $ticket['code']], $ticket);
+            Ticket::updateOrCreate(['code' => $ticket['code']], $ticket);
         }
 
         // Create sample reservations
         $reservations = [
             [
                 'code' => 'RES-2603-001',
-                'room_name' => 'Conference Room A',
-                'purpose' => 'Team meeting',
+                'room_name' => 'Rapat Koordinasi Mingguan',
+                'purpose' => 'Koordinasi pekerjaan dan update progres tim.',
                 'start_time' => now()->addDays(1)->setHour(10)->setMinute(0),
                 'end_time' => now()->addDays(1)->setHour(11)->setMinute(0),
                 'status' => 'APPROVED',
                 'requester_id' => $testUser->id,
+                'approver_id' => $techUser->id,
+                'zoom_link' => 'https://zoom.us/j/meeting-demo-001',
+                'notes' => 'Silakan bergabung 10 menit sebelum acara dimulai.',
             ],
             [
                 'code' => 'RES-2603-002',
@@ -162,17 +165,20 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'code' => 'RES-2603-003',
-                'room_name' => 'Training Room',
-                'purpose' => 'Staff training session',
+                'room_name' => 'Pelatihan Internal',
+                'purpose' => 'Sesi pelatihan staf dan pembahasan materi kerja baru.',
                 'start_time' => now()->addDays(5)->setHour(9)->setMinute(0),
                 'end_time' => now()->addDays(5)->setHour(12)->setMinute(0),
                 'status' => 'APPROVED',
                 'requester_id' => $testUser->id,
+                'approver_id' => $techUser->id,
+                'zoom_link' => 'https://zoom.us/j/meeting-demo-003',
+                'notes' => 'Host akan membuka ruang Zoom 15 menit sebelum pelatihan.',
             ]
         ];
 
         foreach ($reservations as $reservation) {
-            Reservation::firstOrCreate(['code' => $reservation['code']], $reservation);
+            Reservation::updateOrCreate(['code' => $reservation['code']], $reservation);
         }
     }
 }

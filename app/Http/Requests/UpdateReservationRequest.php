@@ -27,6 +27,8 @@ class UpdateReservationRequest extends FormRequest
             'start_time' => 'sometimes|date_format:Y-m-d H:i|after:now',
             'end_time' => 'sometimes|date_format:Y-m-d H:i|after:start_time',
             'status' => 'sometimes|string|in:PENDING,APPROVED,REJECTED,COMPLETED,CANCELLED',
+            'zoom_link' => 'nullable|url|max:255',
+            'notes' => 'nullable|string|max:2000',
         ];
     }
 }

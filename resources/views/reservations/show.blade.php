@@ -1,109 +1,106 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Reservation {{ $reservation->code }}
-            </h2>
-            <div class="flex space-x-2">
-                <a href="{{ route('reservations.edit', $reservation) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
-                    Edit
-                </a>
-                <form action="{{ route('reservations.destroy', $reservation) }}" method="POST" class="inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Delete this reservation?')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-                        Delete
-                    </button>
-                </form>
+<div class="ml-64 min-h-screen">
+    <div class="p-5 sm:p-7.5 lg:p-9">
+        <div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">{{ $reservation->room_name }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $reservation->code }} • {{ $reservation->status_label }}</p>
+            </div>
+            <div class="flex gap-2">
+                <a href="{{ route('reservations.index') }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Kembali</a>
+                @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']) || auth()->id() === $reservation->requester_id)
+                    <a href="{{ route('reservations.edit', $reservation) }}" class="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">Ubah</a>
+                @endif
             </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="md:col-span-2 bg-white rounded-lg shadow p-6">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">
-                        <i class="fas fa-door-open text-blue-600 mr-2"></i>{{ $reservation->room_name }}
-                    </h3>
-                    <p class="text-gray-600 mb-4">Reservation Code: <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">{{ $reservation->code }}</code></p>
-                    
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                        <h4 class="text-sm font-semibold text-blue-900 mb-3">Purpose</h4>
-                        <p class="text-blue-800">{{ $reservation->purpose }}</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <label class="text-sm font-semibold text-gray-600 block mb-2">Start Time</label>
-                            <p class="text-lg font-bold text-gray-800">
-                                {{ \Carbon\Carbon::parse($reservation->start_time)->format('d/m/Y') }}
-                            </p>
-                            <p class="text-gray-600">{{ \Carbon\Carbon::parse($reservation->start_time)->format('H:i') }}</p>
+        <div class="grid gap-6 lg:grid-cols-3">
+            <div class="space-y-6 lg:col-span-2">
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
+                    <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Detail Pengajuan</h2>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">{{ $reservation->purpose }}</p>
+                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Waktu mulai</p>
+                            <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->start_time->format('d/m/Y H:i') }}</p>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <label class="text-sm font-semibold text-gray-600 block mb-2">End Time</label>
-                            <p class="text-lg font-bold text-gray-800">
-                                {{ \Carbon\Carbon::parse($reservation->end_time)->format('d/m/Y') }}
-                            </p>
-                            <p class="text-gray-600">{{ \Carbon\Carbon::parse($reservation->end_time)->format('H:i') }}</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                        <h4 class="text-sm font-semibold text-gray-600 mb-3">Duration</h4>
-                        <p class="text-lg font-bold text-gray-800">
-                            @php
-                                $start = \Carbon\Carbon::parse($reservation->start_time);
-                                $end = \Carbon\Carbon::parse($reservation->end_time);
-                                $hours = $end->diffInHours($start);
-                                $minutes = $end->diffInMinutes($start) % 60;
-                            @endphp
-                            {{ $hours }}h {{ $minutes }}m
-                        </p>
-                    </div>
-
-                    <hr class="my-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Reservation Details</h4>
-                    <div class="space-y-3">
-                        <div class="flex justify-between py-2 border-b">
-                            <span class="text-gray-600 font-medium">Organized By:</span>
-                            <span class="text-gray-800">{{ optional($reservation->organizer)->name ?? 'Unknown' }}</span>
-                        </div>
-                        <div class="flex justify-between py-2 border-b">
-                            <span class="text-gray-600 font-medium">Created:</span>
-                            <span class="text-gray-800">{{ $reservation->created_at->format('d/m/Y H:i') }}</span>
-                        </div>
-                        <div class="flex justify-between py-2">
-                            <span class="text-gray-600 font-medium">Last Updated:</span>
-                            <span class="text-gray-800">{{ $reservation->updated_at->format('d/m/Y H:i') }}</span>
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Waktu selesai</p>
+                            <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->end_time->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow p-6 h-fit sticky top-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Reservation Status</h3>
-                    <div class="space-y-4">
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
+                    <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Hasil Follow Up</h2>
+                    <div class="space-y-4 text-sm">
                         <div>
-                            <label class="text-sm text-gray-600">Current Status</label>
-                            <p class="text-lg font-bold mt-1">
-                                <span class="px-3 py-1 rounded-full text-sm
-                                    @if($reservation->status === 'PENDING')bg-yellow-100 text-yellow-700
-                                    @elseif($reservation->status === 'CONFIRMED')bg-green-100 text-green-700
-                                    @elseif($reservation->status === 'CANCELLED')bg-red-100 text-red-700
-                                    @else bg-gray-100 text-gray-700
-                                    @endif">
-                                    {{ $reservation->status }}
-                                </span>
-                            </p>
+                            <p class="text-gray-500 dark:text-gray-400">Link Zoom</p>
+                            @if($reservation->zoom_link)
+                                <a href="{{ $reservation->zoom_link }}" target="_blank" class="font-medium text-brand-600 hover:underline">{{ $reservation->zoom_link }}</a>
+                            @else
+                                <p class="text-gray-700 dark:text-gray-300">Belum ditambahkan.</p>
+                            @endif
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-3">
-                            <p class="text-xs text-gray-600 mb-1">Reservation Code</p>
-                            <p class="font-mono text-sm font-bold text-gray-800">{{ $reservation->code }}</p>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Catatan tindak lanjut</p>
+                            <p class="text-gray-700 dark:text-gray-300">{{ $reservation->notes ?: 'Belum ada catatan dari petugas.' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']))
+                    <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Tindak Lanjut oleh Teknisi / Admin</h2>
+                        <form method="POST" action="{{ route('reservations.update', $reservation) }}" class="space-y-4" id="followUpForm">
+                            @csrf
+                            @method('PATCH')
+                            <div>
+                                <label for="status" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                <select id="status" name="status" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white">
+                                    @foreach(\App\Models\Reservation::statusLabels() as $value => $label)
+                                        <option value="{{ $value }}" {{ $reservation->status === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="zoom_link" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Link Zoom</label>
+                                <input id="zoom_link" type="url" name="zoom_link" value="{{ old('zoom_link', $reservation->zoom_link) }}" placeholder="https://zoom.us/j/..." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white" />
+                            </div>
+                            <div>
+                                <label for="notes" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Catatan tindak lanjut</label>
+                                <textarea id="notes" name="notes" rows="3" placeholder="Contoh: Link aktif 10 menit sebelum mulai." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white">{{ old('notes', $reservation->notes) }}</textarea>
+                            </div>
+                            <button type="submit" class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-700">Simpan Follow Up</button>
+                        </form>
+                    </div>
+                @endif
+            </div>
+
+            <div class="space-y-6">
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
+                    <h3 class="mb-3 text-sm font-bold uppercase text-gray-500 dark:text-gray-400">Ringkasan</h3>
+                    <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Pemohon</p>
+                            <p>{{ optional($reservation->requester)->name ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Ditangani oleh</p>
+                            <p>{{ optional($reservation->approver)->name ?? 'Belum ada petugas' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Dibuat pada</p>
+                            <p>{{ $reservation->created_at->format('d/m/Y H:i') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Terakhir diperbarui</p>
+                            <p>{{ $reservation->updated_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </x-app-layout>
