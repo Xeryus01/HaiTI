@@ -26,7 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::post('tickets/{ticket}/attachments', [\App\Http\Controllers\TicketViewController::class, 'uploadAttachment'])->name('tickets.attachments.store');
     Route::get('tickets/{ticket}/attachments/{attachment}', [\App\Http\Controllers\TicketViewController::class, 'showAttachment'])->name('tickets.attachments.show');
 
+    // Asset CSV/XLS download/import routes must be registered before the resource route to avoid conflict with assets/{asset}
+    Route::get('assets/template', [\App\Http\Controllers\AssetViewController::class, 'downloadTemplate'])->name('assets.template');
+    Route::post('assets/import', [\App\Http\Controllers\AssetViewController::class, 'import'])->name('assets.import');
     Route::resource('assets', \App\Http\Controllers\AssetViewController::class);
+
     Route::resource('reservations', \App\Http\Controllers\ReservationViewController::class);
     Route::get('reservations/{reservation}/nota-dinas', [\App\Http\Controllers\ReservationViewController::class, 'showNotaDinas'])->name('reservations.nota-dinas');
 

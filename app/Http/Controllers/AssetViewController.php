@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AssetsImport;
+use App\Imports\AssetsTemplateExport;
 use App\Models\Asset;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Requests\StoreAssetRequest;
 use App\Http\Requests\UpdateAssetRequest;
@@ -60,5 +63,46 @@ class AssetViewController extends Controller
     {
         $asset->delete();
         return redirect()->route('assets.index')->with('success', 'Asset deleted');
+    }
+
+    public function downloadTemplate()
+    {
+        abort_unless(auth()->user()->can('manage assets'), 403);
+
+        $filename = 'asset-upload-template.xlsx';
+        $diskPath = storage_path('app/' . $filename);
+
+        // Generate file if it doesn't exist yet
+        if (! file_exists($diskPath)) {
+            Excel::store(new AssetsTemplateExport(), $filename, 'local');
+        }
+
+        if (! file_exists($diskPath)) {
+            // fallback if storage path not writable
+            return Excel::download(new AssetsTemplateExport(), $filename);
+        }
+
+        return response()->download($diskPath, 'template-aset.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    }
+
+    public function import(Request $request)
+    {
+        abort_unless(auth()->user()->can('manage assets'), 403);
+
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        $file = $request->file('file');
+
+        try {
+            Excel::import(new AssetsImport(), $file);
+        } catch (\Exception $ex) {
+            return redirect()->route('assets.index')->with('error', 'Import gagal: ' . $ex->getMessage());
+        }
+
+        return redirect()->route('assets.index')->with('success', 'Data aset berhasil diimpor dari Excel.');
     }
 }
