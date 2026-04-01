@@ -20,12 +20,7 @@ class ReservationViewController extends Controller
 
     public function index(Request $request)
     {
-        $user = $request->user();
         $q = Reservation::query()->with(['requester', 'approver']);
-
-        if (! $user->hasAnyRole(['Admin', 'Teknisi'])) {
-            $q->where('requester_id', $user->id);
-        }
 
         $reservations = $q->latest()->paginate(15);
         return view('reservations.index', compact('reservations'));
@@ -60,12 +55,6 @@ class ReservationViewController extends Controller
 
     public function show(Request $request, Reservation $reservation)
     {
-        $user = $request->user();
-
-        if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $reservation->requester_id !== $user->id) {
-            abort(403);
-        }
-
         $reservation->load(['requester', 'approver']);
 
         return view('reservations.show', compact('reservation'));
@@ -84,6 +73,12 @@ class ReservationViewController extends Controller
 
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
+        $user = $request->user();
+
+        if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $reservation->requester_id !== $user->id) {
+            abort(403);
+        }
+
         $oldStatus = $reservation->status;
         $data = $request->validated();
         $isHandler = $request->user()->hasAnyRole(['Admin', 'Teknisi']);
@@ -103,13 +98,7 @@ class ReservationViewController extends Controller
         return redirect()->route('reservations.show', $reservation)->with('success', 'Pengajuan Zoom berhasil diperbarui.');
     }
 
-    public function destroy(Reservation $reservation)
-    {
-        $reservation->delete();
-        return redirect()->route('reservations.index')->with('success', 'Reservation deleted');
-    }
-
-    public function showNotaDinas(Request $request, Reservation $reservation)
+    public function destroy(Request $request, Reservation $reservation)
     {
         $user = $request->user();
 
@@ -117,6 +106,12 @@ class ReservationViewController extends Controller
             abort(403);
         }
 
+        $reservation->delete();
+        return redirect()->route('reservations.index')->with('success', 'Reservation deleted');
+    }
+
+    public function showNotaDinas(Request $request, Reservation $reservation)
+    {
         if (!$reservation->nota_dinas_path) {
             abort(404);
         }

@@ -151,6 +151,7 @@
                         @endforelse
                     </div>
 
+                    @if(auth()->user()->hasAnyRole(['Admin','Teknisi']) || auth()->id() === $ticket->requester_id)
                     <form method="POST" action="{{ route('tickets.comment', $ticket) }}" enctype="multipart/form-data" class="mt-5 space-y-4 rounded-xl bg-gray-50 p-4 dark:bg-white/5">
                         @csrf
                         <div>
@@ -174,6 +175,7 @@
                         @endif
                         <button type="submit" class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-700">Kirim Pesan</button>
                     </form>
+                    @endif
                 </div>
             </div>
 

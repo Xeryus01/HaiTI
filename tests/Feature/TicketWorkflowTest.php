@@ -303,11 +303,12 @@ class TicketWorkflowTest extends TestCase
     }
 
     /** @test */
-    public function authorized_user_can_open_uploaded_ticket_attachment_preview()
+    public function any_user_can_open_uploaded_ticket_attachment_preview()
     {
         Storage::fake('public');
 
         $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
         $ticket = Ticket::factory()->create([
             'requester_id' => $requester->id,
         ]);
@@ -323,8 +324,74 @@ class TicketWorkflowTest extends TestCase
             'size_bytes' => 18,
         ]);
 
-        $this->actingAs($requester)
+        // Test that any user (not just the requester) can view the attachment
+        $this->actingAs($otherUser)
             ->get(route('tickets.attachments.show', [$ticket, $attachment]))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function regular_user_cannot_edit_someone_elses_ticket()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        $this->actingAs($otherUser)
+            ->get(route('tickets.edit', $ticket))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function regular_user_cannot_update_someone_elses_ticket()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        $this->actingAs($otherUser)
+            ->patch(route('tickets.update', $ticket), [
+                'title' => 'Updated title',
+                'description' => 'Updated description',
+                'category' => 'IT_SUPPORT',
+                'priority' => 'HIGH',
+            ])
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function regular_user_cannot_delete_someone_elses_ticket()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        $this->actingAs($otherUser)
+            ->delete(route('tickets.destroy', $ticket))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function regular_user_can_view_someone_elses_ticket()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $ticket = Ticket::factory()->create([
+            'requester_id' => $requester->id,
+        ]);
+
+        $this->actingAs($otherUser)
+            ->get(route('tickets.show', $ticket))
             ->assertOk();
     }
 }

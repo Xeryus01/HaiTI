@@ -27,7 +27,7 @@ class TicketViewController extends Controller
     {
         $q = Ticket::query()->with(['requester', 'assignee', 'asset'])->latest();
 
-        // allow filtering by status, priority or assignee for technicians/admin
+        // allow filtering by status, priority or assignee for all users
         if ($request->filled('status')) {
             $q->where('status', $request->status);
         }
@@ -36,11 +36,6 @@ class TicketViewController extends Controller
         }
         if ($request->filled('assignee_id')) {
             $q->where('assignee_id', $request->assignee_id);
-        }
-
-        // regular users only see their own tickets
-        if (! $request->user()->hasAnyRole(['Admin', 'Teknisi'])) {
-            $q->where('requester_id', $request->user()->id);
         }
 
         $tickets = $q->paginate(15)->withQueryString();
@@ -78,25 +73,31 @@ class TicketViewController extends Controller
 
     public function show(Request $request, Ticket $ticket)
     {
+        $ticket->load('requester', 'assignee', 'asset', 'comments.user', 'comments.attachments', 'attachments.uploader');
+
+        return view('tickets.show', compact('ticket'));
+    }
+
+    public function edit(Request $request, Ticket $ticket)
+    {
         $user = $request->user();
 
         if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $ticket->requester_id !== $user->id) {
             abort(403);
         }
 
-        $ticket->load('requester', 'assignee', 'asset', 'comments.user', 'comments.attachments', 'attachments.uploader');
-
-        return view('tickets.show', compact('ticket'));
-    }
-
-    public function edit(Ticket $ticket)
-    {
         $assets = Asset::all();
         return view('tickets.edit', compact('ticket','assets'));
     }
 
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
+        $user = $request->user();
+
+        if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $ticket->requester_id !== $user->id) {
+            abort(403);
+        }
+
         $oldStatus = $ticket->status;
         $data = $request->validated();
 
@@ -118,8 +119,14 @@ class TicketViewController extends Controller
         return redirect()->route('tickets.show', $ticket)->with('success','Ticket updated');
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Request $request, Ticket $ticket)
     {
+        $user = $request->user();
+
+        if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $ticket->requester_id !== $user->id) {
+            abort(403);
+        }
+
         $ticket->delete();
         return redirect()->route('tickets.index')->with('success','Ticket deleted');
     }
@@ -202,10 +209,6 @@ class TicketViewController extends Controller
 
         if ((int) $attachment->ticket_id !== (int) $ticket->id) {
             abort(404);
-        }
-
-        if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $ticket->requester_id !== $user->id) {
-            abort(403);
         }
 
         $diskName = Storage::disk('public')->exists($attachment->file_path) ? 'public' : 'local';

@@ -89,17 +89,18 @@ class ReservationWorkflowTest extends TestCase
     }
 
     /** @test */
-    public function authorized_user_can_view_nota_dinas_pdf(): void
+    public function any_user_can_view_nota_dinas_pdf(): void
     {
         \Illuminate\Support\Facades\Storage::fake('public');
 
-        $user = User::factory()->create();
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
 
         \Illuminate\Support\Facades\Storage::disk('public')->put('nota_dinas/test.pdf', 'fake-pdf-content');
 
         $reservation = Reservation::create([
             'code' => 'RES-TEST-002',
-            'requester_id' => $user->id,
+            'requester_id' => $requester->id,
             'room_name' => 'Rapat Koordinasi',
             'purpose' => 'Test nota dinas',
             'start_time' => now()->addDay(),
@@ -108,9 +109,99 @@ class ReservationWorkflowTest extends TestCase
             'nota_dinas_path' => 'nota_dinas/test.pdf',
         ]);
 
-        $this->actingAs($user)
+        // Test that any user (not just the requester) can view the nota dinas
+        $this->actingAs($otherUser)
             ->get(route('reservations.nota-dinas', $reservation))
             ->assertOk()
             ->assertHeader('content-type', 'application/pdf');
+    }
+
+    /** @test */
+    public function regular_user_cannot_edit_someone_elses_reservation()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $reservation = Reservation::create([
+            'code' => 'RES-TEST-003',
+            'requester_id' => $requester->id,
+            'room_name' => 'Rapat Koordinasi',
+            'purpose' => 'Test authorization',
+            'start_time' => now()->addDay(),
+            'end_time' => now()->addDay()->addHour(),
+            'status' => 'PENDING',
+        ]);
+
+        $this->actingAs($otherUser)
+            ->get(route('reservations.edit', $reservation))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function regular_user_cannot_update_someone_elses_reservation()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $reservation = Reservation::create([
+            'code' => 'RES-TEST-004',
+            'requester_id' => $requester->id,
+            'room_name' => 'Rapat Koordinasi',
+            'purpose' => 'Test authorization',
+            'start_time' => now()->addDay(),
+            'end_time' => now()->addDay()->addHour(),
+            'status' => 'PENDING',
+        ]);
+
+        $this->actingAs($otherUser)
+            ->patch(route('reservations.update', $reservation), [
+                'room_name' => 'Updated room name',
+                'purpose' => 'Updated purpose',
+                'start_time' => now()->addDay()->format('Y-m-d H:i:s'),
+                'end_time' => now()->addDay()->addHour()->format('Y-m-d H:i:s'),
+            ])
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function regular_user_cannot_delete_someone_elses_reservation()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $reservation = Reservation::create([
+            'code' => 'RES-TEST-005',
+            'requester_id' => $requester->id,
+            'room_name' => 'Rapat Koordinasi',
+            'purpose' => 'Test authorization',
+            'start_time' => now()->addDay(),
+            'end_time' => now()->addDay()->addHour(),
+            'status' => 'PENDING',
+        ]);
+
+        $this->actingAs($otherUser)
+            ->delete(route('reservations.destroy', $reservation))
+            ->assertForbidden();
+    }
+
+    /** @test */
+    public function regular_user_can_view_someone_elses_reservation()
+    {
+        $requester = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $reservation = Reservation::create([
+            'code' => 'RES-TEST-006',
+            'requester_id' => $requester->id,
+            'room_name' => 'Rapat Koordinasi',
+            'purpose' => 'Test view authorization',
+            'start_time' => now()->addDay(),
+            'end_time' => now()->addDay()->addHour(),
+            'status' => 'PENDING',
+        ]);
+
+        $this->actingAs($otherUser)
+            ->get(route('reservations.show', $reservation))
+            ->assertOk();
     }
 }
