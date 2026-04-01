@@ -98,6 +98,11 @@ class TicketViewController extends Controller
             abort(403);
         }
 
+        // Only Admin can assign tickets
+        if (isset($request->assignee_id) && ! $user->hasRole('Admin')) {
+            abort(403, 'Hanya Admin yang dapat menugaskan petugas.');
+        }
+
         $oldStatus = $ticket->status;
         $data = $request->validated();
 

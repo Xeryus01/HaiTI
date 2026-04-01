@@ -44,7 +44,7 @@
                     </div>
                 </div>
 
-                @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']))
+                @if(auth()->user()->hasPermissionTo('approve reservations'))
                     <div>
                         <label for="status" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status</label>
                         <select id="status" name="status" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white">

@@ -40,17 +40,6 @@
                 </a>
             </li>
 
-            <!-- Assets -->
-            <li>
-                <a href="{{ route('assets.index') }}" class="group relative flex items-center gap-3 rounded-lg px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400 {{ request()->routeIs('assets.*') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'hover:bg-gray-100 dark:hover:bg-white/5' }}">
-                    <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 4C1.89543 4 1 4.89543 1 6V14C1 15.1046 1.89543 16 3 16H17C18.1046 16 19 15.1046 19 14V6C19 4.89543 18.1046 4 17 4H3ZM3 6H17V14H3V6Z"></path>
-                        <path d="M5 9C4.44772 9 4 9.44772 4 10C4 10.5523 4.44772 11 5 11H7C7.55228 11 8 10.5523 8 10C8 9.44772 7.55228 9 7 9H5Z"></path>
-                    </svg>
-                    <span>Data Aset</span>
-                </a>
-            </li>
-
             <!-- Reservations -->
             <li>
                 <a href="{{ route('reservations.index') }}" class="group relative flex items-center gap-3 rounded-lg px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400 {{ request()->routeIs('reservations.*') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'hover:bg-gray-100 dark:hover:bg-white/5' }}">
@@ -59,6 +48,17 @@
                         <path d="M2 8C1.44772 8 1 8.44772 1 9V9C1 9.55228 1.44772 10 2 10H18C18.5523 10 19 9.55228 19 9V9C19 8.44772 18.5523 8 18 8H2Z"></path>
                     </svg>
                     <span>Pengajuan Zoom</span>
+                </a>
+            </li>
+
+            <!-- Assets -->
+            <li>
+                <a href="{{ route('assets.index') }}" class="group relative flex items-center gap-3 rounded-lg px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400 {{ request()->routeIs('assets.*') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'hover:bg-gray-100 dark:hover:bg-white/5' }}">
+                    <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 4C1.89543 4 1 4.89543 1 6V14C1 15.1046 1.89543 16 3 16H17C18.1046 16 19 15.1046 19 14V6C19 4.89543 18.1046 4 17 4H3ZM3 6H17V14H3V6Z"></path>
+                        <path d="M5 9C4.44772 9 4 9.44772 4 10C4 10.5523 4.44772 11 5 11H7C7.55228 11 8 10.5523 8 10C8 9.44772 7.55228 9 7 9H5Z"></path>
+                    </svg>
+                    <span>Data Aset</span>
                 </a>
             </li>
         </ul>

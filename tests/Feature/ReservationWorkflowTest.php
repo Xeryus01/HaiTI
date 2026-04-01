@@ -12,11 +12,11 @@ class ReservationWorkflowTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function technician_can_follow_up_zoom_request_and_add_zoom_link(): void
+    public function admin_can_follow_up_zoom_request_and_add_zoom_link(): void
     {
         $user = User::factory()->create();
-        $tech = User::factory()->create();
-        $tech->assignRole('Teknisi');
+        $admin = User::factory()->create();
+        $admin->assignRole('Admin');
 
         $reservation = Reservation::create([
             'code' => 'RES-TEST-001',
@@ -28,7 +28,7 @@ class ReservationWorkflowTest extends TestCase
             'status' => 'PENDING',
         ]);
 
-        $this->actingAs($tech)
+        $this->actingAs($admin)
             ->patch(route('reservations.update', $reservation), [
                 'status' => 'APPROVED',
                 'zoom_link' => 'https://zoom.us/j/123456789',

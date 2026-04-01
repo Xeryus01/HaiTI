@@ -61,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
             'view reservations',
             'create reservations',
             'manage reservations',
+            'approve reservations',
             'view dashboard',
         ];
 
@@ -72,10 +73,11 @@ class AppServiceProvider extends ServiceProvider
         $roles['Teknisi']->syncPermissions([
             'view tickets',
             'update tickets',
-            'assign tickets',
             'comment tickets',
             'view assets',
             'manage assets',
+            'view reservations',
+            'approve reservations',
             'view dashboard',
         ]);
         $roles['User']->syncPermissions([

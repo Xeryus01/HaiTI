@@ -54,10 +54,21 @@ class ReservationController extends Controller
 
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
-        $data = $request->validated();
-        $isHandler = $request->user()->hasAnyRole(['Admin', 'Teknisi']);
+        $user = $request->user();
 
-        if ($isHandler) {
+        if (! $user->hasAnyRole(['Admin', 'Teknisi']) && $reservation->requester_id !== $user->id) {
+            abort(403);
+        }
+
+        // Only users with approve reservations permission can update status
+        if (! $user->hasPermissionTo('approve reservations') && $request->filled('status')) {
+            abort(403, 'Anda tidak memiliki izin untuk menyetujui pengajuan Zoom.');
+        }
+
+        $data = $request->validated();
+        $isApprover = $user->hasPermissionTo('approve reservations');
+
+        if ($isApprover) {
             $data['approver_id'] = $request->user()->id;
         } else {
             unset($data['status'], $data['zoom_link'], $data['notes'], $data['approver_id']);

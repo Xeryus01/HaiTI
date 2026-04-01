@@ -103,26 +103,44 @@
                         @enderror
                     </div>
                 </div>
-                <!-- Assignment & Status Grid -->
-                @if(auth()->user()->hasAnyRole(['Admin','Teknisi']))
-                    <div class="grid gap-6 sm:grid-cols-2">
-                        <div>
-                            <label for="assignee_id" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                                Assign To
-                            </label>
-                            <select id="assignee_id" name="assignee_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('assignee_id') border-red-500 @enderror">
-                                <option value="">-- Unassigned --</option>
-                                @foreach(\App\Models\User::whereHas('roles', function($q){ $q->where('name','Teknisi'); })->get() as $user)
-                                    <option value="{{ $user->id }}" {{ $ticket->assignee_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('assignee_id')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
+                <!-- Status & Assignment Section -->
+                @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']))
+                    <!-- Admin: Assignment + Status -->
+                    @if(auth()->user()->hasRole('Admin'))
+                        <div class="grid gap-6 sm:grid-cols-2">
+                            <div>
+                                <label for="assignee_id" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                    Tugaskan Ke
+                                </label>
+                                <select id="assignee_id" name="assignee_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('assignee_id') border-red-500 @enderror">
+                                    <option value="">-- Belum Ditugaskan --</option>
+                                    @foreach(\App\Models\User::whereHas('roles', function($q){ $q->where('name','Teknisi'); })->get() as $user)
+                                        <option value="{{ $user->id }}" {{ $ticket->assignee_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('assignee_id')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                    Status
+                                </label>
+                                <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('status') border-red-500 @enderror">
+                                    @foreach(\App\Models\Ticket::statuses() as $st)
+                                        <option value="{{ $st }}" {{ $ticket->status === $st ? 'selected' : '' }}>{{ $st }}</option>
+                                    @endforeach
+                                </select>
+                                @error('status')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
+                    @else
+                        <!-- Teknisi: Status Only (No Assignment) -->
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                                Status
+                                Status Penanganan
                             </label>
                             <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('status') border-red-500 @enderror">
                                 @foreach(\App\Models\Ticket::statuses() as $st)
@@ -133,7 +151,7 @@
                                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
+                    @endif
                 @endif
 
                 <!-- Form Actions -->

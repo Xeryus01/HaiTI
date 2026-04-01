@@ -93,6 +93,11 @@ class TicketController extends Controller
             'assignee_id' => 'nullable|exists:users,id',
         ]);
 
+        // Only Admin can assign tickets
+        if (isset($validated['assignee_id']) && ! $user->hasRole('Admin')) {
+            abort(403, 'Hanya Admin yang dapat menugaskan petugas.');
+        }
+
         $oldStatus = $ticket->status;
 
         $ticket->status = $validated['status'];

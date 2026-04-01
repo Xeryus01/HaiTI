@@ -79,11 +79,16 @@ class ReservationViewController extends Controller
             abort(403);
         }
 
+        // Only Admin can assign petugas, but both Admin and Teknisi can approve reservations
+        if (! $user->hasPermissionTo('approve reservations') && $request->filled('status')) {
+            abort(403, 'Anda tidak memiliki izin untuk menyetujui pengajuan Zoom.');
+        }
+
         $oldStatus = $reservation->status;
         $data = $request->validated();
-        $isHandler = $request->user()->hasAnyRole(['Admin', 'Teknisi']);
+        $isApprover = $user->hasPermissionTo('approve reservations');
 
-        if ($isHandler) {
+        if ($isApprover) {
             $data['approver_id'] = $request->user()->id;
         } else {
             unset($data['status'], $data['zoom_link'], $data['notes'], $data['approver_id']);

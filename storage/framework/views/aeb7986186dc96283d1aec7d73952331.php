@@ -79,7 +79,7 @@
                     </div>
                 </div>
 
-                <?php if(auth()->user()->hasAnyRole(['Admin', 'Teknisi'])): ?>
+                <?php if(auth()->user()->hasPermissionTo('approve reservations')): ?>
                     <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
                         <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Tindak Lanjut oleh Teknisi / Admin</h2>
                         <form method="POST" action="<?php echo e(route('reservations.update', $reservation)); ?>" class="space-y-4" id="followUpForm">
