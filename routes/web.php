@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('assets', \App\Http\Controllers\AssetViewController::class);
     Route::resource('reservations', \App\Http\Controllers\ReservationViewController::class);
+    Route::get('reservations/{reservation}/nota-dinas', [\App\Http\Controllers\ReservationViewController::class, 'showNotaDinas'])->name('reservations.nota-dinas');
 
     // notifications
     Route::get('/notifications', [\App\Http\Controllers\NotificationViewController::class, 'index'])->name('notifications.index');

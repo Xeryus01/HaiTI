@@ -32,6 +32,27 @@
                 </div>
 
                 <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
+                    <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Nota Dinas</h2>
+                    @if($reservation->nota_dinas_path)
+                        <div class="space-y-4">
+                            <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                                <div class="mb-3 flex items-center justify-between gap-3">
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Nota Dinas Pengajuan</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">File PDF yang diunggah saat pengajuan</p>
+                                    </div>
+                                    <a href="{{ route('reservations.nota-dinas', $reservation) }}" target="_blank" class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Buka PDF</a>
+                                </div>
+
+                                <iframe src="{{ route('reservations.nota-dinas', $reservation) }}" title="Nota Dinas" class="h-96 w-full rounded-lg border border-gray-200 dark:border-gray-700"></iframe>
+                            </div>
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Nota dinas belum diunggah.</p>
+                    @endif
+                </div>
+
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
                     <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Hasil Follow Up</h2>
                     <div class="space-y-4 text-sm">
                         <div>

@@ -57,4 +57,60 @@ class ReservationWorkflowTest extends TestCase
         $reservationExport->assertOk();
         $reservationExport->assertHeader('content-type', 'text/csv; charset=UTF-8');
     }
+
+    /** @test */
+    public function user_can_create_reservation_with_nota_dinas_pdf(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $user = User::factory()->create();
+
+        $pdfFile = \Illuminate\Http\UploadedFile::fake()->create('nota_dinas.pdf', 1000, 'application/pdf');
+
+        $this->actingAs($user)
+            ->post(route('reservations.store'), [
+                'room_name' => 'Rapat Koordinasi',
+                'purpose' => 'Permintaan ruang Zoom untuk rapat mingguan',
+                'start_time' => now()->addDay()->format('Y-m-d H:i'),
+                'end_time' => now()->addDay()->addHour()->format('Y-m-d H:i'),
+                'nota_dinas' => $pdfFile,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('reservations', [
+            'requester_id' => $user->id,
+            'room_name' => 'Rapat Koordinasi',
+            'purpose' => 'Permintaan ruang Zoom untuk rapat mingguan',
+        ]);
+
+        $reservation = Reservation::where('requester_id', $user->id)->latest()->first();
+        $this->assertNotNull($reservation->nota_dinas_path);
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($reservation->nota_dinas_path);
+    }
+
+    /** @test */
+    public function authorized_user_can_view_nota_dinas_pdf(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $user = User::factory()->create();
+
+        \Illuminate\Support\Facades\Storage::disk('public')->put('nota_dinas/test.pdf', 'fake-pdf-content');
+
+        $reservation = Reservation::create([
+            'code' => 'RES-TEST-002',
+            'requester_id' => $user->id,
+            'room_name' => 'Rapat Koordinasi',
+            'purpose' => 'Test nota dinas',
+            'start_time' => now()->addDay(),
+            'end_time' => now()->addDay()->addHour(),
+            'status' => 'PENDING',
+            'nota_dinas_path' => 'nota_dinas/test.pdf',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('reservations.nota-dinas', $reservation))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+    }
 }

@@ -17,6 +17,7 @@ class Reservation extends Model
         'approver_id',
         'notes',
         'zoom_link',
+        'nota_dinas_path',
     ];
 
     protected $casts = [

@@ -27,7 +27,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?php echo e(route('reservations.store')); ?>" class="space-y-6" id="reservationForm">
+            <form method="POST" action="<?php echo e(route('reservations.store')); ?>" enctype="multipart/form-data" class="space-y-6" id="reservationForm">
                 <?php echo csrf_field(); ?>
 
                 <div>
@@ -79,6 +79,17 @@ endif;
 unset($__errorArgs, $__bag); ?>" />
                         <input type="hidden" name="end_time" id="end_time_hidden" />
                     </div>
+                <div>
+                    <label for="nota_dinas" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nota Dinas <span class="text-red-500">*</span></label>
+                    <input id="nota_dinas" type="file" name="nota_dinas" accept=".pdf" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-700 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-brand-700 dark:file:bg-brand-500/10 dark:file:text-brand-300 <?php $__errorArgs = ['nota_dinas'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" />
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload nota dinas dalam format PDF (maksimal 5MB)</p>
                 </div>
 
                 <div class="flex gap-3 pt-4">
