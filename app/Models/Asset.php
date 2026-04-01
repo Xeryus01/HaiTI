@@ -15,7 +15,9 @@ class Asset extends Model
         'serial_number',
         'specs',
         'location',
+        'holder',
         'status',
+        'condition',
         'purchased_at',
     ];
 

@@ -43,6 +43,11 @@ class TicketCommentAdded extends Notification
         ]);
     }
 
+    public function toDatabase($notifiable)
+    {
+        return $this->toArray($notifiable);
+    }
+
     public function toArray($notifiable)
     {
         return [

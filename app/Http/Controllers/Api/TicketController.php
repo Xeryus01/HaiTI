@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTicketRequest;
 use App\Models\Ticket;
 use App\Models\Log;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function index(Request $request)
     {
         $user = $request->user();
@@ -52,7 +59,7 @@ class TicketController extends Controller
         $user = $request->user();
 
         $ticket = Ticket::create([
-            'code' => $this->generateCode(),
+            'code' => Ticket::generateCode(),
             'requester_id' => $user->id,
             'asset_id' => $request->asset_id,
             'category' => $request->category,
@@ -109,18 +116,14 @@ class TicketController extends Controller
         // send notifications
         $old = $oldStatus;
         if ($ticket->requester) {
-            $ticket->requester->notify(new \App\Notifications\TicketStatusChanged($ticket, $old));
+            $this->notificationService->notifyTicketUpdated($ticket->requester, $ticket, $old, false, false);
         }
         if ($ticket->assignee && $ticket->assignee->id !== $ticket->requester_id) {
-            $ticket->assignee->notify(new \App\Notifications\TicketStatusChanged($ticket, $old));
+            $this->notificationService->notifyTicketUpdated($ticket->assignee, $ticket, $old, false, false);
         }
 
         return response()->json($ticket->fresh()->load(['requester', 'assignee', 'asset']));
     }
 
-    private function generateCode(): string
-    {
-        // Simple code generator. For production, consider a sequence/counter.
-        return 'ITSM-' . now()->format('Y') . '-' . str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT);
-    }
 }
+

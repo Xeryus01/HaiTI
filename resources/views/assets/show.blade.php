@@ -2,17 +2,17 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Asset {{ $asset->asset_code }}
+                Aset {{ $asset->asset_code }}
             </h2>
             <div class="flex space-x-2">
                 <a href="{{ route('assets.edit', $asset) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
-                    Edit
+                    Ubah
                 </a>
                 <form action="{{ route('assets.destroy', $asset) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Delete this asset?')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-                        Delete
+                    <button type="submit" onclick="return confirm('Hapus aset ini?')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                        Hapus
                     </button>
                 </form>
             </div>
@@ -24,21 +24,21 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="md:col-span-2 bg-white rounded-lg shadow p-6">
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ $asset->name }}</h3>
-                    <p class="text-gray-600 mb-6">Asset Code: <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">{{ $asset->asset_code }}</code></p>
+                    <p class="text-gray-600 mb-6">Kode Aset: <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">{{ $asset->asset_code }}</code></p>
                     
                     <div class="grid grid-cols-2 gap-4 mb-6">
                         <div>
-                            <label class="text-sm font-semibold text-gray-600">Type</label>
+                            <label class="text-sm font-semibold text-gray-600">Tipe</label>
                             <p class="text-gray-800 mt-1 font-medium">{{ $asset->type }}</p>
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-gray-600">Location</label>
+                            <label class="text-sm font-semibold text-gray-600">Lokasi</label>
                             <p class="text-gray-800 mt-1">{{ $asset->location }}</p>
                         </div>
                     </div>
 
                     <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                        <h4 class="text-sm font-semibold text-gray-600 mb-3">Specifications</h4>
+                        <h4 class="text-sm font-semibold text-gray-600 mb-3">Spesifikasi</h4>
                         @if($asset->specs && is_array($asset->specs) && count($asset->specs) > 0)
                             <div class="space-y-2">
                                 @foreach($asset->specs as $key => $value)
@@ -49,12 +49,12 @@
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-gray-500">No specifications recorded</p>
+                            <p class="text-gray-500">Belum ada spesifikasi tercatat</p>
                         @endif
                     </div>
 
                     <hr class="my-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Maintenance History</h4>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Riwayat Perawatan</h4>
                     <div class="space-y-3">
                         @forelse($asset->logs ?? [] as $log)
                             <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
@@ -67,16 +67,16 @@
                                 <p class="mt-2 text-gray-700">{{ $log->description ?? '' }}</p>
                             </div>
                         @empty
-                            <p class="text-gray-500">No maintenance history</p>
+                            <p class="text-gray-500">Belum ada riwayat perawatan</p>
                         @endforelse
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow p-6 h-fit sticky top-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Asset Status</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Status Aset</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="text-sm text-gray-600">Current Status</label>
+                            <label class="text-sm text-gray-600">Status Saat Ini</label>
                             <p class="text-lg font-bold mt-1">
                                 <span class="px-3 py-1 rounded-full text-sm
                                     @if($asset->status === 'ACTIVE')bg-green-100 text-green-700
@@ -89,15 +89,23 @@
                             </p>
                         </div>
                         <div>
-                            <label class="text-sm text-gray-600">Acquisition Date</label>
+                            <label class="text-sm text-gray-600">Pemegang</label>
+                            <p class="text-gray-800 font-medium mt-1">{{ $asset->holder ?? 'Belum Ditugaskan' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-600">Kondisi</label>
+                            <p class="text-gray-800 font-medium mt-1">{{ ucfirst(strtolower($asset->condition ?? 'N/A')) }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-600">Tanggal Perolehan</label>
                             <p class="text-gray-800 font-medium mt-1">{{ optional($asset->purchased_at)->format('d/m/Y') ?? 'N/A' }}</p>
                         </div>
                         <div>
-                            <label class="text-sm text-gray-600">Created</label>
+                            <label class="text-sm text-gray-600">Dibuat</label>
                             <p class="text-gray-800 font-medium mt-1">{{ $asset->created_at->format('d/m/Y H:i') }}</p>
                         </div>
                         <div>
-                            <label class="text-sm text-gray-600">Last Updated</label>
+                            <label class="text-sm text-gray-600">Terakhir Diperbarui</label>
                             <p class="text-gray-800 font-medium mt-1">{{ $asset->updated_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>

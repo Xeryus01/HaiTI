@@ -56,10 +56,19 @@ class Reservation extends Model
         return $this->hasMany(Log::class, 'entity_id')->where('entity_type', 'Reservation');
     }
 
-    public function generateCode()
+    public static function generateCode(): string
     {
-        $timestamp = date('ymdHi');
-        $random = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
-        return 'RES' . $timestamp . $random;
+        $prefix = 'RES';
+        $date = now()->format('Ymd');
+
+        $sequence = self::whereDate('created_at', now())->count() + 1;
+        $code = sprintf('%s-%s-%05d', $prefix, $date, $sequence);
+
+        while (self::where('code', $code)->exists()) {
+            $sequence++;
+            $code = sprintf('%s-%s-%05d', $prefix, $date, $sequence);
+        }
+
+        return $code;
     }
 }

@@ -7,10 +7,18 @@ use App\Models\Ticket;
 use App\Models\TicketComment;
 use App\Models\Log;
 use App\Models\Attachment;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class TicketCommentController extends Controller
 {
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     public function store(Request $request, Ticket $ticket)
     {
         $validated = $request->validate([
@@ -81,12 +89,31 @@ class TicketCommentController extends Controller
             'meta' => ['comment_id' => $comment->id],
         ]);
 
-        // notify requester and assignee
+        // notify requester and assignee via custom notification service
         if ($ticket->requester && $ticket->requester->id !== $user->id) {
-            $ticket->requester->notify(new \App\Notifications\TicketCommentAdded($comment));
+            $this->notificationService->notify(
+                $ticket->requester,
+                'info',
+                '💬 Komentar Baru pada Tiket',
+                "Komentar baru pada tiket {$ticket->code}: {$comment->message}",
+                'ticket',
+                $ticket->id,
+                false,
+                false
+            );
         }
+
         if ($ticket->assignee && $ticket->assignee->id !== $user->id) {
-            $ticket->assignee->notify(new \App\Notifications\TicketCommentAdded($comment));
+            $this->notificationService->notify(
+                $ticket->assignee,
+                'info',
+                '💬 Komentar Baru pada Tiket',
+                "Komentar baru pada tiket {$ticket->code}: {$comment->message}",
+                'ticket',
+                $ticket->id,
+                false,
+                false
+            );
         }
 
         return response()->json($comment->load('user'), 201);

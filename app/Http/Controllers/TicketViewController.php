@@ -51,7 +51,7 @@ class TicketViewController extends Controller
     public function store(StoreTicketRequest $request)
     {
         $data = $request->validated();
-        $data['code'] = (new Ticket())->generateCode();
+        $data['code'] = Ticket::generateCode();
         $data['requester_id'] = $request->user()->id;
         $data['status'] = Ticket::STATUS_OPEN;
 

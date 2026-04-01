@@ -36,7 +36,7 @@ class ReservationViewController extends Controller
         $data = $request->validated();
         $data['requester_id'] = $request->user()->id;
         $data['status'] = 'PENDING';
-        $data['code'] = (new Reservation())->generateCode();
+        $data['code'] = Reservation::generateCode();
 
         // Handle nota dinas upload
         if ($request->hasFile('nota_dinas')) {

@@ -22,7 +22,9 @@ class StoreAssetRequest extends FormRequest
             'serial_number' => 'nullable|string|max:120|unique:assets',
             'specs' => 'nullable|json',
             'location' => 'nullable|string|max:120',
+            'holder' => 'nullable|string|max:120',
             'status' => 'required|string|in:ACTIVE,MAINTENANCE,BROKEN,RETIRED,SOLD,INACTIVE',
+            'condition' => 'required|string|in:GOOD,FAIR,POOR',
             'purchased_at' => 'nullable|date',
         ];
     }

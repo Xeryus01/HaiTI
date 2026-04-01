@@ -4,8 +4,8 @@
     <div class="p-5 sm:p-7.5 lg:p-9">
         <!-- Page Header -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Edit Asset {{ $asset->asset_code }}</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Update asset information</p>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ubah Aset {{ $asset->asset_code }}</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Perbarui informasi aset</p>
         </div>
 
         <!-- Form Card -->
@@ -18,7 +18,7 @@
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                         </svg>
                         <div>
-                            <h3 class="font-medium text-red-800 dark:text-red-400">Please correct the following errors:</h3>
+                            <h3 class="font-medium text-red-800 dark:text-red-400">Silakan perbaiki kesalahan berikut:</h3>
                             <ul class="mt-2 list-inside space-y-1 text-sm text-red-700 dark:text-red-400">
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -36,7 +36,7 @@
                 <!-- Asset Code -->
                 <div>
                     <label for="asset_code" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                        Asset Code
+                        Kode Aset
                     </label>
                     <input id="asset_code" type="text" name="asset_code" value="{{ old('asset_code', $asset->asset_code) }}" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('asset_code') border-red-500 @enderror" />
                     @error('asset_code')
@@ -47,7 +47,7 @@
                 <!-- Name -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                        Asset Name
+                        Nama Aset
                     </label>
                     <input id="name" type="text" name="name" value="{{ old('name', $asset->name) }}" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('name') border-red-500 @enderror" />
                     @error('name')
@@ -58,10 +58,36 @@
                 <!-- Type -->
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                        Type
+                        Tipe
                     </label>
                     <input id="type" type="text" name="type" value="{{ old('type', $asset->type) }}" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('type') border-red-500 @enderror" />
                     @error('type')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Holder -->
+                <div>
+                    <label for="holder" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Pemegang
+                    </label>
+                    <input id="holder" type="text" name="holder" value="{{ old('holder', $asset->holder) }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('holder') border-red-500 @enderror" />
+                    @error('holder')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Condition -->
+                <div>
+                    <label for="condition" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Kondisi
+                    </label>
+                    <select id="condition" name="condition" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('condition') border-red-500 @enderror">
+                        @foreach(['GOOD','FAIR','POOR'] as $c)
+                            <option value="{{ $c }}" {{ old('condition', $asset->condition) === $c ? 'selected' : '' }}>{{ ucfirst(strtolower($c)) }}</option>
+                        @endforeach
+                    </select>
+                    @error('condition')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
@@ -84,10 +110,10 @@
                 <!-- Form Actions -->
                 <div class="flex gap-3 pt-6">
                     <a href="{{ route('assets.index') }}" class="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">
-                        Cancel
+                        Batal
                     </a>
                     <button type="submit" class="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-center font-medium text-white hover:bg-brand-700">
-                        Save Changes
+                        Simpan Perubahan
                     </button>
                 </div>
             </form>

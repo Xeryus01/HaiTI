@@ -22,7 +22,9 @@ class UpdateAssetRequest extends FormRequest
             'serial_number' => 'nullable|string|max:120|unique:assets,serial_number,' . $this->asset->id,
             'specs' => 'nullable|json',
             'location' => 'nullable|string|max:120',
+            'holder' => 'nullable|string|max:120',
             'status' => 'sometimes|string|in:ACTIVE,MAINTENANCE,BROKEN,RETIRED,SOLD,INACTIVE',
+            'condition' => 'sometimes|string|in:GOOD,FAIR,POOR',
             'purchased_at' => 'nullable|date',
         ];
     }

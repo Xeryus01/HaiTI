@@ -122,11 +122,20 @@ class Ticket extends Model
         return $this->hasMany(Log::class, 'entity_id')->where('entity_type', 'Ticket');
     }
 
-    public function generateCode()
+    public static function generateCode(): string
     {
-        $prefix = substr($this->category, 0, 3);
-        $timestamp = date('ymd');
-        $random = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-        return strtoupper($prefix . $timestamp . $random);
+        $prefix = 'TKT';
+        $date = now()->format('Ymd');
+
+        // Generate a daily sequence number; fallback when collisions happen.
+        $sequence = self::whereDate('created_at', now())->count() + 1;
+        $code = sprintf('%s-%s-%05d', $prefix, $date, $sequence);
+
+        while (self::where('code', $code)->exists()) {
+            $sequence++;
+            $code = sprintf('%s-%s-%05d', $prefix, $date, $sequence);
+        }
+
+        return $code;
     }
 }

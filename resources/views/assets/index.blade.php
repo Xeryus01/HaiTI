@@ -5,15 +5,15 @@
         <!-- Page Header -->
         <div class="mb-6 flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">IT Assets</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Track and manage all organization IT equipment</p>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Aset TI</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Pantau dan kelola semua aset TI organisasi</p>
             </div>
             @can('manage assets')
                 <a href="{{ route('assets.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">
                     <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 3C10.5523 3 11 3.44772 11 4V9H16C16.5523 9 17 9.44772 17 10C17 10.5523 16.5523 11 16 11H11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11H4C3.44772 11 3 10.5523 3 10C3 9.44772 3.44772 9 4 9H9V4C9 3.44772 9.44772 3 10 3Z"></path>
                     </svg>
-                    New Asset
+                    Tambah Aset
                 </a>
             @endcan
         </div>
@@ -26,22 +26,28 @@
                     <thead class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-white/5">
                         <tr>
                             <th class="px-5 py-3.5 text-left sm:px-6">
-                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Code</span>
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Kode</span>
                             </th>
                             <th class="px-5 py-3.5 text-left sm:px-6">
-                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Name</span>
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Nama</span>
                             </th>
                             <th class="px-5 py-3.5 text-left sm:px-6">
-                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Type</span>
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Tipe</span>
                             </th>
                             <th class="px-5 py-3.5 text-left sm:px-6">
                                 <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Status</span>
                             </th>
                             <th class="px-5 py-3.5 text-left sm:px-6">
-                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Location</span>
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Kondisi</span>
+                            </th>
+                            <th class="px-5 py-3.5 text-left sm:px-6">
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Lokasi</span>
+                            </th>
+                            <th class="px-5 py-3.5 text-left sm:px-6">
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Pemegang</span>
                             </th>
                             <th class="px-5 py-3.5 text-right sm:px-6">
-                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Action</span>
+                                <span class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Aksi</span>
                             </th>
                         </tr>
                     </thead>
@@ -69,7 +75,20 @@
                                     </span>
                                 </td>
                                 <td class="px-5 py-4 sm:px-6">
+                                    <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
+                                        @if($asset->condition === 'GOOD') bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
+                                        @elseif($asset->condition === 'FAIR') bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
+                                        @elseif($asset->condition === 'POOR') bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
+                                        @else bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
+                                        @endif">
+                                        {{ ucfirst(strtolower($asset->condition ?? 'N/A')) }}
+                                    </span>
+                                </td>
+                                <td class="px-5 py-4 sm:px-6">
                                     <span class="text-sm text-gray-600 dark:text-gray-400">{{ $asset->location ?? '-' }}</span>
+                                </td>
+                                <td class="px-5 py-4 sm:px-6">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $asset->holder ?? '-' }}</span>
                                 </td>
                                 <td class="px-5 py-4 text-right sm:px-6">
                                     <a href="{{ route('assets.show', $asset) }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">View</a>
@@ -78,7 +97,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="px-5 py-8 text-center sm:px-6">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">No assets found</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Belum ada aset</p>
                                 </td>
                             </tr>
                         @endforelse
