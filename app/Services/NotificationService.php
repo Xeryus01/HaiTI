@@ -8,10 +8,12 @@ use App\Models\User;
 class NotificationService
 {
     protected WhatsAppService $whatsAppService;
+    protected EmailService $emailService;
 
-    public function __construct(WhatsAppService $whatsAppService)
+    public function __construct(WhatsAppService $whatsAppService, EmailService $emailService)
     {
         $this->whatsAppService = $whatsAppService;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -24,7 +26,8 @@ class NotificationService
         string $message,
         ?string $actionType = null,
         ?int $actionId = null,
-        bool $sendWhatsApp = true
+        bool $sendWhatsApp = true,
+        bool $sendEmail = true
     ): Notification {
         // Create system notification
         $notification = Notification::create([
@@ -39,6 +42,11 @@ class NotificationService
         // Send WhatsApp if phone number exists
         if ($sendWhatsApp && !empty($user->phone_number)) {
             $this->sendWhatsAppNotification($user, $notification);
+        }
+
+        // Send Email if email exists
+        if ($sendEmail && !empty($user->email)) {
+            $this->sendEmailNotification($user, $notification);
         }
 
         return $notification;
@@ -77,9 +85,41 @@ class NotificationService
     }
 
     /**
+     * Send Email notification
+     */
+    protected function sendEmailNotification(User $user, Notification $notification): void
+    {
+        try {
+            $response = $this->emailService->send(
+                $user->email,
+                $notification->title,
+                $notification->message
+            );
+
+            if ($response['success'] ?? false) {
+                $notification->update([
+                    'email_sent' => true,
+                    'email_status' => 'sent',
+                    'email_response' => json_encode($response),
+                ]);
+            } else {
+                $notification->update([
+                    'email_status' => 'failed',
+                    'email_response' => json_encode($response),
+                ]);
+            }
+        } catch (\Exception $e) {
+            $notification->update([
+                'email_status' => 'failed',
+                'email_response' => json_encode(['error' => $e->getMessage()]),
+            ]);
+        }
+    }
+
+    /**
      * Create ticket notification
      */
-    public function notifyTicketCreated(User $user, $ticket, bool $sendWhatsApp = true): Notification
+    public function notifyTicketCreated(User $user, $ticket, bool $sendWhatsApp = true, bool $sendEmail = true): Notification
     {
         return $this->notify(
             $user,
@@ -88,14 +128,15 @@ class NotificationService
             "Tiket '{$ticket->title}' dengan prioritas {$ticket->priority} telah dibuat.",
             'ticket',
             $ticket->id,
-            $sendWhatsApp
+            $sendWhatsApp,
+            $sendEmail
         );
     }
 
     /**
      * Create ticket status update notification
      */
-    public function notifyTicketUpdated(User $user, $ticket, string $oldStatus, bool $sendWhatsApp = true): Notification
+    public function notifyTicketUpdated(User $user, $ticket, string $oldStatus, bool $sendWhatsApp = true, bool $sendEmail = true): Notification
     {
         return $this->notify(
             $user,
@@ -104,14 +145,15 @@ class NotificationService
             "Tiket '{$ticket->code}' status berubah dari {$oldStatus} menjadi {$ticket->status}.",
             'ticket',
             $ticket->id,
-            $sendWhatsApp
+            $sendWhatsApp,
+            $sendEmail
         );
     }
 
     /**
      * Create ticket resolved notification
      */
-    public function notifyTicketResolved(User $user, $ticket, bool $sendWhatsApp = true): Notification
+    public function notifyTicketResolved(User $user, $ticket, bool $sendWhatsApp = true, bool $sendEmail = true): Notification
     {
         return $this->notify(
             $user,
@@ -120,30 +162,32 @@ class NotificationService
             "Tiket '{$ticket->code}' telah diselesaikan.",
             'ticket',
             $ticket->id,
-            $sendWhatsApp
+            $sendWhatsApp,
+            $sendEmail
         );
     }
 
     /**
      * Create reservation notification
      */
-    public function notifyReservationCreated(User $user, $reservation, bool $sendWhatsApp = true): Notification
+    public function notifyReservationCreated(User $user, $reservation, bool $sendWhatsApp = true, bool $sendEmail = true): Notification
     {
         return $this->notify(
             $user,
             'info',
-            '� Pengajuan Zoom Baru',
+            '🏢 Pengajuan Zoom Baru',
             "Pengajuan Zoom '{$reservation->room_name}' pada {$reservation->start_time->format('d/m/Y H:i')} telah dibuat.",
             'reservation',
             $reservation->id,
-            $sendWhatsApp
+            $sendWhatsApp,
+            $sendEmail
         );
     }
 
     /**
      * Create reservation approved notification
      */
-    public function notifyReservationApproved(User $user, $reservation, bool $sendWhatsApp = true): Notification
+    public function notifyReservationApproved(User $user, $reservation, bool $sendWhatsApp = true, bool $sendEmail = true): Notification
     {
         return $this->notify(
             $user,
@@ -152,14 +196,15 @@ class NotificationService
             "Pengajuan Zoom '{$reservation->room_name}' telah disetujui." . ($reservation->zoom_link ? " Link: {$reservation->zoom_link}" : ''),
             'reservation',
             $reservation->id,
-            $sendWhatsApp
+            $sendWhatsApp,
+            $sendEmail
         );
     }
 
     /**
      * Create asset notification
      */
-    public function notifyAssetCreated(User $user, $asset, bool $sendWhatsApp = true): Notification
+    public function notifyAssetCreated(User $user, $asset, bool $sendWhatsApp = true, bool $sendEmail = true): Notification
     {
         return $this->notify(
             $user,
@@ -168,7 +213,8 @@ class NotificationService
             "Aset '{$asset->name}' (Kode: {$asset->asset_code}) telah ditambahkan ke sistem.",
             'asset',
             $asset->id,
-            $sendWhatsApp
+            $sendWhatsApp,
+            $sendEmail
         );
     }
 

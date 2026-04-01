@@ -8,8 +8,10 @@
 <?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <div class="grid grid-cols-12 gap-4 md:gap-5.5 2xl:gap-7.5">
-        <!-- Main Content -->
+    <div class="ml-64 min-h-screen">
+        <div class="p-5 sm:p-7.5 lg:p-9">
+            <div class="grid grid-cols-12 gap-4 md:gap-5.5 2xl:gap-7.5">
+                <!-- Main Content -->
         <div class="col-span-12 lg:col-span-8">
             <div class="rounded-sm border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-dark-800">
                 <!-- Header -->
@@ -164,6 +166,7 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
  <?php echo $__env->renderComponent(); ?>
@@ -176,4 +179,4 @@
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
 <?php endif; ?>
-<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views\notifications\show.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views/notifications/show.blade.php ENDPATH**/ ?>

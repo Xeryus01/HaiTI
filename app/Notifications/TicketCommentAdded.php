@@ -21,7 +21,7 @@ class TicketCommentAdded extends Notification
 
     public function via($notifiable)
     {
-        return ['mail', 'broadcast'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     public function toMail($notifiable)
@@ -46,8 +46,10 @@ class TicketCommentAdded extends Notification
     public function toArray($notifiable)
     {
         return [
+            'type' => 'ticket_comment',
             'ticket_id' => $this->comment->ticket->id,
             'comment_id' => $this->comment->id,
+            'title' => "Komentar baru pada tiket {$this->comment->ticket->code}",
             'message' => $this->comment->message,
             'user_id' => $this->comment->user_id,
         ];

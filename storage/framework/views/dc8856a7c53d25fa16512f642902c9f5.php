@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-5.5 py-4 dark:border-gray-700 dark:bg-dark-800 sm:px-7.5 lg:px-9">
+    <header class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-5.5 py-4 dark:border-gray-700 dark:bg-dark-800 sm:px-7.5 lg:px-9">
     <!-- Left Section -->
     <div class="flex items-center gap-4">
         <button @click="$store.theme.toggle()" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5">
@@ -24,35 +24,108 @@
     <!-- Right Section -->
     <div class="flex items-center gap-3">
         <!-- Notifications Bell -->
-        <div x-data="{ 
+        <div x-data="{
             notifOpen: false,
             notifications: [],
             unreadCount: 0,
+            loading: false,
+            error: null,
+            csrfToken: '<?php echo e(csrf_token()); ?>',
             init() {
+                this.requestNotificationPermission();
                 this.fetchUnreadCount();
-                // Refresh every 30 seconds
                 setInterval(() => this.fetchUnreadCount(), 30000);
             },
+            requestNotificationPermission() {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
+            },
             fetchUnreadCount() {
-                fetch('/api/notifications/unread-count')
-                    .then(response => response.json())
+                const previousCount = this.unreadCount;
+                fetch('/api/notifications/unread-count', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
                     .then(data => {
-                        this.unreadCount = data.unread_count;
+                        const newCount = data.unread_count || 0;
+                        if (newCount > previousCount && previousCount > 0) {
+                            this.showNewNotificationAlert();
+                        }
+                        this.unreadCount = newCount;
+                        this.error = null;
                         if (this.notifOpen) this.fetchLatestUnread();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching unread count:', error);
+                        this.error = 'Failed to load notifications';
                     });
             },
             fetchLatestUnread() {
-                fetch('/api/notifications/latest-unread')
-                    .then(response => response.json())
+                this.loading = true;
+                this.error = null;
+                fetch('/api/notifications/latest-unread', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
                     .then(data => {
-                        this.notifications = data.data;
+                        this.notifications = data.data || [];
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching latest unread:', error);
+                        this.loading = false;
+                        this.error = 'Failed to load notifications';
                     });
             },
             markAsRead(notification) {
-                fetch(`/api/notifications/${notification.id}/mark-as-read`, { method: 'PATCH' })
+                fetch(`/api/notifications/${notification.id}/mark-as-read`, {
+                    method: 'PATCH',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': this.csrfToken
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
                     .then(() => {
                         this.fetchUnreadCount();
+                    })
+                    .catch(error => {
+                        console.error('Error marking as read:', error);
                     });
+            },
+            showNewNotificationAlert() {
+                const bell = this.$el.querySelector('button');
+                bell.classList.add('animate-pulse');
+                setTimeout(() => {
+                    bell.classList.remove('animate-pulse');
+                }, 2000);
+
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('HaiTI - Notifikasi Baru', {
+                        body: 'Anda memiliki notifikasi baru',
+                        icon: '/favicon.ico'
+                    });
+                }
             }
         }" class="relative">
             <button @click="notifOpen = !notifOpen; notifOpen && fetchLatestUnread()" class="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5">
@@ -62,11 +135,11 @@
                     <path d="M11.7 18C11.7 18.6 11.2 19.1 10.5 19.1C9.8 19.1 9.3 18.6 9.3 18H11.7Z"></path>
                 </svg>
                 <!-- Unread Badge -->
-                <span x-show="unreadCount > 0" x-text="unreadCount" class="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white text-xs font-bold"></span>
+                <span x-show="unreadCount > 0" x-text="unreadCount" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-75" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-75" class="absolute -top-1 -right-1 flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white text-xs font-bold"></span>
             </button>
 
             <!-- Notifications Dropdown -->
-            <div x-show="notifOpen" @click.outside="notifOpen = false" class="absolute right-0 mt-2 w-80 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-dark-800 z-50">
+            <div x-show="notifOpen" @click.outside="notifOpen = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="absolute right-0 mt-2 w-80 sm:w-80 md:w-96 rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-dark-800 z-60 max-h-[80vh] overflow-hidden">
                 <!-- Header -->
                 <div class="border-b border-gray-200 px-4 py-3 dark:border-gray-700">
                     <p class="text-sm font-semibold text-gray-900 dark:text-white">Notifikasi</p>
@@ -74,22 +147,66 @@
 
                 <!-- Notifications List -->
                 <div class="max-h-96 overflow-y-auto">
-                    <template x-if="notifications.length === 0">
+                    <!-- Loading State -->
+                    <template x-if="loading">
+                        <div class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-500 mx-auto mb-2"></div>
+                            Memuat notifikasi...
+                        </div>
+                    </template>
+
+                    <!-- Error State -->
+                    <template x-if="error && !loading">
+                        <div class="px-4 py-8 text-center text-sm text-red-500 dark:text-red-400">
+                            <svg class="w-6 h-6 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span x-text="error"></span>
+                            <br>
+                            <button @click="fetchLatestUnread()" class="text-xs underline hover:no-underline mt-1">
+                                Coba lagi
+                            </button>
+                        </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <template x-if="!loading && !error && notifications.length === 0">
                         <div class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                             Belum ada notifikasi baru
                         </div>
                     </template>
 
+                    <!-- Notifications -->
                     <template x-for="notification in notifications" :key="notification.id">
-                        <div class="border-b border-gray-100 px-4 py-3 hover:bg-gray-50 dark:border-gray-700/50 dark:hover:bg-white/5 cursor-pointer transition" @click="markAsRead(notification)">
+                        <div class="border-b border-gray-100 px-4 py-3 hover:bg-gray-50 dark:border-gray-700/50 dark:hover:bg-white/5 cursor-pointer transition duration-150 ease-in-out" @click="markAsRead(notification)">
                             <div class="flex gap-3">
-                                <div class="mt-0.5">
-                                    <div class="h-2 w-2 rounded-full bg-brand-500"></div>
+                                <div class="mt-0.5 flex-shrink-0">
+                                    <!-- Type-based Icon -->
+                                    <div x-show="notification.type === 'ticket_comment'" class="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                        <svg class="h-4 w-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="notification.type === 'ticket_status'" class="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                        <svg class="h-4 w-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="notification.type !== 'ticket_comment' && notification.type !== 'ticket_status'" class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                        <svg class="h-4 w-4 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="notification.title"></p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="notification.message"></p>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2" x-text="new Date(notification.created_at).toLocaleString('id-ID')"></p>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white truncate" x-text="notification.title"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2 break-words" x-text="notification.message"></p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2" x-text="new Date(notification.created_at).toLocaleString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })"></p>
                                 </div>
                             </div>
                         </div>

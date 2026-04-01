@@ -23,7 +23,7 @@ class TicketStatusChanged extends Notification
 
     public function via($notifiable)
     {
-        return ['mail', 'broadcast'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     public function toMail($notifiable)
@@ -48,8 +48,11 @@ class TicketStatusChanged extends Notification
     public function toArray($notifiable)
     {
         return [
+            'type' => 'ticket_status',
             'ticket_id' => $this->ticket->id,
             'code' => $this->ticket->code,
+            'title' => "Status tiket {$this->ticket->code} berubah",
+            'message' => "Status berubah dari {$this->oldStatus} ke {$this->ticket->status}",
             'old_status' => $this->oldStatus,
             'status' => $this->ticket->status,
         ];

@@ -18,11 +18,15 @@ class Notification extends Model
         'whatsapp_sent',
         'whatsapp_status',
         'whatsapp_response',
+        'email_sent',
+        'email_status',
+        'email_response',
     ];
 
     protected $casts = [
         'is_read' => 'boolean',
         'whatsapp_sent' => 'boolean',
+        'email_sent' => 'boolean',
     ];
 
     /**
