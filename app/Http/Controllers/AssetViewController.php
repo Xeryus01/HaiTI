@@ -69,22 +69,10 @@ class AssetViewController extends Controller
     {
         abort_unless(auth()->user()->can('manage assets'), 403);
 
-        $filename = 'asset-upload-template.xlsx';
-        $diskPath = storage_path('app/' . $filename);
+        $filename = 'template-aset.xlsx';
 
-        // Generate file if it doesn't exist yet
-        if (! file_exists($diskPath)) {
-            Excel::store(new AssetsTemplateExport(), $filename, 'local');
-        }
-
-        if (! file_exists($diskPath)) {
-            // fallback if storage path not writable
-            return Excel::download(new AssetsTemplateExport(), $filename);
-        }
-
-        return response()->download($diskPath, 'template-aset.xlsx', [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        ]);
+        // Delivery langsung, tanpa ketergantungan file system lokal
+        return Excel::download(new AssetsTemplateExport(), $filename, \Maatwebsite\Excel\Excel::XLSX);
     }
 
     public function import(Request $request)

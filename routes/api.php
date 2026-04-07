@@ -41,15 +41,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('reservations', ReservationController::class);
 
     // notifications - web auth for header dropdown
-    Route::middleware('auth')->group(function () {
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('api.notifications.index');
-        Route::get('/notifications/latest-unread', [NotificationController::class, 'latestUnread'])->name('api.notifications.latestUnread');
-        Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('api.notifications.unreadCount');
-        Route::get('/notifications/{notification}', [NotificationController::class, 'show'])->name('api.notifications.show');
-        Route::patch('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('api.notifications.markAsRead');
-        Route::patch('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('api.notifications.markAllAsRead');
-        Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('api.notifications.destroy');
-    });
+    // these routes are in web session flow (not Sanctum token), so they are also accessible from frontend layout navbar
+    // (SPA uses same-origin cookies, auth middleware)
+    
+    // handled in routes/web.php now to keep standard web cookie auth and avoid sanctum guard mismatch.
 
     // logs (read-only)
     Route::get('/logs', function (Request $request) {

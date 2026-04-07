@@ -34,9 +34,20 @@ Route::middleware('auth')->group(function () {
     Route::resource('reservations', \App\Http\Controllers\ReservationViewController::class);
     Route::get('reservations/{reservation}/nota-dinas', [\App\Http\Controllers\ReservationViewController::class, 'showNotaDinas'])->name('reservations.nota-dinas');
 
-    // notifications
+    // notifications UI
     Route::get('/notifications', [\App\Http\Controllers\NotificationViewController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/{notification}', [\App\Http\Controllers\NotificationViewController::class, 'show'])->name('notifications.show');
+
+    // notifications API endpoint for header dropdown (same-session web auth)
+    Route::middleware('auth')->prefix('api')->group(function () {
+        Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('api.notifications.index');
+        Route::get('/notifications/latest-unread', [\App\Http\Controllers\NotificationController::class, 'latestUnread'])->name('api.notifications.latestUnread');
+        Route::get('/notifications/unread-count', [\App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('api.notifications.unreadCount');
+        Route::get('/notifications/{notification}', [\App\Http\Controllers\NotificationController::class, 'show'])->name('api.notifications.show');
+        Route::patch('/notifications/{notification}/mark-as-read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('api.notifications.markAsRead');
+        Route::patch('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('api.notifications.markAllAsRead');
+        Route::delete('/notifications/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy'])->name('api.notifications.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

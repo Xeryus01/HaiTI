@@ -149,10 +149,16 @@ class TicketViewController extends Controller
             'status' => 'sometimes|string|in:' . implode(',', Ticket::statuses()),
             'attachment' => 'sometimes|file|max:10240',
         ]);
-        $data['ticket_id'] = $ticket->id;
-        $data['user_id'] = $user->id;
-        $data['is_internal'] = false;
-        $comment = TicketComment::create($data);
+
+        // Create comment with only the fields that belong to TicketComment
+        $commentData = [
+            'ticket_id' => $ticket->id,
+            'user_id' => $user->id,
+            'message' => $data['message'],
+            'is_internal' => false, // Regular users can't create internal comments via web form
+        ];
+
+        $comment = TicketComment::create($commentData);
 
         // handle optional file
         if ($request->hasFile('attachment')) {
@@ -171,11 +177,66 @@ class TicketViewController extends Controller
 
         // if status was provided and user is technician/admin, update ticket
         if (isset($data['status']) && $request->user()->hasAnyRole(['Admin','Teknisi'])) {
+            $oldStatus = $ticket->status;
             $ticket->status = $data['status'];
             if (in_array($ticket->status, [Ticket::STATUS_SOLVED, Ticket::STATUS_SOLVED_WITH_NOTES], true)) {
                 $ticket->resolved_at = now();
             }
             $ticket->save();
+
+            // Log status change
+            Log::create([
+                'actor_id' => $user->id,
+                'entity_type' => 'TICKET',
+                'entity_id' => $ticket->id,
+                'action' => 'STATUS_CHANGED',
+                'meta' => ['status' => $ticket->status],
+            ]);
+
+            // Send notification if status changed
+            if ($oldStatus !== $ticket->status) {
+                if (in_array($ticket->status, [Ticket::STATUS_SOLVED, Ticket::STATUS_SOLVED_WITH_NOTES], true)) {
+                    $this->notificationService->notifyTicketResolved($ticket->assignee ?? $ticket->requester, $ticket);
+                } else {
+                    $this->notificationService->notifyTicketUpdated($ticket->assignee ?? $ticket->requester, $ticket);
+                }
+            }
+        }
+
+        // Log comment creation
+        Log::create([
+            'actor_id' => $user->id,
+            'entity_type' => 'TICKET',
+            'entity_id' => $ticket->id,
+            'action' => 'COMMENTED',
+            'meta' => ['comment_id' => $comment->id],
+        ]);
+
+        // Send notification about new comment
+        if ($ticket->requester && $ticket->requester->id !== $user->id) {
+            $this->notificationService->notify(
+                $ticket->requester,
+                'info',
+                '💬 Komentar Baru pada Tiket',
+                "Komentar baru pada tiket {$ticket->code}: {$comment->message}",
+                'ticket',
+                $ticket->id,
+                false,
+                false
+            );
+        }
+
+        if ($ticket->assignee && $ticket->assignee->id !== $user->id) {
+            $this->notificationService->notify(
+                $ticket->assignee,
+                'info',
+                '💬 Komentar Baru pada Tiket',
+                "Komentar baru pada tiket {$ticket->code}: {$comment->message}",
+                'ticket',
+                $ticket->id,
+                false,
+                false
+            );
         }
 
         return redirect()->route('tickets.show', $ticket)->with('success','Pesan berhasil dikirim');
