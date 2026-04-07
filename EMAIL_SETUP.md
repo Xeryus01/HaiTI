@@ -1,6 +1,6 @@
 # Email Notification Setup
 
-Sistem HaiTI sekarang mendukung notifikasi email selain WhatsApp. Berikut adalah panduan untuk mengkonfigurasi email notifications.
+Sistem TimCare sekarang mendukung notifikasi email selain WhatsApp. Berikut adalah panduan untuk mengkonfigurasi email notifications.
 
 ## Konfigurasi Email
 
@@ -16,7 +16,7 @@ MAIL_USERNAME=your-email@gmail.com
 MAIL_PASSWORD=your-app-password
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS="noreply@haiti.com"
-MAIL_FROM_NAME="HaiTI Helpdesk"
+MAIL_FROM_NAME="TimCare Helpdesk"
 ```
 
 ### 2. Gmail Setup (Contoh)
@@ -27,7 +27,7 @@ Untuk menggunakan Gmail sebagai SMTP server:
 2. Buat App Password:
    - Pergi ke Google Account Settings
    - Security > 2-Step Verification > App passwords
-   - Generate password untuk "HaiTI Helpdesk"
+   - Generate password untuk "TimCare Helpdesk"
 3. Gunakan App Password tersebut sebagai MAIL_PASSWORD
 
 ### 3. Mailgun Setup (Production Recommended)
@@ -50,9 +50,9 @@ php artisan tinker
 Kemudian jalankan:
 
 ```php
-Mail::raw('Test email from HaiTI', function ($message) {
+Mail::raw('Test email from TimCare', function ($message) {
     $message->to('your-email@example.com')
-            ->subject('HaiTI Email Test');
+            ->subject('TimCare Email Test');
 });
 ```
 

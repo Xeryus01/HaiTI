@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>HaiTI - Sistem Helpdesk IT Terintegrasi</title>
+    <title>TimCare - Sistem Helpdesk IT Terintegrasi</title>
     <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket termasalahan, pengajuan ruang Zoom, dan layanan IT lainnya.">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
@@ -59,7 +59,7 @@
                         <svg class="h-8 w-8 text-brand-600" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                         </svg>
-                        <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">HaiTI</span>
+                        <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">TimCare</span>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -127,11 +127,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                    Fitur Unggulan HaiTI
-                </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                    Sistem helpdesk IT lengkap yang memudahkan pengelolaan layanan IT dalam satu platform terintegrasi.
-                </p>
+                    Fitur Unggulan TimCare
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -217,35 +213,57 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-20 bg-gray-50 dark:bg-dark-900">
+    <section class="py-20 bg-slate-50 dark:bg-dark-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                    Dampak HaiTI
-                </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-300">
-                    Statistik penggunaan sistem helpdesk IT
+            <div class="text-center mb-14">
+                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 mb-3">Statistik</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">Dampak TimCare</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+                    Ringkasan kinerja sistem helpdesk IT yang menunjukkan aktivitas, penggunaan, dan layanan yang telah selesai.
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-brand-600 mb-2">{{ \App\Models\Ticket::count() }}</div>
-                    <div class="text-gray-600 dark:text-gray-300">Tiket Ditangani</div>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-800 p-6 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-brand-100 text-brand-600 mb-4">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="text-4xl font-semibold text-gray-900 dark:text-white mb-2">{{ \App\Models\Ticket::count() }}</div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Tiket Ditangani</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-green-600 mb-2">{{ \App\Models\Reservation::count() }}</div>
-                    <div class="text-gray-600 dark:text-gray-300">Ruang Zoom Diajukan</div>
+
+                <div class="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-800 p-6 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-green-100 text-green-600 mb-4">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="text-4xl font-semibold text-gray-900 dark:text-white mb-2">{{ \App\Models\Reservation::count() }}</div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Ruang Zoom Diajukan</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">{{ \App\Models\User::count() }}</div>
-                    <div class="text-gray-600 dark:text-gray-300">Pengguna Aktif</div>
+
+                <div class="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-800 p-6 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-blue-100 text-blue-600 mb-4">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div class="text-4xl font-semibold text-gray-900 dark:text-white mb-2">{{ \App\Models\User::count() }}</div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pengguna Aktif</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">
+
+                <div class="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-800 p-6 shadow-sm hover:shadow-lg transition-shadow">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-purple-100 text-purple-600 mb-4">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="text-4xl font-semibold text-gray-900 dark:text-white mb-2">
                         {{ \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count() + \App\Models\Reservation::where('status', 'COMPLETED')->count() }}
                     </div>
-                    <div class="text-gray-600 dark:text-gray-300">Layanan Selesai</div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Layanan Selesai</p>
                 </div>
             </div>
         </div>
@@ -254,65 +272,55 @@
     <!-- CTA Section -->
     <section class="py-20 bg-brand-600 text-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                Siap Menggunakan HaiTI?
-            </h2>
-            <p class="text-xl mb-8 text-brand-100">
-                Bergabunglah dengan sistem helpdesk IT terintegrasi untuk kemudahan layanan IT Anda.
-            </p>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Siap Menggunakan TimCare?</h2>
+            <p class="text-xl mb-8 text-brand-100">Bergabunglah dengan sistem helpdesk IT terintegrasi untuk kemudahan layanan IT Anda.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 @auth
-                    <a href="{{ route('tickets.create') }}" class="bg-white text-brand-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        Ajukan Tiket Sekarang
-                    </a>
+                    <a href="{{ route('tickets.create') }}" class="bg-white text-brand-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Ajukan Tiket Sekarang</a>
                 @else
-                    <a href="{{ route('register') }}" class="bg-white text-brand-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        Daftar Akun
-                    </a>
-                    <a href="{{ route('login') }}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors">
-                        Masuk
-                    </a>
+                    <a href="{{ route('register') }}" class="bg-white text-brand-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Daftar Akun</a>
+                    <a href="{{ route('login') }}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors">Masuk</a>
                 @endauth
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gray-900 text-white py-16 dark:bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="col-span-2">
+            <div class="grid gap-12 md:grid-cols-3">
+                <div>
                     <div class="flex items-center mb-4">
                         <svg class="h-8 w-8 text-brand-400" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                         </svg>
-                        <span class="ml-2 text-xl font-bold">HaiTI</span>
+                        <span class="ml-3 text-xl font-bold">TimCare</span>
                     </div>
-                    <p class="text-gray-400 mb-4">
-                        Sistem Helpdesk IT Terintegrasi untuk kemudahan layanan IT Anda.
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        © {{ date('Y') }} HaiTI. All rights reserved.
+                    <p class="text-gray-400 max-w-md">
+                        Layanan helpdesk IT modern untuk memudahkan tiket, pengajuan Zoom, dan pemantauan layanan secara terintegrasi.
                     </p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Fitur</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Tiket Permasalahan</a></li>
-                        <li><a href="#" class="hover:text-white">Pengajuan Zoom</a></li>
-                        <li><a href="#" class="hover:text-white">Dashboard Analytics</a></li>
-                        <li><a href="#" class="hover:text-white">Notifikasi Real-time</a></li>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Fitur</h3>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#features" class="hover:text-white">Tiket Permasalahan</a></li>
+                        <li><a href="#features" class="hover:text-white">Pengajuan Zoom</a></li>
+                        <li><a href="#features" class="hover:text-white">Dashboard Analytics</a></li>
+                        <li><a href="#features" class="hover:text-white">Notifikasi Real-time</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Dukungan</h3>
-                    <ul class="space-y-2 text-gray-400">
+                    <h3 class="text-lg font-semibold mb-4 text-white">Dukungan</h3>
+                    <ul class="space-y-3 text-gray-400">
                         <li><a href="#" class="hover:text-white">Dokumentasi</a></li>
                         <li><a href="#" class="hover:text-white">FAQ</a></li>
                         <li><a href="#" class="hover:text-white">Kontak</a></li>
                         <li><a href="#" class="hover:text-white">Status Sistem</a></li>
                     </ul>
                 </div>
+            </div>
+            <div class="mt-12 border-t border-gray-800 pt-8 text-sm text-gray-500">
+                © {{ date('Y') }} TimCare. All rights reserved.
             </div>
         </div>
     </footer>

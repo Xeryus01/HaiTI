@@ -121,7 +121,7 @@
                 }, 2000);
 
                 if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification('HaiTI - Notifikasi Baru', {
+                    new Notification('TimCare - Notifikasi Baru', {
                         body: 'Anda memiliki notifikasi baru',
                         icon: '/favicon.ico'
                     });

@@ -1,4 +1,4 @@
-# Quick Start Guide - Haiti ITSM Dashboard
+# Quick Start Guide - TimCare ITSM Dashboard
 
 ## 🚀 Mulai dalam 5 Menit
 

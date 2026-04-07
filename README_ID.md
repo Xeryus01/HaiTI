@@ -1,4 +1,4 @@
-# Haiti ITSM Dashboard - Complete Documentation
+# TimCare ITSM Dashboard - Complete Documentation
 
 Sistem manajemen tiket, aset, dan reservasi ruangan dengan notifikasi real-time via WhatsApp.
 

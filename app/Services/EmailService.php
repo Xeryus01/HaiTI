@@ -85,36 +85,36 @@ class EmailService
                 "Judul: {$data['title']}\n" .
                 "Kategori: {$data['category']}\n\n" .
                 "Deskripsi: {$data['description']}\n\n" .
-                "Silakan login ke sistem HaiTI untuk melihat detail tiket.",
+                "Silakan login ke sistem TimCare untuk melihat detail tiket.",
 
             'ticket_updated' => "Tiket telah diperbarui:\n\n" .
                 "Kode: {$data['code']}\n" .
                 "Status: {$data['status']}\n" .
                 "Perubahan: {$data['change_description']}\n\n" .
-                "Silakan login ke sistem HaiTI untuk melihat detail perubahan.",
+                "Silakan login ke sistem TimCare untuk melihat detail perubahan.",
 
             'ticket_resolved' => "Tiket telah diselesaikan:\n\n" .
                 "Kode: {$data['code']}\n" .
                 "Judul: {$data['title']}\n\n" .
-                "Terima kasih telah menggunakan sistem HaiTI.",
+                "Terima kasih telah menggunakan sistem TimCare.",
 
             'reservation_created' => "Reservasi ruangan baru telah dibuat:\n\n" .
                 "Ruangan: {$data['room_name']}\n" .
                 "Tanggal: {$data['date']}\n" .
                 "Waktu: {$data['time']}\n" .
                 "Tujuan: {$data['purpose']}\n\n" .
-                "Silakan login ke sistem HaiTI untuk melihat detail reservasi.",
+                "Silakan login ke sistem TimCare untuk melihat detail reservasi.",
 
             'reservation_approved' => "Reservasi ruangan telah disetujui:\n\n" .
                 "Ruangan: {$data['room_name']}\n" .
                 "Tanggal: {$data['date']}\n\n" .
-                "Reservasi Anda telah disetujui. Silakan login ke sistem HaiTI untuk detail lebih lanjut.",
+                "Reservasi Anda telah disetujui. Silakan login ke sistem TimCare untuk detail lebih lanjut.",
 
             'asset_created' => "Aset baru telah ditambahkan:\n\n" .
                 "Kode: {$data['asset_code']}\n" .
                 "Nama: {$data['name']}\n" .
                 "Tipe: {$data['type']}\n\n" .
-                "Silakan login ke sistem HaiTI untuk melihat detail aset.",
+                "Silakan login ke sistem TimCare untuk melihat detail aset.",
 
             default => "Notifikasi baru: " . json_encode($data),
         };
@@ -126,13 +126,13 @@ class EmailService
     private function getNotificationSubject(string $type): string
     {
         return match ($type) {
-            'ticket_created' => '📋 Tiket Baru - HaiTI Helpdesk',
-            'ticket_updated' => '🔄 Tiket Diperbarui - HaiTI Helpdesk',
-            'ticket_resolved' => '✅ Tiket Diselesaikan - HaiTI Helpdesk',
-            'reservation_created' => '🏢 Reservasi Ruangan Baru - HaiTI Helpdesk',
-            'reservation_approved' => '✅ Reservasi Disetujui - HaiTI Helpdesk',
-            'asset_created' => '📦 Aset Baru - HaiTI Helpdesk',
-            default => '📬 Notifikasi - HaiTI Helpdesk',
+            'ticket_created' => '📋 Tiket Baru - TimCare Helpdesk',
+            'ticket_updated' => '🔄 Tiket Diperbarui - TimCare Helpdesk',
+            'ticket_resolved' => '✅ Tiket Diselesaikan - TimCare Helpdesk',
+            'reservation_created' => '🏢 Reservasi Ruangan Baru - TimCare Helpdesk',
+            'reservation_approved' => '✅ Reservasi Disetujui - TimCare Helpdesk',
+            'asset_created' => '📦 Aset Baru - TimCare Helpdesk',
+            default => '📬 Notifikasi - TimCare Helpdesk',
         };
     }
 }
