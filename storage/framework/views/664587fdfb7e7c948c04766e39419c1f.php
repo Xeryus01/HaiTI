@@ -36,10 +36,6 @@
                         <p class="mt-1 font-semibold text-gray-900 dark:text-white"><?php echo e($ticket->category_label); ?></p>
                     </div>
                     <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Prioritas</p>
-                        <p class="mt-1 font-semibold text-gray-900 dark:text-white"><?php echo e($ticket->priority_label); ?></p>
-                    </div>
-                    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
                         <p class="text-sm text-gray-500 dark:text-gray-400">Pemohon</p>
                         <p class="mt-1 font-semibold text-gray-900 dark:text-white"><?php echo e(optional($ticket->requester)->name ?? '-'); ?></p>
                     </div>

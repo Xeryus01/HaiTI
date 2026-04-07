@@ -29,18 +29,26 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('tickets.update', $ticket) }}" class="space-y-6">
+            <form method="POST" action="{{ route('tickets.update', $ticket) }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PATCH')
+
+                <div>
+                    <label for="submission_time" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Waktu Pengajuan Tiket
+                    </label>
+                    <input id="submission_time" type="text" value="{{ $ticket->created_at->format('d/m/Y H:i') }}" disabled class="w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-gray-700 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300" />
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Waktu pengajuan dicatat saat tiket dibuat.</p>
+                </div>
 
                 <!-- Category -->
                 <div>
                     <label for="category" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                        Category
+                        Jenis Permintaan
                     </label>
                     <select id="category" name="category" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('category') border-red-500 @enderror">
-                        @foreach(['MAINTENANCE','ZOOM_SUPPORT','IT_SUPPORT','OTHER'] as $cat)
-                            <option value="{{ $cat }}" {{ $ticket->category === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        @foreach(\App\Models\Ticket::categoryLabels() as $value => $label)
+                            <option value="{{ $value }}" {{ $ticket->category === $value ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
                     @error('category')
@@ -70,38 +78,30 @@
                     @enderror
                 </div>
 
-                <!-- Priority & Asset Grid -->
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <!-- Priority -->
-                    <div>
-                        <label for="priority" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                            Priority
-                        </label>
-                        <select id="priority" name="priority" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('priority') border-red-500 @enderror">
-                            @foreach(['LOW','MEDIUM','HIGH','CRITICAL'] as $p)
-                                <option value="{{ $p }}" {{ $ticket->priority === $p ? 'selected' : '' }}>{{ $p }}</option>
-                            @endforeach
-                        </select>
-                        @error('priority')
-                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div>
+                    <label for="attachment" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Lampiran <span class="text-gray-400">(opsional)</span>
+                    </label>
+                    <input id="attachment" type="file" name="attachment" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('attachment') border-red-500 @enderror" />
+                    @error('attachment')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <!-- Asset (optional) -->
-                    <div>
-                        <label for="asset_id" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                            Related Asset (optional)
-                        </label>
-                        <select id="asset_id" name="asset_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('asset_id') border-red-500 @enderror">
-                            <option value="">-- Choose an asset --</option>
-                            @foreach($assets as $asset)
-                                <option value="{{ $asset->id }}" {{ $ticket->asset_id == $asset->id ? 'selected' : '' }}>{{ $asset->name }} ({{ $asset->asset_code }})</option>
-                            @endforeach
-                        </select>
-                        @error('asset_id')
-                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <!-- Asset Field -->
+                <div>
+                    <label for="asset_id" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Related Asset (optional)
+                    </label>
+                    <select id="asset_id" name="asset_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('asset_id') border-red-500 @enderror">
+                        <option value="">-- Choose an asset --</option>
+                        @foreach($assets as $asset)
+                            <option value="{{ $asset->id }}" {{ $ticket->asset_id == $asset->id ? 'selected' : '' }}>{{ $asset->name }} ({{ $asset->asset_code }})</option>
+                        @endforeach
+                    </select>
+                    @error('asset_id')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
                 </div>
                 <!-- Status & Assignment Section -->
                 @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']))

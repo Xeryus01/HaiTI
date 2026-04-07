@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>HaiTI - Sistem Helpdesk IT Terintegrasi</title>
-    <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket perbaikan, pengajuan ruang Zoom, dan layanan IT lainnya.">
+    <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket termasalahan, pengajuan ruang Zoom, dan layanan IT lainnya.">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -99,7 +99,7 @@
                     <span class="text-brand-200">Terintegrasi</span>
                 </h1>
                 <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto">
-                    Kelola tiket perbaikan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
+                    Kelola tiket termasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     @auth
@@ -135,16 +135,16 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Tiket Perbaikan -->
+                <!-- Tiket Permasalahan -->
                 <div class="feature-card bg-gray-50 dark:bg-dark-700 p-6 rounded-xl border border-gray-200 dark:border-gray-600">
                     <div class="w-12 h-12 bg-brand-100 dark:bg-brand-500/20 rounded-lg flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Tiket Perbaikan IT</h3>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Tiket Permasalahan IT</h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        Ajukan tiket perbaikan hardware, software, jaringan, dan masalah IT lainnya dengan mudah.
+                        Ajukan tiket termasalahan hardware, software, jaringan, dan masalah IT lainnya dengan mudah.
                     </p>
                 </div>
 
@@ -298,7 +298,7 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Fitur</h3>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Tiket Perbaikan</a></li>
+                        <li><a href="#" class="hover:text-white">Tiket Permasalahan</a></li>
                         <li><a href="#" class="hover:text-white">Pengajuan Zoom</a></li>
                         <li><a href="#" class="hover:text-white">Dashboard Analytics</a></li>
                         <li><a href="#" class="hover:text-white">Notifikasi Real-time</a></li>

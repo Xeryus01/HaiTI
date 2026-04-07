@@ -12,7 +12,7 @@
     <div class="p-5 sm:p-7.5 lg:p-9">
         <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Tiket Perbaikan</h1>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Tiket Permasalahan</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">User mengajukan keluhan, lalu teknisi atau admin menindaklanjuti sampai selesai.</p>
             </div>
             <div class="flex flex-wrap gap-2">
@@ -28,12 +28,6 @@
                     <option value="<?php echo e($value); ?>" <?php echo e(request('status') === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
-            <select name="priority" class="rounded-lg border-gray-300 px-3 py-2 dark:bg-dark-800 dark:text-white">
-                <option value="">Semua prioritas</option>
-                <?php $__currentLoopData = \App\Models\Ticket::priorityLabels(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($value); ?>" <?php echo e(request('priority') === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </select>
             <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 text-white">Terapkan</button>
         </form>
 
@@ -46,7 +40,6 @@
                             <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 sm:px-6">Keluhan</th>
                             <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 sm:px-6">Pemohon</th>
                             <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 sm:px-6">Status</th>
-                            <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 sm:px-6">Prioritas</th>
                             <th class="px-5 py-3.5 text-left text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 sm:px-6">Petugas</th>
                             <th class="px-5 py-3.5 text-right text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 sm:px-6">Aksi</th>
                         </tr>
@@ -71,17 +64,6 @@
                                         <?php else: ?> bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         <?php endif; ?>">
                                         <?php echo e($ticket->status_label); ?>
-
-                                    </span>
-                                </td>
-                                <td class="px-5 py-4 sm:px-6">
-                                    <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
-                                        <?php if($ticket->priority === 'CRITICAL'): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
-                                        <?php elseif($ticket->priority === 'HIGH'): ?> bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400
-                                        <?php elseif($ticket->priority === 'MEDIUM'): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                                        <?php else: ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
-                                        <?php endif; ?>">
-                                        <?php echo e($ticket->priority_label); ?>
 
                                     </span>
                                 </td>

@@ -83,8 +83,7 @@ class EmailService
             'ticket_created' => "Tiket baru telah dibuat:\n\n" .
                 "Kode: {$data['code']}\n" .
                 "Judul: {$data['title']}\n" .
-                "Kategori: {$data['category']}\n" .
-                "Prioritas: {$data['priority']}\n\n" .
+                "Kategori: {$data['category']}\n\n" .
                 "Deskripsi: {$data['description']}\n\n" .
                 "Silakan login ke sistem HaiTI untuk melihat detail tiket.",
 

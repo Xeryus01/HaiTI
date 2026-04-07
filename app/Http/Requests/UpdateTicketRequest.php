@@ -25,13 +25,13 @@ class UpdateTicketRequest extends FormRequest
         $allowedStatus = array_merge([''], \App\Models\Ticket::statuses());
 
         return [
-            'category' => 'sometimes|string|in:MAINTENANCE,ZOOM_SUPPORT,IT_SUPPORT,OTHER',
+            'category' => 'sometimes|string|in:DATA_PROCESSING,EMAIL_SSO,HARDWARE_SUPPORT,SOFTWARE_SUPPORT,NETWORK_SUPPORT,SECURITY_INCIDENT',
             'title' => 'sometimes|string|max:200',
             'description' => 'sometimes|string|max:5000',
-            'priority' => 'sometimes|string|in:LOW,MEDIUM,HIGH,CRITICAL',
             'status' => ['nullable', 'string', Rule::in($allowedStatus)],
             'asset_id' => 'nullable|integer|exists:assets,id',
             'assignee_id' => 'nullable|integer|exists:users,id',
+            'attachment' => 'nullable|file|max:10240',
         ];
     }
 }

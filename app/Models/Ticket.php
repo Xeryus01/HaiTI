@@ -53,10 +53,12 @@ class Ticket extends Model
     public static function categoryLabels(): array
     {
         return [
-            'MAINTENANCE' => 'Perawatan',
-            'ZOOM_SUPPORT' => 'Bantuan Zoom',
-            'IT_SUPPORT' => 'Perbaikan IT',
-            'OTHER' => 'Lainnya',
+            'DATA_PROCESSING' => 'Pengolahan Data',
+            'EMAIL_SSO' => 'Layanan Email dan SSO BPS',
+            'HARDWARE_SUPPORT' => 'Layanan Perangkat Keras',
+            'SOFTWARE_SUPPORT' => 'Layanan Perangkat Lunak',
+            'NETWORK_SUPPORT' => 'Layanan Jaringan',
+            'SECURITY_INCIDENT' => 'Insiden Keamanan',
         ];
     }
 

@@ -125,7 +125,7 @@ class NotificationService
             $user,
             'success',
             '📋 Tiket Baru Dibuat',
-            "Tiket '{$ticket->title}' dengan prioritas {$ticket->priority} telah dibuat.",
+            "Tiket '{$ticket->title}' telah dibuat.",
             'ticket',
             $ticket->id,
             $sendWhatsApp,

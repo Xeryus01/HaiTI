@@ -2,7 +2,7 @@
 <div class="ml-64 min-h-screen">
     <div class="p-5 sm:p-7.5 lg:p-9">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ajukan Tiket Perbaikan</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ajukan Tiket Permasalahan</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Sampaikan kendala secara singkat, lalu teknisi atau admin akan menanganinya.</p>
         </div>
 
@@ -18,16 +18,22 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('tickets.store') }}" class="space-y-6">
+            <form method="POST" action="{{ route('tickets.store') }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <div>
                     <label for="category" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Jenis Permintaan</label>
                     <select id="category" name="category" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('category') border-red-500 @enderror">
                         @foreach(\App\Models\Ticket::categoryLabels() as $value => $label)
-                            <option value="{{ $value }}" {{ old('category', 'IT_SUPPORT') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                            <option value="{{ $value }}" {{ old('category', 'DATA_PROCESSING') === $value ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
+                </div>
+
+                <div>
+                    <label for="submission_time" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Waktu Pengajuan Tiket</label>
+                    <input id="submission_time" type="text" value="{{ now()->format('d/m/Y H:i') }}" disabled class="w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-gray-700 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300" />
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Waktu pengajuan akan dicatat otomatis saat tiket dikirim.</p>
                 </div>
 
                 <div>
@@ -40,25 +46,22 @@
                     <textarea id="description" name="description" rows="4" required placeholder="Jelaskan masalah yang dialami agar petugas lebih mudah menindaklanjuti." class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
                 </div>
 
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <div>
-                        <label for="priority" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Prioritas</label>
-                        <select id="priority" name="priority" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('priority') border-red-500 @enderror">
-                            @foreach(\App\Models\Ticket::priorityLabels() as $value => $label)
-                                <option value="{{ $value }}" {{ old('priority', 'MEDIUM') === $value ? 'selected' : '' }}>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div>
+                    <label for="attachment" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Lampiran Awal <span class="text-gray-400">(opsional)</span></label>
+                    <input id="attachment" type="file" name="attachment" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('attachment') border-red-500 @enderror" />
+                    @error('attachment')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div>
-                        <label for="asset_id" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Aset Terkait <span class="text-gray-400">(opsional)</span></label>
-                        <select id="asset_id" name="asset_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('asset_id') border-red-500 @enderror">
-                            <option value="">Pilih aset jika ada</option>
-                            @foreach($assets as $asset)
-                                <option value="{{ $asset->id }}" {{ old('asset_id') == $asset->id ? 'selected' : '' }}>{{ $asset->name }} ({{ $asset->asset_code }})</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div>
+                    <label for="asset_id" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Aset Terkait <span class="text-gray-400">(opsional)</span></label>
+                    <select id="asset_id" name="asset_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('asset_id') border-red-500 @enderror">
+                        <option value="">Pilih aset jika ada</option>
+                        @foreach($assets as $asset)
+                            <option value="{{ $asset->id }}" {{ old('asset_id') == $asset->id ? 'selected' : '' }}>{{ $asset->name }} ({{ $asset->asset_code }})</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="flex gap-3 pt-4">

@@ -147,8 +147,7 @@ class WhatsAppService
             'ticket_created' => "Tiket baru telah dibuat:\n" .
                 "Kode: {$data['code']}\n" .
                 "Judul: {$data['title']}\n" .
-                "Kategori: {$data['category']}\n" .
-                "Prioritas: {$data['priority']}",
+                "Kategori: {$data['category']}",
 
             'ticket_updated' => "Tiket telah diperbarui:\n" .
                 "Kode: {$data['code']}\n" .

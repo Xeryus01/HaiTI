@@ -11,7 +11,7 @@
 <div class="ml-64 min-h-screen">
     <div class="p-5 sm:p-7.5 lg:p-9">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ajukan Tiket Perbaikan</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ajukan Tiket Permasalahan</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Sampaikan kendala secara singkat, lalu teknisi atau admin akan menanganinya.</p>
         </div>
 
@@ -27,7 +27,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?php echo e(route('tickets.store')); ?>" class="space-y-6">
+            <form method="POST" action="<?php echo e(route('tickets.store')); ?>" enctype="multipart/form-data" class="space-y-6">
                 <?php echo csrf_field(); ?>
 
                 <div>
@@ -41,9 +41,15 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>">
                         <?php $__currentLoopData = \App\Models\Ticket::categoryLabels(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($value); ?>" <?php echo e(old('category', 'IT_SUPPORT') === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
+                            <option value="<?php echo e($value); ?>" <?php echo e(old('category', 'DATA_PROCESSING') === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
+                </div>
+
+                <div>
+                    <label for="submission_time" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Waktu Pengajuan Tiket</label>
+                    <input id="submission_time" type="text" value="<?php echo e(now()->format('d/m/Y H:i')); ?>" disabled class="w-full rounded-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-gray-700 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300" />
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Waktu pengajuan akan dicatat otomatis saat tiket dikirim.</p>
                 </div>
 
                 <div>
@@ -70,26 +76,31 @@ endif;
 unset($__errorArgs, $__bag); ?>"><?php echo e(old('description')); ?></textarea>
                 </div>
 
-                <div class="grid gap-6 sm:grid-cols-2">
-                    <div>
-                        <label for="priority" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Prioritas</label>
-                        <select id="priority" name="priority" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white <?php $__errorArgs = ['priority'];
+                <div>
+                    <label for="attachment" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Lampiran Awal <span class="text-gray-400">(opsional)</span></label>
+                    <input id="attachment" type="file" name="attachment" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white <?php $__errorArgs = ['attachment'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>">
-                            <?php $__currentLoopData = \App\Models\Ticket::priorityLabels(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($value); ?>" <?php echo e(old('priority', 'MEDIUM') === $value ? 'selected' : ''); ?>><?php echo e($label); ?></option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                    </div>
+unset($__errorArgs, $__bag); ?>" />
+                    <?php $__errorArgs = ['attachment'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
 
-                    <div>
-                        <label for="asset_id" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Aset Terkait <span class="text-gray-400">(opsional)</span></label>
-                        <select id="asset_id" name="asset_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white <?php $__errorArgs = ['asset_id'];
+                <div>
+                    <label for="asset_id" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Aset Terkait <span class="text-gray-400">(opsional)</span></label>
+                    <select id="asset_id" name="asset_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white <?php $__errorArgs = ['asset_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -97,12 +108,11 @@ $message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($messag
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>">
-                            <option value="">Pilih aset jika ada</option>
-                            <?php $__currentLoopData = $assets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($asset->id); ?>" <?php echo e(old('asset_id') == $asset->id ? 'selected' : ''); ?>><?php echo e($asset->name); ?> (<?php echo e($asset->asset_code); ?>)</option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                    </div>
+                        <option value="">Pilih aset jika ada</option>
+                        <?php $__currentLoopData = $assets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asset): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($asset->id); ?>" <?php echo e(old('asset_id') == $asset->id ? 'selected' : ''); ?>><?php echo e($asset->name); ?> (<?php echo e($asset->asset_code); ?>)</option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
                 </div>
 
                 <div class="flex gap-3 pt-4">

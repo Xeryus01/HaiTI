@@ -32,9 +32,6 @@ class TicketViewController extends Controller
         if ($request->filled('status')) {
             $q->where('status', $request->status);
         }
-        if ($request->filled('priority')) {
-            $q->where('priority', $request->priority);
-        }
         if ($request->filled('assignee_id')) {
             $q->where('assignee_id', $request->assignee_id);
         }
@@ -57,6 +54,19 @@ class TicketViewController extends Controller
         $data['status'] = Ticket::STATUS_OPEN;
 
         $ticket = Ticket::create($data);
+
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $path = $file->store('attachments', 'public');
+            Attachment::create([
+                'ticket_id' => $ticket->id,
+                'uploader_id' => $request->user()->id,
+                'file_path' => $path,
+                'file_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getClientMimeType(),
+                'size_bytes' => $file->getSize(),
+            ]);
+        }
 
         Log::create([
             'actor_id' => $request->user()->id,
@@ -113,6 +123,19 @@ class TicketViewController extends Controller
             $ticket->resolved_at = now();
         }
         $ticket->save();
+
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $path = $file->store('attachments', 'public');
+            Attachment::create([
+                'ticket_id' => $ticket->id,
+                'uploader_id' => $request->user()->id,
+                'file_path' => $path,
+                'file_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getClientMimeType(),
+                'size_bytes' => $file->getSize(),
+            ]);
+        }
 
         // Send notification if status changed
         if ($oldStatus !== $ticket->status) {

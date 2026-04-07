@@ -38,7 +38,7 @@
             <div class="mt-4 grid gap-3 md:grid-cols-4">
                 <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
                     <p class="text-xs font-semibold text-brand-600">1</p>
-                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">User ajukan tiket perbaikan</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">User ajukan tiket termasalahan</p>
                 </div>
                 <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
                     <p class="text-xs font-semibold text-brand-600">2</p>
@@ -77,7 +77,7 @@
         <div class="mb-6 grid gap-6 xl:grid-cols-2">
             <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
                 <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Grafik Tiket Perbaikan</h2>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Grafik Tiket Permasalahan</h2>
                     <a href="{{ route('exports.tickets') }}" class="text-sm font-medium text-brand-600 hover:text-brand-700">Ekspor CSV</a>
                 </div>
                 <canvas id="ticketChart" height="220"></canvas>

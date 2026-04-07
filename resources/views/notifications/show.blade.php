@@ -46,7 +46,7 @@
                                             {{ $ticket->title }}
                                         </a>
                                         <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
-                                            #{{ $ticket->id }} • Priority: {{ $ticket->priority }}
+                                            #{{ $ticket->id }}
                                         </p>
                                     </div>
                                     @break
