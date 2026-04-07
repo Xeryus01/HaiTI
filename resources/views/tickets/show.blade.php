@@ -156,21 +156,30 @@
                         @csrf
                         <div>
                             <label for="message" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Balas percakapan</label>
-                            <textarea id="message" name="message" rows="3" placeholder="Tulis pesan, update penanganan, atau permintaan tambahan..." class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white">{{ old('message') }}</textarea>
+                            <textarea id="message" name="message" rows="3" placeholder="Tulis pesan, update penanganan, atau permintaan tambahan..." class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('message') border-red-500 @enderror" required>{{ old('message') }}</textarea>
+                            @error('message')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label for="attachment" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Lampiran <span class="text-gray-400">(opsional)</span></label>
-                            <input type="file" id="attachment" name="attachment" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" class="w-full text-sm text-gray-700 dark:text-gray-300">
+                            <input type="file" id="attachment" name="attachment" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" class="w-full text-sm text-gray-700 dark:text-gray-300 @error('attachment') border-red-500 @enderror">
+                            @error('attachment')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                         @if(auth()->user()->hasAnyRole(['Admin','Teknisi']))
                             <div>
                                 <label for="status" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Ubah status saat ini</label>
-                                <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white">
+                                <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('status') border-red-500 @enderror">
                                     <option value="">Tetap seperti sekarang</option>
                                     @foreach(\App\Models\Ticket::statusLabels() as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>
+                                @error('status')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
                         @endif
                         <button type="submit" class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-700">Kirim Pesan</button>

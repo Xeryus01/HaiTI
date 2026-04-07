@@ -9,6 +9,7 @@ use App\Models\TicketComment;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
@@ -63,6 +64,7 @@ class TicketViewController extends Controller
             'entity_id' => $ticket->id,
             'action' => 'CREATED',
             'meta' => ['code' => $ticket->code],
+            'created_at' => now(),
         ]);
 
         // Send notification
@@ -117,7 +119,7 @@ class TicketViewController extends Controller
             if (in_array($ticket->status, [Ticket::STATUS_SOLVED, Ticket::STATUS_SOLVED_WITH_NOTES], true)) {
                 $this->notificationService->notifyTicketResolved($ticket->assignee ?? $ticket->requester, $ticket);
             } else {
-                $this->notificationService->notifyTicketUpdated($ticket->assignee ?? $ticket->requester, $ticket);
+                $this->notificationService->notifyTicketUpdated($ticket->assignee ?? $ticket->requester, $ticket, $oldStatus);
             }
         }
 
@@ -146,7 +148,11 @@ class TicketViewController extends Controller
 
         $data = $request->validate([
             'message' => 'required|string',
-            'status' => 'sometimes|string|in:' . implode(',', Ticket::statuses()),
+            'status' => [
+                'nullable',
+                'string',
+                Rule::in(array_merge([''], Ticket::statuses())),
+            ],
             'attachment' => 'sometimes|file|max:10240',
         ]);
 
@@ -191,6 +197,7 @@ class TicketViewController extends Controller
                 'entity_id' => $ticket->id,
                 'action' => 'STATUS_CHANGED',
                 'meta' => ['status' => $ticket->status],
+                'created_at' => now(),
             ]);
 
             // Send notification if status changed
@@ -198,7 +205,7 @@ class TicketViewController extends Controller
                 if (in_array($ticket->status, [Ticket::STATUS_SOLVED, Ticket::STATUS_SOLVED_WITH_NOTES], true)) {
                     $this->notificationService->notifyTicketResolved($ticket->assignee ?? $ticket->requester, $ticket);
                 } else {
-                    $this->notificationService->notifyTicketUpdated($ticket->assignee ?? $ticket->requester, $ticket);
+                    $this->notificationService->notifyTicketUpdated($ticket->assignee ?? $ticket->requester, $ticket, $oldStatus);
                 }
             }
         }
@@ -210,6 +217,7 @@ class TicketViewController extends Controller
             'entity_id' => $ticket->id,
             'action' => 'COMMENTED',
             'meta' => ['comment_id' => $comment->id],
+            'created_at' => now(),
         ]);
 
         // Send notification about new comment
