@@ -57,7 +57,7 @@
                 <div class="fixed inset-x-0 top-20 z-50 flex justify-center px-4 sm:px-6 lg:px-8 pointer-events-none">
                     <div class="w-full max-w-3xl">
                         <?php if(session('success')): ?>
-                            <div x-data="{show: true}" x-show="show" x-transition class="rounded-xl border border-green-500 bg-green-50 p-4 dark:border-green-500/30 dark:bg-green-500/15 shadow-lg ring-1 ring-green-500/20 pointer-events-auto">
+                            <div x-data="{show: true}" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)" class="rounded-xl border border-green-500 bg-green-50 p-4 dark:border-green-500/30 dark:bg-green-500/15 shadow-lg ring-1 ring-green-500/20 pointer-events-auto">
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="flex items-center gap-2">
                                         <div class="text-green-500">

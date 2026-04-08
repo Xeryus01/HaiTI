@@ -63,6 +63,16 @@
                                 <p class="text-gray-700 dark:text-gray-300">Belum ditambahkan.</p>
                             @endif
                         </div>
+                        @if($reservation->zoom_link)
+                            <div>
+                                <p class="text-gray-500 dark:text-gray-400">Link Record Zoom</p>
+                                @if($reservation->zoom_record_link)
+                                    <a href="{{ $reservation->zoom_record_link }}" target="_blank" class="font-medium text-brand-600 hover:underline">{{ $reservation->zoom_record_link }}</a>
+                                @else
+                                    <p class="text-gray-700 dark:text-gray-300">Belum ditambahkan.</p>
+                                @endif
+                            </div>
+                        @endif
                         <div>
                             <p class="text-gray-500 dark:text-gray-400">Catatan tindak lanjut</p>
                             <p class="text-gray-700 dark:text-gray-300">{{ $reservation->notes ?: 'Belum ada catatan dari petugas.' }}</p>
@@ -73,26 +83,71 @@
                 @if(auth()->user()->hasPermissionTo('approve reservations'))
                     <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
                         <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Tindak Lanjut oleh Teknisi / Admin</h2>
-                        <form method="POST" action="{{ route('reservations.update', $reservation) }}" class="space-y-4" id="followUpForm">
+                        
+                        @if($errors->any())
+                            <div class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-400">
+                                <ul class="list-inside list-disc space-y-1">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        
+                        <form method="POST" action="{{ route('reservations.update', $reservation) }}" class="space-y-6">
                             @csrf
                             @method('PATCH')
-                            <div>
-                                <label for="status" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                                <select id="status" name="status" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white">
-                                    @foreach(\App\Models\Reservation::statusLabels() as $value => $label)
-                                        <option value="{{ $value }}" {{ $reservation->status === $value ? 'selected' : '' }}>{{ $label }}</option>
-                                    @endforeach
-                                </select>
+
+                            <div class="grid gap-6 sm:grid-cols-2">
+                                <div>
+                                    <label for="status" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                    <select id="status" name="status" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('status') border-red-500 @enderror">
+                                        @foreach(\App\Models\Reservation::statusLabels() as $value => $label)
+                                            <option value="{{ $value }}" {{ $reservation->status === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('status')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
+
                             <div>
-                                <label for="zoom_link" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Link Zoom</label>
-                                <input id="zoom_link" type="url" name="zoom_link" value="{{ old('zoom_link', $reservation->zoom_link) }}" placeholder="https://zoom.us/j/..." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white" />
+                                <label for="zoom_link" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                    Link Zoom 
+                                    @if($reservation->status === 'APPROVED' || request()->input('status') === 'APPROVED')
+                                        <span class="text-red-500">*</span>
+                                    @endif
+                                </label>
+                                <input id="zoom_link" type="url" name="zoom_link" value="{{ old('zoom_link', $reservation->zoom_link) }}" placeholder="https://zoom.us/j/123456789/..." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('zoom_link') border-red-500 @enderror" 
+                                       @if($reservation->status === 'APPROVED' || request()->input('status') === 'APPROVED') required @endif />
+                                @error('zoom_link')
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
+
+                            @if($reservation->zoom_link)
+                                <div>
+                                    <label for="zoom_record_link" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Link Record Zoom <span class="text-gray-400">(Opsional)</span></label>
+                                    <input id="zoom_record_link" type="url" name="zoom_record_link" value="{{ old('zoom_record_link', $reservation->zoom_record_link) }}" placeholder="https://zoom.us/rec/..." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('zoom_record_link') border-red-500 @enderror" />
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Hanya bisa ditambahkan setelah link zoom diberikan.</p>
+                                    @error('zoom_record_link')
+                                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endif
+
                             <div>
-                                <label for="notes" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Catatan tindak lanjut</label>
-                                <textarea id="notes" name="notes" rows="3" placeholder="Contoh: Link aktif 10 menit sebelum mulai." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white">{{ old('notes', $reservation->notes) }}</textarea>
+                                <label for="notes" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Catatan Tindak Lanjut <span class="text-gray-400">(Opsional)</span></label>
+                                <textarea id="notes" name="notes" rows="3" placeholder="Contoh: Link aktif 10 menit sebelum mulai." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('notes') border-red-500 @enderror">{{ old('notes', $reservation->notes) }}</textarea>
+                                @error('notes')
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
-                            <button type="submit" class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-700">Simpan Follow Up</button>
+
+                            <div class="flex gap-3 pt-2">
+                                <button type="submit" class="flex-1 rounded-lg bg-brand-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-brand-700">Simpan Follow Up</button>
+                            </div>
                         </form>
                     </div>
                 @endif
@@ -124,4 +179,60 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Scroll to top if there's a success message
+    @if(session('success'))
+        window.addEventListener('load', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    @endif
+
+    // Highlight zoom link field if it was just updated
+    @if(session('success') && strpos(session('success'), 'Zoom') !== false)
+        document.addEventListener('DOMContentLoaded', function() {
+            const zoomLinkInput = document.getElementById('zoom_link');
+            if (zoomLinkInput) {
+                zoomLinkInput.classList.add('ring-2', 'ring-green-500', 'border-green-500');
+                setTimeout(() => {
+                    zoomLinkInput.classList.remove('ring-2', 'ring-green-500', 'border-green-500');
+                }, 3000);
+            }
+        });
+    @endif
+
+    // Handle zoom link requirement based on status
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.getElementById('status');
+        const zoomLinkInput = document.getElementById('zoom_link');
+        const zoomLinkLabel = document.querySelector('label[for="zoom_link"]');
+
+        function updateZoomLinkRequirement() {
+            const isApproved = statusSelect.value === 'APPROVED';
+            const requiredSpan = zoomLinkLabel.querySelector('.text-red-500');
+
+            if (isApproved) {
+                zoomLinkInput.setAttribute('required', 'required');
+                if (!requiredSpan) {
+                    const span = document.createElement('span');
+                    span.className = 'text-red-500';
+                    span.textContent = '*';
+                    zoomLinkLabel.appendChild(span);
+                }
+            } else {
+                zoomLinkInput.removeAttribute('required');
+                if (requiredSpan) {
+                    requiredSpan.remove();
+                }
+            }
+        }
+
+        if (statusSelect && zoomLinkInput) {
+            statusSelect.addEventListener('change', updateZoomLinkRequirement);
+            // Initial check
+            updateZoomLinkRequirement();
+        }
+    });
+</script>
+
 </x-app-layout>

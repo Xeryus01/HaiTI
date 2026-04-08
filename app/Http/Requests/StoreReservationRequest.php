@@ -16,10 +16,35 @@ class StoreReservationRequest extends FormRequest
         return [
             'room_name' => 'required|string|max:100',
             'purpose' => 'required|string|max:500',
-            'start_time' => 'required|date_format:Y-m-d H:i|after:now',
-            'end_time' => 'required|date_format:Y-m-d H:i|after:start_time',
+            'start_time_local' => 'required|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/|after:now',
+            'end_time_local' => 'required|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/',
             'nota_dinas' => 'required|file|mimes:pdf|max:5120', // 5MB max
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->filled('start_time_local')) {
+            // Convert datetime-local format (2026-04-08T14:30) to database format (2026-04-08 14:30:00)
+            $startTime = $this->input('start_time_local');
+            if (strlen($startTime) == 16) { // Format: YYYY-MM-DDTHH:MM
+                $startTime .= ':00'; // Add seconds
+            }
+            $this->merge([
+                'start_time' => $startTime
+            ]);
+        }
+
+        if ($this->filled('end_time_local')) {
+            // Convert datetime-local format (2026-04-08T14:30) to database format (2026-04-08 14:30:00)
+            $endTime = $this->input('end_time_local');
+            if (strlen($endTime) == 16) { // Format: YYYY-MM-DDTHH:MM
+                $endTime .= ':00'; // Add seconds
+            }
+            $this->merge([
+                'end_time' => $endTime
+            ]);
+        }
     }
 
     public function messages(): array
@@ -35,5 +60,19 @@ class StoreReservationRequest extends FormRequest
             'nota_dinas.mimes' => 'Nota dinas harus berformat PDF',
             'nota_dinas.max' => 'Ukuran nota dinas maksimal 5MB',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->filled('start_time_local') && $this->filled('end_time_local')) {
+                $startTime = $this->input('start_time');
+                $endTime = $this->input('end_time');
+
+                if (strtotime($endTime) <= strtotime($startTime)) {
+                    $validator->errors()->add('end_time_local', 'Waktu selesai harus setelah waktu mulai.');
+                }
+            }
+        });
     }
 }

@@ -34,6 +34,24 @@ class ReservationViewController extends Controller
     public function store(StoreReservationRequest $request)
     {
         $data = $request->validated();
+        
+        // Add the converted datetime fields if they were provided
+        if ($request->filled('start_time_local')) {
+            $startTime = $request->input('start_time_local');
+            if (strlen($startTime) == 16) {
+                $startTime .= ':00';
+            }
+            $data['start_time'] = $startTime;
+        }
+
+        if ($request->filled('end_time_local')) {
+            $endTime = $request->input('end_time_local');
+            if (strlen($endTime) == 16) {
+                $endTime .= ':00';
+            }
+            $data['end_time'] = $endTime;
+        }
+        
         $data['requester_id'] = $request->user()->id;
         $data['status'] = 'PENDING';
         $data['code'] = Reservation::generateCode();
@@ -88,10 +106,27 @@ class ReservationViewController extends Controller
         $data = $request->validated();
         $isApprover = $user->hasPermissionTo('approve reservations');
 
+        // Add the converted datetime fields if they were provided
+        if ($request->filled('start_time_local')) {
+            $startTime = $request->input('start_time_local');
+            if (strlen($startTime) == 16) {
+                $startTime .= ':00';
+            }
+            $data['start_time'] = $startTime;
+        }
+
+        if ($request->filled('end_time_local')) {
+            $endTime = $request->input('end_time_local');
+            if (strlen($endTime) == 16) {
+                $endTime .= ':00';
+            }
+            $data['end_time'] = $endTime;
+        }
+
         if ($isApprover) {
             $data['approver_id'] = $request->user()->id;
         } else {
-            unset($data['status'], $data['zoom_link'], $data['notes'], $data['approver_id']);
+            unset($data['status'], $data['zoom_link'], $data['zoom_record_link'], $data['notes'], $data['approver_id']);
         }
 
         $reservation->update($data);

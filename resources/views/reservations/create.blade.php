@@ -35,12 +35,10 @@
                     <div>
                         <label for="start_time" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Mulai</label>
                         <input id="start_time" type="datetime-local" name="start_time_local" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('start_time') border-red-500 @enderror" />
-                        <input type="hidden" name="start_time" id="start_time_hidden" />
                     </div>
                     <div>
                         <label for="end_time" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Selesai</label>
                         <input id="end_time" type="datetime-local" name="end_time_local" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('end_time') border-red-500 @enderror" />
-                        <input type="hidden" name="end_time" id="end_time_hidden" />
                     </div>
                 <div>
                     <label for="nota_dinas" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nota Dinas <span class="text-red-500">*</span></label>
@@ -56,21 +54,4 @@
         </div>
     </div>
 </div>
-
-<script>
-document.getElementById('reservationForm').addEventListener('submit', function () {
-    const startTimeLocal = document.getElementById('start_time').value;
-    const endTimeLocal = document.getElementById('end_time').value;
-
-    if (startTimeLocal) {
-        const [date, time] = startTimeLocal.split('T');
-        document.getElementById('start_time_hidden').value = date + ' ' + time;
-    }
-
-    if (endTimeLocal) {
-        const [date, time] = endTimeLocal.split('T');
-        document.getElementById('end_time_hidden').value = date + ' ' + time;
-    }
-});
-</script>
 </x-app-layout>

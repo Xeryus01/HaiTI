@@ -22,13 +22,70 @@ class UpdateReservationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'room_name' => 'sometimes|string|max:100',
-            'purpose' => 'sometimes|string|max:500',
-            'start_time' => 'sometimes|date_format:Y-m-d H:i|after:now',
-            'end_time' => 'sometimes|date_format:Y-m-d H:i|after:start_time',
-            'status' => 'sometimes|string|in:PENDING,APPROVED,REJECTED,COMPLETED,CANCELLED',
+            'room_name' => 'nullable|string|max:100',
+            'purpose' => 'nullable|string|max:500',
+            'start_time_local' => 'nullable|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/',
+            'end_time_local' => 'nullable|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/',
+            'status' => 'nullable|string|in:PENDING,APPROVED,REJECTED,COMPLETED,CANCELLED',
             'zoom_link' => 'nullable|url|max:255',
+            'zoom_record_link' => 'nullable|url|max:255',
             'notes' => 'nullable|string|max:2000',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->filled('start_time_local')) {
+            // Convert datetime-local format (2026-04-08T14:30) to database format (2026-04-08 14:30:00)
+            $startTime = $this->input('start_time_local');
+            if (strlen($startTime) == 16) { // Format: YYYY-MM-DDTHH:MM
+                $startTime .= ':00'; // Add seconds
+            }
+            $this->merge([
+                'start_time' => $startTime
+            ]);
+        }
+
+        if ($this->filled('end_time_local')) {
+            // Convert datetime-local format (2026-04-08T14:30) to database format (2026-04-08 14:30:00)
+            $endTime = $this->input('end_time_local');
+            if (strlen($endTime) == 16) { // Format: YYYY-MM-DDTHH:MM
+                $endTime .= ':00'; // Add seconds
+            }
+            $this->merge([
+                'end_time' => $endTime
+            ]);
+        }
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            // Check if times are provided and end time is after start time
+            if ($this->filled('start_time_local') && $this->filled('end_time_local')) {
+                $startTime = $this->input('start_time');
+                $endTime = $this->input('end_time');
+
+                if (strtotime($endTime) <= strtotime($startTime)) {
+                    $validator->errors()->add('end_time_local', 'Waktu selesai harus setelah waktu mulai.');
+                }
+            }
+
+            // For admins, zoom_link is required when changing status to APPROVED
+            $user = $this->user();
+            if ($user && $user->hasPermissionTo('approve reservations')) {
+                if ($this->filled('status') && $this->input('status') === 'APPROVED' && ! $this->filled('zoom_link')) {
+                    $validator->errors()->add('zoom_link', 'Link Zoom harus diisi ketika menyetujui pengajuan.');
+                }
+            }
+
+            // If status is being changed to REJECTED, CANCELLED, or COMPLETED, zoom_link is not required
+            if ($this->filled('status')) {
+                $status = $this->input('status');
+                if (in_array($status, ['REJECTED', 'CANCELLED', 'COMPLETED']) && !$this->filled('zoom_link')) {
+                    // Allow empty zoom_link for these statuses - no error needed
+                }
+            }
+        });
     }
 }
