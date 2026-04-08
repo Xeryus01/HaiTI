@@ -70,7 +70,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white min-h-screen flex items-center justify-center">
+    <section class="hero-gradient text-white min-h-screen flex items-center justify-center relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="text-center">
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 leading-tight">
@@ -80,7 +80,7 @@
                 <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 sm:mb-12 text-gray-100 max-w-4xl mx-auto px-2 leading-relaxed">
                     Kelola tiket termasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2 mb-10">
                     <?php if(auth()->guard()->check()): ?>
                         <a href="<?php echo e(route('tickets.create')); ?>" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Ajukan Tiket Baru
@@ -97,8 +97,61 @@
                         </a>
                     <?php endif; ?>
                 </div>
+
+                <!-- Jadwal Piket Clean -->
+                <?php
+                    $bulanData = [
+                        1 => ['nama' => 'Januari', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
+                        2 => ['nama' => 'Februari', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Mesra', 'TU Atas Bawah' => 'Marko']],
+                        3 => ['nama' => 'Maret', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
+                        4 => ['nama' => 'April', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
+                        5 => ['nama' => 'Mei', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Eji', 'TU Atas Bawah' => 'Fadil']],
+                        6 => ['nama' => 'Juni', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
+                        7 => ['nama' => 'Juli', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
+                        8 => ['nama' => 'Agustus', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Eji', 'TU Atas Bawah' => 'Fadil']],
+                        9 => ['nama' => 'September', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
+                        10 => ['nama' => 'Oktober', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
+                        11 => ['nama' => 'November', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Eji', 'TU Atas Bawah' => 'Fadil']],
+                        12 => ['nama' => 'Desember', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
+                    ];
+                    $currentMonth = date('n');
+                    $currentData = $bulanData[$currentMonth];
+                    $colorMap = [
+                        'Fadil' => ['dot' => 'bg-blue-400', 'accent' => 'from-blue-400 to-blue-500'],
+                        'Marko' => ['dot' => 'bg-emerald-400', 'accent' => 'from-emerald-400 to-emerald-500'],
+                        'Eji' => ['dot' => 'bg-purple-400', 'accent' => 'from-purple-400 to-purple-500'],
+                        'Mesra' => ['dot' => 'bg-rose-400', 'accent' => 'from-rose-400 to-rose-500'],
+                    ];
+                ?>
+                <div class="mt-8 pt-6 border-t border-white/20 max-w-3xl mx-auto">
+                    <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest mb-4">Tim Piket Hari Ini</p>
+                    <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                        <?php $__currentLoopData = $currentData['piket']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi => $nama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php 
+                                $colors = $colorMap[$nama] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
+                                $displayLocation = $lokasi === 'Lantai Bawah' ? 'Lantai 1' : ($lokasi === 'TU Atas Bawah' ? 'TU' : 'Lantai 2');
+                            ?>
+                            <div class="group relative flex-1 sm:flex-none">
+                                <div class="absolute inset-0 bg-gradient-to-r <?php echo e($colors['accent']); ?> rounded-lg blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
+                                <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-3 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-full sm:w-auto">
+                                    <div class="flex flex-col items-center gap-1.5">
+                                        <div class="h-1.5 w-1.5 <?php echo e($colors['dot']); ?> rounded-full"></div>
+                                        <p class="text-xs sm:text-sm font-semibold text-gray-300"><?php echo e($displayLocation); ?></p>
+                                        <p class="text-xs sm:text-sm font-bold text-white"><?php echo e($nama); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php if(!$loop->last): ?>
+                                <div class="hidden sm:block w-px h-12 bg-white/20"></div>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
+
+    <!-- Features Section -->
     </section>
 
     <!-- Features Section -->
