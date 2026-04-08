@@ -123,26 +123,26 @@
                         'Mesra' => ['dot' => 'bg-rose-400', 'accent' => 'from-rose-400 to-rose-500'],
                     ];
                 ?>
-                <div class="mt-8 pt-6 border-t border-white/20 max-w-3xl mx-auto">
+                <div class="mt-8 pt-6 border-t border-white/20 max-w-2xl mx-auto">
                     <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest mb-4">Tim Piket Hari Ini</p>
-                    <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 sm:flex-nowrap">
                         <?php $__currentLoopData = $currentData['piket']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi => $nama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php 
                                 $colors = $colorMap[$nama] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
                                 $displayLocation = $lokasi === 'Lantai Bawah' ? 'Lantai 1' : ($lokasi === 'TU Atas Bawah' ? 'TU' : 'Lantai 2');
                             ?>
-                            <div class="group relative flex-1 sm:flex-none">
-                                <div class="absolute inset-0 bg-gradient-to-r <?php echo e($colors['accent']); ?> rounded-lg blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
-                                <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg px-4 py-3 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-full sm:w-auto">
+                            <div class="group relative">
+                                <div class="absolute inset-0 bg-gradient-to-r <?php echo e($colors['accent']); ?> rounded-md blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
+                                <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-md px-3 py-3 sm:px-4 sm:py-4 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-20 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                                     <div class="flex flex-col items-center gap-1.5">
                                         <div class="h-1.5 w-1.5 <?php echo e($colors['dot']); ?> rounded-full"></div>
-                                        <p class="text-xs sm:text-sm font-semibold text-gray-300"><?php echo e($displayLocation); ?></p>
-                                        <p class="text-xs sm:text-sm font-bold text-white"><?php echo e($nama); ?></p>
+                                        <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap"><?php echo e($displayLocation); ?></p>
+                                        <p class="text-xs sm:text-sm font-bold text-white whitespace-nowrap"><?php echo e($nama); ?></p>
                                     </div>
                                 </div>
                             </div>
                             <?php if(!$loop->last): ?>
-                                <div class="hidden sm:block w-px h-12 bg-white/20"></div>
+                                <div class="hidden sm:block w-px h-14 bg-white/20"></div>
                             <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
