@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     // User management - Admin only
     Route::middleware('role:Admin')->group(function () {
         Route::resource('users', \App\Http\Controllers\UserController::class);
+        Route::get('users/{user}/change-password', [\App\Http\Controllers\UserController::class, 'editPassword'])->name('users.editPassword');
+        Route::patch('users/{user}/change-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->name('users.updatePassword');
     });
 });
 

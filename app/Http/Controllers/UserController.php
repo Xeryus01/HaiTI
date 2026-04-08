@@ -120,4 +120,29 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success', 'User berhasil dihapus.');
     }
+
+    /**
+     * Show the form for editing user password.
+     */
+    public function editPassword(User $user)
+    {
+        return view('users.change-password', compact('user'));
+    }
+
+    /**
+     * Update the specified user password in storage.
+     */
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users.show', $user)
+            ->with('success', 'Password user berhasil diperbarui.');
+    }
 }

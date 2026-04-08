@@ -67,6 +67,7 @@
                                 <td class="px-5 py-4 sm:px-6 text-right text-sm font-medium">
                                     <div class="flex justify-end gap-3">
                                         <a href="{{ route('users.show', $user) }}" class="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">Lihat</a>
+                                        <a href="{{ route('users.editPassword', $user) }}" class="text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300">Password</a>
                                         <a href="{{ route('users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
                                         @if($user->id !== auth()->id())
                                             <form method="POST" action="{{ route('users.destroy', $user) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
