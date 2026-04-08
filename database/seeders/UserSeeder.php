@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -19,9 +20,11 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Administrator',
                 'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
             ]
         );
-        $admin->assignRole('Admin');
+        $admin->syncRoles(['Admin']);
 
         // Create Teknisi users
         $technicians = [
@@ -49,9 +52,11 @@ class UserSeeder extends Seeder
                 [
                     'name' => $techData['name'],
                     'password' => Hash::make('password'),
+                    'email_verified_at' => now(),
+                    'remember_token' => Str::random(10),
                 ]
             );
-            $user->assignRole('Teknisi');
+            $user->syncRoles(['Teknisi']);
         }
 
         // Create Test User
@@ -60,8 +65,10 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Test User',
                 'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(10),
             ]
         );
-        $testUser->assignRole('User');
+        $testUser->syncRoles(['User']);
     }
 }
