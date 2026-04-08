@@ -67,6 +67,18 @@
                     <span>Manajemen User</span>
                 </a>
             </li>
+
+            <!-- Jadwal Piket - Admin Only -->
+            <?php if(auth()->user()->hasRole('Admin')): ?>
+            <li>
+                <a href="<?php echo e(route('piket.index')); ?>" class="group relative flex items-center gap-3 rounded-lg px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400 <?php echo e(request()->routeIs('piket.*') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'hover:bg-gray-100 dark:hover:bg-white/5'); ?>">
+                    <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 2C4.89543 2 4 2.89543 4 4V6H2V8H4V10H2V12H4V14H2V16H4V18H6V16H8V18H10V16H12V18H14V16H16V18H18V16H16V14H18V12H16V10H18V8H16V6H14V4C14 2.89543 13.1046 2 12 2H6ZM6 4H12V6H6V4ZM6 8H8V10H6V8ZM10 8H12V10H10V8ZM6 12H8V14H6V12ZM10 12H12V14H10V12Z"></path>
+                    </svg>
+                    <span>Jadwal Piket</span>
+                </a>
+            </li>
+            <?php endif; ?>
             <?php endif; ?>
         </ul>
     </nav>

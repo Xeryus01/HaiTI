@@ -35,6 +35,12 @@
                         <a href="{{ url('/dashboard') }}" class="hidden sm:inline-block text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                             Dashboard
                         </a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
+                                Logout
+                            </button>
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
                             Masuk
@@ -61,7 +67,7 @@
                 <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 sm:mb-12 text-gray-100 max-w-4xl mx-auto px-2 leading-relaxed">
                     Kelola tiket termasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2 mb-10">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2 mb-8">
                     @auth
                         <a href="{{ route('tickets.create') }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Ajukan Tiket Baru
@@ -81,44 +87,35 @@
 
                 <!-- Jadwal Piket Clean -->
                 <?php
-                    $bulanData = [
-                        1 => ['nama' => 'Januari', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
-                        2 => ['nama' => 'Februari', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Mesra', 'TU Atas Bawah' => 'Marko']],
-                        3 => ['nama' => 'Maret', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
-                        4 => ['nama' => 'April', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
-                        5 => ['nama' => 'Mei', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Eji', 'TU Atas Bawah' => 'Fadil']],
-                        6 => ['nama' => 'Juni', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
-                        7 => ['nama' => 'Juli', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
-                        8 => ['nama' => 'Agustus', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Eji', 'TU Atas Bawah' => 'Fadil']],
-                        9 => ['nama' => 'September', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
-                        10 => ['nama' => 'Oktober', 'piket' => ['Atas' => 'Fadil', 'Lantai Bawah' => 'Marko', 'TU Atas Bawah' => 'Eji']],
-                        11 => ['nama' => 'November', 'piket' => ['Atas' => 'Marko', 'Lantai Bawah' => 'Eji', 'TU Atas Bawah' => 'Fadil']],
-                        12 => ['nama' => 'Desember', 'piket' => ['Atas' => 'Eji', 'Lantai Bawah' => 'Fadil', 'TU Atas Bawah' => 'Marko']],
-                    ];
-                    $currentMonth = date('n');
-                    $currentData = $bulanData[$currentMonth];
+                    $schedule = \App\Models\PiketSchedule::getCurrentMonth();
                     $colorMap = [
                         'Fadil' => ['dot' => 'bg-blue-400', 'accent' => 'from-blue-400 to-blue-500'],
                         'Marko' => ['dot' => 'bg-emerald-400', 'accent' => 'from-emerald-400 to-emerald-500'],
                         'Eji' => ['dot' => 'bg-purple-400', 'accent' => 'from-purple-400 to-purple-500'],
                         'Mesra' => ['dot' => 'bg-rose-400', 'accent' => 'from-rose-400 to-rose-500'],
                     ];
+                    $piketData = [
+                        ['lokasi' => 'Lantai 1', 'nama' => $schedule->lantai_1],
+                        ['lokasi' => 'Lantai 2', 'nama' => $schedule->lantai_2],
+                        ['lokasi' => 'TU', 'nama' => $schedule->tu],
+                    ];
                 ?>
-                <div class="mt-8 pt-6 border-t border-white/20 max-w-2xl mx-auto">
-                    <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest mb-4">Tim Piket Hari Ini</p>
+                <div class="mt-8 pt-16 border-t border-white/20">
+                    <div class="text-center mb-4" style="margin-top: 20px;">
+                        <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest">Tim Piket Hari Ini</p>
+                    </div>
                     <div class="flex flex-wrap justify-center gap-2 sm:gap-3 sm:flex-nowrap">
-                        @foreach($currentData['piket'] as $lokasi => $nama)
+                        @foreach($piketData as $item)
                             <?php 
-                                $colors = $colorMap[$nama] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
-                                $displayLocation = $lokasi === 'Lantai Bawah' ? 'Lantai 1' : ($lokasi === 'TU Atas Bawah' ? 'TU' : 'Lantai 2');
+                                $colors = $colorMap[$item['nama']] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
                             ?>
                             <div class="group relative">
                                 <div class="absolute inset-0 bg-gradient-to-r {{ $colors['accent'] }} rounded-md blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
                                 <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-md px-3 py-3 sm:px-4 sm:py-4 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-20 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                                     <div class="flex flex-col items-center gap-1.5">
                                         <div class="h-1.5 w-1.5 {{ $colors['dot'] }} rounded-full"></div>
-                                        <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap">{{ $displayLocation }}</p>
-                                        <p class="text-xs sm:text-sm font-bold text-white whitespace-nowrap">{{ $nama }}</p>
+                                        <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap">{{ $item['lokasi'] }}</p>
+                                        <p class="text-xs sm:text-sm font-bold text-white whitespace-nowrap">{{ $item['nama'] }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -127,6 +124,15 @@
                             @endif
                         @endforeach
                     </div>
+                    @auth
+                        @if(auth()->user()->hasRole('Admin'))
+                            <div class="flex justify-center mt-6">
+                                <a href="{{ route('piket.index') }}" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
+                                    Kelola Jadwal Piket
+                                </a>
+                            </div>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>
@@ -314,10 +320,10 @@
                 <div>
                     <h3 class="text-base sm:text-lg font-semibold mb-4 text-white">Fitur</h3>
                     <ul class="space-y-2 sm:space-y-3 text-gray-400">
-                        <li><a href="#features" class="text-sm sm:text-base transition hover:text-white">Tiket Permasalahan</a></li>
-                        <li><a href="#features" class="text-sm sm:text-base transition hover:text-white">Pengajuan Zoom</a></li>
-                        <li><a href="#features" class="text-sm sm:text-base transition hover:text-white">Dashboard Analytics</a></li>
-                        <li><a href="#features" class="text-sm sm:text-base transition hover:text-white">Notifikasi Real-time</a></li>
+                        <li><a href="{{ url('/tickets/create') }}" class="text-sm sm:text-base transition hover:text-white">Pengajuan Tiket</a></li>
+                        <li><a href="{{ url('/reservations/create') }}" class="text-sm sm:text-base transition hover:text-white">Pengajuan Room Zoom</a></li>
+                        <li><a href="{{ url('/dashboard') }}" class="text-sm sm:text-base transition hover:text-white">Dashboard</a></li>
+                        <li><a href="{{ url('/notifications') }}" class="text-sm sm:text-base transition hover:text-white">Notifikasi</a></li>
                     </ul>
                 </div>
                 <div>

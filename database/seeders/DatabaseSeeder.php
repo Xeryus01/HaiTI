@@ -47,6 +47,27 @@ class DatabaseSeeder extends Seeder
         );
         $techUser->syncRoles(['Teknisi']);
 
+        // Create Teknisi users for piket schedule
+        $technicians = [
+            ['name' => 'Fadil', 'email' => 'fadil@example.com'],
+            ['name' => 'Marko', 'email' => 'marko@example.com'],
+            ['name' => 'Eji', 'email' => 'eji@example.com'],
+            ['name' => 'Mesra', 'email' => 'mesra@example.com'],
+        ];
+
+        foreach ($technicians as $techData) {
+            $user = User::updateOrCreate(
+                ['email' => $techData['email']],
+                [
+                    'name' => $techData['name'],
+                    'password' => Hash::make('password'),
+                    'email_verified_at' => now(),
+                    'remember_token' => Str::random(10),
+                ]
+            );
+            $user->syncRoles(['Teknisi']);
+        }
+
         $testUser = User::updateOrCreate(
             ['email' => 'test@example.com'],
             [

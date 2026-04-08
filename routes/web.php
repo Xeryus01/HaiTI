@@ -54,7 +54,15 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', \App\Http\Controllers\UserController::class);
         Route::get('users/{user}/change-password', [\App\Http\Controllers\UserController::class, 'editPassword'])->name('users.editPassword');
         Route::patch('users/{user}/change-password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->name('users.updatePassword');
+
+        // Piket schedule management - Admin only
+        Route::get('admin/piket', [\App\Http\Controllers\PiketScheduleController::class, 'index'])->name('piket.index');
+        Route::get('admin/piket/{month}/edit', [\App\Http\Controllers\PiketScheduleController::class, 'edit'])->name('piket.edit');
+        Route::put('admin/piket/{month}', [\App\Http\Controllers\PiketScheduleController::class, 'update'])->name('piket.update');
     });
+
+    // Get current piket schedule (public API)
+    Route::get('api/piket/current', [\App\Http\Controllers\PiketScheduleController::class, 'show'])->name('api.piket.show');
 });
 
 require __DIR__.'/auth.php';
