@@ -57,6 +57,13 @@ class ReservationController extends Controller
         $data['status'] = 'PENDING';
         $data['code'] = Reservation::generateCode();
 
+        // Handle nota dinas upload
+        if ($request->hasFile('nota_dinas')) {
+            $file = $request->file('nota_dinas');
+            $path = $file->store('nota_dinas', 'public');
+            $data['nota_dinas_path'] = $path;
+        }
+
         $reservation = Reservation::create($data);
 
         Log::create([

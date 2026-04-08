@@ -20,7 +20,7 @@ class TicketWorkflowTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->postJson('/api/tickets', [
-            'category' => 'IT_SUPPORT',
+            'category' => 'HARDWARE_SUPPORT',
             'title' => 'My printer is broken',
             'description' => 'It will not print',
             'priority' => 'HIGH',

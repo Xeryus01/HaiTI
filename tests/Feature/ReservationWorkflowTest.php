@@ -71,8 +71,8 @@ class ReservationWorkflowTest extends TestCase
             ->post(route('reservations.store'), [
                 'room_name' => 'Rapat Koordinasi',
                 'purpose' => 'Permintaan ruang Zoom untuk rapat mingguan',
-                'start_time' => now()->addDay()->format('Y-m-d H:i'),
-                'end_time' => now()->addDay()->addHour()->format('Y-m-d H:i'),
+                'start_time_local' => now()->addDay()->format('Y-m-d\TH:i'),
+                'end_time_local' => now()->addDay()->addHour()->format('Y-m-d\TH:i'),
                 'nota_dinas' => $pdfFile,
             ])
             ->assertRedirect();
