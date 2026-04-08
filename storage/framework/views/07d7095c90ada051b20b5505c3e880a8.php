@@ -2,13 +2,8 @@
 <aside class="fixed top-0 left-0 z-50 h-screen w-64 overflow-y-auto bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700">
     <!-- Logo -->
     <div class="flex items-center justify-between px-5.5 py-6.5 lg:py-7.5">
-        <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500">
-                <svg class="fill-white" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2 4C2 2.89543 2.89543 2 4 2H16C17.1046 2 18 2.89543 18 4V16C18 17.1046 17.1046 18 16 18H4C2.89543 18 2 17.1046 2 16V4Z"></path>
-                </svg>
-            </div>
-            <span class="font-semibold text-gray-900 dark:text-white">TimCare</span>
+        <a href="<?php echo e(route('dashboard')); ?>" class="block">
+            <img src="<?php echo e(asset(file_exists(public_path('logo/full-logo.png')) ? 'logo/full-logo.png' : 'logo/logo.png')); ?>" alt="<?php echo e(config('app.name', 'TimCare')); ?>" class="h-14 w-auto object-contain" />
         </a>
     </div>
 

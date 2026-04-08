@@ -56,10 +56,10 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
-                        <svg class="h-8 w-8 text-brand-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                        <span class="ml-2 text-xl font-bold text-gray-900 dark:text-white">TimCare</span>
+                        <a href="{{ url('/') }}" class="flex items-center gap-2">
+                            <x-application-logo class="h-10 w-auto text-brand-600" />
+                            <!-- <span class="text-xl font-bold text-gray-900 dark:text-white">TimCare</span> -->
+                        </a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
