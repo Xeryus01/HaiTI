@@ -8,7 +8,7 @@
                     <path d="M2 4C2 2.89543 2.89543 2 4 2H16C17.1046 2 18 2.89543 18 4V16C18 17.1046 17.1046 18 16 18H4C2.89543 18 2 17.1046 2 16V4Z"></path>
                 </svg>
             </div>
-            <span class="font-semibold text-gray-900 dark:text-white">Layanan TI</span>
+            <span class="font-semibold text-gray-900 dark:text-white">TimCare</span>
         </a>
     </div>
 
