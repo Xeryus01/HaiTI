@@ -61,6 +61,18 @@
                     <span>Data Aset</span>
                 </a>
             </li>
+
+            <!-- User Management - Admin Only -->
+            @if(auth()->user()->hasRole('Admin'))
+            <li>
+                <a href="{{ route('users.index') }}" class="group relative flex items-center gap-3 rounded-lg px-4 py-2.5 font-medium text-gray-500 dark:text-gray-400 {{ request()->routeIs('users.*') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'hover:bg-gray-100 dark:hover:bg-white/5' }}">
+                    <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM10 4C11.6569 4 13 5.34315 13 7C13 8.65685 11.6569 10 10 10C8.34315 10 7 8.65685 7 7C7 5.34315 8.34315 4 10 4ZM10 12C7.33579 12 4.25 13.2403 4.25 15.25C4.25 16.3856 7.21 17 10 17C12.79 17 15.75 16.3856 15.75 15.25C15.75 13.2403 12.6642 12 10 12Z"></path>
+                    </svg>
+                    <span>Manajemen User</span>
+                </a>
+            </li>
+            @endif
         </ul>
     </nav>
 

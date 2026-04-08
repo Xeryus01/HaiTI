@@ -48,6 +48,11 @@ Route::middleware('auth')->group(function () {
         Route::patch('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('api.notifications.markAllAsRead');
         Route::delete('/notifications/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy'])->name('api.notifications.destroy');
     });
+
+    // User management - Admin only
+    Route::middleware('role:Admin')->group(function () {
+        Route::resource('users', \App\Http\Controllers\UserController::class);
+    });
 });
 
 require __DIR__.'/auth.php';
