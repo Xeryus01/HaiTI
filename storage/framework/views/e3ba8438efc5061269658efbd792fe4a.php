@@ -242,6 +242,8 @@
                 </p>
             </div>
 
+            <br>
+
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-800 p-6 shadow-sm hover:shadow-lg transition-shadow">
                     <div class="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-brand-100 text-brand-600 mb-4">
@@ -306,40 +308,57 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-16 dark:bg-black">
+    <footer class="bg-gray-900 text-white py-8 dark:bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid gap-12 md:grid-cols-3">
                 <div>
-                    <div class="flex items-center mb-4">
-                        <svg class="h-8 w-8 text-brand-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                        <span class="ml-3 text-xl font-bold">TimCare</span>
+                    <div class="flex items-center gap-3 mb-4">
+                        <?php if (isset($component)) { $__componentOriginal8892e718f3d0d7a916180885c6f012e7 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal8892e718f3d0d7a916180885c6f012e7 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.application-logo','data' => ['class' => 'h-10 w-auto text-white']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('application-logo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'h-10 w-auto text-white']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal8892e718f3d0d7a916180885c6f012e7)): ?>
+<?php $attributes = $__attributesOriginal8892e718f3d0d7a916180885c6f012e7; ?>
+<?php unset($__attributesOriginal8892e718f3d0d7a916180885c6f012e7); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal8892e718f3d0d7a916180885c6f012e7)): ?>
+<?php $component = $__componentOriginal8892e718f3d0d7a916180885c6f012e7; ?>
+<?php unset($__componentOriginal8892e718f3d0d7a916180885c6f012e7); ?>
+<?php endif; ?>
+                        <!-- <span class="text-xl font-bold">TimCare</span> -->
                     </div>
-                    <p class="text-gray-400 max-w-md">
-                        Layanan helpdesk IT modern untuk memudahkan tiket, pengajuan Zoom, dan pemantauan layanan secara terintegrasi.
+                    <p class="text-gray-400 max-w-md leading-relaxed">
+                        Solusi helpdesk IT yang menyatukan tiket, pengajuan Zoom, dan pemantauan layanan dalam satu platform yang mudah digunakan.
                     </p>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-4 text-white">Fitur</h3>
                     <ul class="space-y-3 text-gray-400">
-                        <li><a href="#features" class="hover:text-white">Tiket Permasalahan</a></li>
-                        <li><a href="#features" class="hover:text-white">Pengajuan Zoom</a></li>
-                        <li><a href="#features" class="hover:text-white">Dashboard Analytics</a></li>
-                        <li><a href="#features" class="hover:text-white">Notifikasi Real-time</a></li>
+                        <li><a href="#features" class="transition hover:text-white">Tiket Permasalahan</a></li>
+                        <li><a href="#features" class="transition hover:text-white">Pengajuan Zoom</a></li>
+                        <li><a href="#features" class="transition hover:text-white">Dashboard Analytics</a></li>
+                        <li><a href="#features" class="transition hover:text-white">Notifikasi Real-time</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-4 text-white">Dukungan</h3>
                     <ul class="space-y-3 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Dokumentasi</a></li>
-                        <li><a href="#" class="hover:text-white">FAQ</a></li>
-                        <li><a href="#" class="hover:text-white">Kontak</a></li>
-                        <li><a href="#" class="hover:text-white">Status Sistem</a></li>
+                        <li><a href="#" class="transition hover:text-white">Dokumentasi</a></li>
+                        <li><a href="#" class="transition hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="transition hover:text-white">Kontak</a></li>
+                        <li><a href="#" class="transition hover:text-white">Status Sistem</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-12 border-t border-gray-800 pt-8 text-sm text-gray-500">
+            <div class="mt-16 border-t border-gray-800 pt-8 text-sm text-gray-500">
                 © <?php echo e(date('Y')); ?> TimCare. All rights reserved.
             </div>
         </div>
