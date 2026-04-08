@@ -36,7 +36,7 @@
                             Dashboard
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="hidden sm:inline-block text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
                             Masuk
                         </a>
                         @if (Route::has('register'))
@@ -51,29 +51,29 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+    <section class="hero-gradient text-white min-h-screen flex items-center justify-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="text-center">
-                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 leading-tight">
                     Sistem Helpdesk IT<br>
                     <span class="text-brand-200">Terintegrasi</span>
                 </h1>
-                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-gray-200 max-w-3xl mx-auto px-2">
+                <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 sm:mb-12 text-gray-100 max-w-4xl mx-auto px-2 leading-relaxed">
                     Kelola tiket termasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2">
                     @auth
-                        <a href="{{ route('tickets.create') }}" class="bg-white text-gray-900 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">
+                        <a href="{{ route('tickets.create') }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Ajukan Tiket Baru
                         </a>
-                        <a href="{{ route('reservations.create') }}" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors text-sm sm:text-base">
+                        <a href="{{ route('reservations.create') }}" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Ajukan Ruang Zoom
                         </a>
                     @else
-                        <a href="{{ route('register') }}" class="bg-white text-gray-900 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">
+                        <a href="{{ route('register') }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Mulai Sekarang
                         </a>
-                        <a href="#features" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors text-sm sm:text-base">
+                        <a href="#features" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Pelajari Lebih Lanjut
                         </a>
                     @endauth
