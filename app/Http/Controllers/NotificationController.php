@@ -19,12 +19,21 @@ class NotificationController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
+        // Use cached unread count to avoid extra query
+        $unreadCount = \Cache::remember(
+            "user.{$request->user()->id}.unread_notifications_count",
+            60, // cache for 1 minute
+            function () use ($request) {
+                return $request->user()->notifications()
+                    ->where('is_read', false)
+                    ->count();
+            }
+        );
+
         return response()->json([
             'success' => true,
             'data' => $notifications,
-            'unread_count' => auth()->user()->notifications()
-                ->where('is_read', false)
-                ->count(),
+            'unread_count' => $unreadCount,
         ]);
     }
 

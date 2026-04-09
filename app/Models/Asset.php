@@ -45,4 +45,19 @@ class Asset extends Model
     {
         return $this->hasMany(Attachment::class);
     }
+
+    protected static function booted()
+    {
+        static::updated(function () {
+            \Cache::forget('assets.all');
+        });
+
+        static::deleted(function () {
+            \Cache::forget('assets.all');
+        });
+
+        static::created(function () {
+            \Cache::forget('assets.all');
+        });
+    }
 }

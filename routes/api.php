@@ -35,10 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tickets/{ticket}/comments', [TicketCommentController::class, 'store']);
 
     // assets
-    Route::apiResource('assets', AssetController::class);
+    Route::apiResource('assets', AssetController::class)->names('api.assets');
 
     // reservations
-    Route::apiResource('reservations', ReservationController::class);
+    Route::apiResource('reservations', ReservationController::class)->names('api.reservations');
 
     // notifications - web auth for header dropdown
     // these routes are in web session flow (not Sanctum token), so they are also accessible from frontend layout navbar

@@ -42,7 +42,9 @@ class TicketViewController extends Controller
 
     public function create(Request $request)
     {
-        $assets = Asset::all();
+        $assets = \Cache::remember('assets.all', 3600, function () {
+            return Asset::all();
+        });
         return view('tickets.create', compact('assets'));
     }
 

@@ -10,20 +10,40 @@ class DashboardController extends Controller
 {
     public function summary()
     {
+        // Single query for asset counts
+        $assetCounts = \DB::table('assets')
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) as active,
+                SUM(CASE WHEN status = 'BROKEN' THEN 1 ELSE 0 END) as broken,
+                SUM(CASE WHEN status IN ('MAINTENANCE', 'REPAIR') THEN 1 ELSE 0 END) as repair
+            ")
+            ->first();
+
+        // Single query for ticket counts
+        $ticketCounts = \DB::table('tickets')
+            ->selectRaw("
+                SUM(CASE WHEN status = 'OPEN' THEN 1 ELSE 0 END) as open,
+                SUM(CASE WHEN status = 'ASSIGNED_DETECT' THEN 1 ELSE 0 END) as assigned_detect,
+                SUM(CASE WHEN status = 'SOLVED_WITH_NOTES' THEN 1 ELSE 0 END) as solved_with_notes,
+                SUM(CASE WHEN status = 'SOLVED' THEN 1 ELSE 0 END) as solved,
+                SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) as rejected
+            ")
+            ->first();
+
         return response()->json([
             'assets' => [
-                'total' => Asset::count(),
-                'active' => Asset::where('status', 'ACTIVE')->count(),
-                'broken' => Asset::where('status', 'BROKEN')->count(),
-                'repair' => Asset::whereIn('status', ['MAINTENANCE', 'REPAIR'])->count(),
+                'total' => $assetCounts->total,
+                'active' => $assetCounts->active,
+                'broken' => $assetCounts->broken,
+                'repair' => $assetCounts->repair,
             ],
             'tickets' => [
-                'open' => Ticket::where('status', Ticket::STATUS_OPEN)->count(),
-                'assigned_detect' => Ticket::where('status', Ticket::STATUS_ASSIGNED_DETECT)->count(),
-                'solved_with_notes' => Ticket::where('status', Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
-                'solved' => Ticket::where('status', Ticket::STATUS_SOLVED)->count(),
-                // keep rejected for reporting if needed
-                'rejected' => Ticket::where('status', Ticket::STATUS_REJECTED)->count(),
+                'open' => $ticketCounts->open,
+                'assigned_detect' => $ticketCounts->assigned_detect,
+                'solved_with_notes' => $ticketCounts->solved_with_notes,
+                'solved' => $ticketCounts->solved,
+                'rejected' => $ticketCounts->rejected,
             ],
             'latest_tickets' => Ticket::latest()->take(10)->get([
                 'id', 'code', 'title', 'status', 'priority', 'created_at',

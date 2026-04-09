@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Reservation extends Model
 {
@@ -62,14 +63,36 @@ class Reservation extends Model
         $prefix = 'RES';
         $date = now()->format('Ymd');
 
-        $sequence = self::whereDate('created_at', now())->count() + 1;
-        $code = sprintf('%s-%s-%05d', $prefix, $date, $sequence);
+        DB::beginTransaction();
 
-        while (self::where('code', $code)->exists()) {
-            $sequence++;
-            $code = sprintf('%s-%s-%05d', $prefix, $date, $sequence);
+        try {
+            $sequence = DB::table('code_sequences')
+                ->where('date', $date)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$sequence) {
+                DB::table('code_sequences')->insert([
+                    'date' => $date,
+                    'ticket_count' => 0,
+                    'reservation_count' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                $nextSequence = 1;
+            } else {
+                $nextSequence = $sequence->reservation_count + 1;
+                DB::table('code_sequences')
+                    ->where('date', $date)
+                    ->update(['reservation_count' => $nextSequence, 'updated_at' => now()]);
+            }
+
+            DB::commit();
+
+            return sprintf('%s-%s-%05d', $prefix, $date, $nextSequence);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-
-        return $code;
     }
 }

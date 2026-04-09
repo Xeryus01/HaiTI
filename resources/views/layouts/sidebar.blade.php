@@ -3,7 +3,7 @@
     <!-- Logo -->
     <div class="flex items-center justify-between px-5.5 py-6.5 lg:py-7.5">
         <a href="{{ route('dashboard') }}" class="block">
-            <img src="{{ asset(file_exists(public_path('logo/full-logo.png')) ? 'logo/full-logo.png' : 'logo/logo.png') }}" alt="{{ config('app.name', 'TimCare') }}" class="h-14 w-auto object-contain" />
+            <img src="{{ asset(file_exists(public_path('logo/full-logo.png')) ? 'logo/logo.png' : 'logo/logo.png') }}" alt="{{ config('app.name', 'TimCare') }}" class="h-14 w-auto object-contain" />
         </a>
     </div>
 
