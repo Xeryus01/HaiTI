@@ -59,7 +59,7 @@
     <!-- Hero Section -->
     <section class="hero-gradient text-white min-h-screen flex items-center justify-center relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="text-center">
+            <div class="text-center mt-4">
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 leading-tight">
                     Sistem Helpdesk IT<br>
                     <span class="text-brand-200">Terintegrasi</span>
