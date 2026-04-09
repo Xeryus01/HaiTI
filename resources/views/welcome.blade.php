@@ -100,8 +100,8 @@
                         ['lokasi' => 'TU', 'nama' => $schedule->tu],
                     ];
                 ?>
-                <div class="mt-8 pt-16 border-t border-white/20">
-                    <div class="text-center mb-4" style="margin-top: 20px;">
+                <div class="pt-8 mb-8 border-t border-white/20">
+                    <div class="text-center mb-4">
                         <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest">Tim Piket Hari Ini</p>
                     </div>
                     <div class="flex flex-wrap justify-center gap-2 sm:gap-3 sm:flex-nowrap">
