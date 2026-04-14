@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('serial_number', 120)->nullable();
             $table->json('specs')->nullable();
             $table->string('location', 120)->nullable();
+            $table->string('holder', 120)->nullable();
             $table->string('status', 30)->default('ACTIVE');
+            $table->string('condition', 30)->default('GOOD');
             $table->date('purchased_at')->nullable();
             $table->timestamps();
         });

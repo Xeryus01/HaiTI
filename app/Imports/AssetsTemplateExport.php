@@ -18,7 +18,7 @@ class AssetsTemplateExport implements FromCollection, WithHeadings
                 'brand' => 'Dell',
                 'model' => 'Vostro 3510',
                 'serial_number' => 'SN123456',
-                'specs' => '{"cpu":"i5","ram":"16GB","storage":"512GB SSD"}',
+                'specs' => '{"prosesor":"i5","ram":"16GB","penyimpanan":"512GB SSD"}',
                 'location' => 'Ruang Server',
                 'holder' => 'TI',
                 'status' => 'ACTIVE',

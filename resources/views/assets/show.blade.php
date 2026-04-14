@@ -32,8 +32,24 @@
                             <p class="text-gray-800 mt-1 font-medium">{{ $asset->type }}</p>
                         </div>
                         <div>
+                            <label class="text-sm font-semibold text-gray-600">Merek</label>
+                            <p class="text-gray-800 mt-1">{{ $asset->brand ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Model</label>
+                            <p class="text-gray-800 mt-1">{{ $asset->model ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Nomor Seri</label>
+                            <p class="text-gray-800 mt-1">{{ $asset->serial_number ?? 'N/A' }}</p>
+                        </div>
+                        <div>
                             <label class="text-sm font-semibold text-gray-600">Lokasi</label>
-                            <p class="text-gray-800 mt-1">{{ $asset->location }}</p>
+                            <p class="text-gray-800 mt-1">{{ $asset->location ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold text-gray-600">Tanggal Dibeli</label>
+                            <p class="text-gray-800 mt-1">{{ optional($asset->purchased_at)->format('d/m/Y') ?? 'N/A' }}</p>
                         </div>
                     </div>
 
@@ -84,7 +100,7 @@
                                     @elseif($asset->status === 'BROKEN')bg-red-100 text-red-700
                                     @else bg-gray-100 text-gray-700
                                     @endif">
-                                    {{ $asset->status }}
+                                    {{ $asset->status_label }}
                                 </span>
                             </p>
                         </div>
@@ -94,7 +110,7 @@
                         </div>
                         <div>
                             <label class="text-sm text-gray-600">Kondisi</label>
-                            <p class="text-gray-800 font-medium mt-1">{{ ucfirst(strtolower($asset->condition ?? 'N/A')) }}</p>
+                            <p class="text-gray-800 font-medium mt-1">{{ $asset->condition_label }}</p>
                         </div>
                         <div>
                             <label class="text-sm text-gray-600">Tanggal Perolehan</label>

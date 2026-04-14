@@ -1,6 +1,6 @@
 <?php
     $logoPath = file_exists(public_path('logo/full-logo.png'))
-        ? 'logo/logo.png'
+        ? 'logo/full-logo.png'
         : 'logo/logo.png';
 ?>
 

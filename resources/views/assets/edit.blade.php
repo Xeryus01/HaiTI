@@ -66,6 +66,72 @@
                     @enderror
                 </div>
 
+                <!-- Brand -->
+                <div>
+                    <label for="brand" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Merek
+                    </label>
+                    <input id="brand" type="text" name="brand" value="{{ old('brand', $asset->brand) }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('brand') border-red-500 @enderror" />
+                    @error('brand')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Model -->
+                <div>
+                    <label for="model" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Model
+                    </label>
+                    <input id="model" type="text" name="model" value="{{ old('model', $asset->model) }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('model') border-red-500 @enderror" />
+                    @error('model')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Serial Number -->
+                <div>
+                    <label for="serial_number" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Nomor Seri
+                    </label>
+                    <input id="serial_number" type="text" name="serial_number" value="{{ old('serial_number', $asset->serial_number) }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('serial_number') border-red-500 @enderror" />
+                    @error('serial_number')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Specs -->
+                <div>
+                    <label for="specs" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Spesifikasi
+                    </label>
+                    <textarea id="specs" name="specs" rows="3" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('specs') border-red-500 @enderror">{{ old('specs', $asset->specs ? json_encode($asset->specs, JSON_PRETTY_PRINT) : '') }}</textarea>
+                    @error('specs')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Lokasi
+                    </label>
+                    <input id="location" type="text" name="location" value="{{ old('location', $asset->location) }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('location') border-red-500 @enderror" />
+                    @error('location')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Purchased At -->
+                <div>
+                    <label for="purchased_at" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Tanggal Dibeli
+                    </label>
+                    <input id="purchased_at" type="date" name="purchased_at" value="{{ old('purchased_at', $asset->purchased_at ? $asset->purchased_at->format('Y-m-d') : '') }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('purchased_at') border-red-500 @enderror" />
+                    @error('purchased_at')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Holder -->
                 <div>
                     <label for="holder" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
@@ -83,8 +149,8 @@
                         Kondisi
                     </label>
                     <select id="condition" name="condition" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('condition') border-red-500 @enderror">
-                        @foreach(['GOOD','FAIR','POOR'] as $c)
-                            <option value="{{ $c }}" {{ old('condition', $asset->condition) === $c ? 'selected' : '' }}>{{ ucfirst(strtolower($c)) }}</option>
+                        @foreach(['GOOD' => 'Baik','FAIR' => 'Cukup','POOR' => 'Buruk'] as $value => $label)
+                            <option value="{{ $value }}" {{ old('condition', $asset->condition) === $value ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
                     @error('condition')
@@ -98,8 +164,8 @@
                         Status
                     </label>
                     <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('status') border-red-500 @enderror">
-                        @foreach(['ACTIVE','MAINTENANCE','BROKEN','RETIRED'] as $s)
-                            <option value="{{ $s }}" {{ $asset->status === $s ? 'selected' : '' }}>{{ $s }}</option>
+                        @foreach(['ACTIVE' => 'Aktif','MAINTENANCE' => 'Perawatan','BROKEN' => 'Rusak','RETIRED' => 'Pensiun'] as $value => $label)
+                            <option value="{{ $value }}" {{ $asset->status === $value ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
                     @error('status')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\AssetsImport;
 use App\Imports\AssetsTemplateExport;
+use App\Imports\AssetsExport;
 use App\Models\Asset;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -92,5 +93,55 @@ class AssetViewController extends Controller
         }
 
         return redirect()->route('assets.index')->with('success', 'Data aset berhasil diimpor dari Excel.');
+    }
+
+    public function export(Request $request)
+    {
+        abort_unless(auth()->user()->can('manage assets'), 403);
+
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'period' => 'nullable|string',
+        ]);
+
+        $startDate = null;
+        $endDate = null;
+        $year = now()->year;
+
+        // Jika ada periode preset yang dipilih
+        if ($request->period) {
+            switch ($request->period) {
+                case 'q1':
+                    $startDate = "{$year}-01-01";
+                    $endDate = "{$year}-03-31";
+                    break;
+                case 'q2':
+                    $startDate = "{$year}-04-01";
+                    $endDate = "{$year}-06-30";
+                    break;
+                case 'q3':
+                    $startDate = "{$year}-07-01";
+                    $endDate = "{$year}-09-30";
+                    break;
+                case 'q4':
+                    $startDate = "{$year}-10-01";
+                    $endDate = "{$year}-12-31";
+                    break;
+                case 'year':
+                    $startDate = "{$year}-01-01";
+                    $endDate = "{$year}-12-31";
+                    break;
+            }
+        } else {
+            // Gunakan tanggal yang dipilih user
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+        }
+
+        $filename = 'aset-' . ($startDate ? \Carbon\Carbon::parse($startDate)->format('Y-m-d') : 'all') .
+                   '-to-' . ($endDate ? \Carbon\Carbon::parse($endDate)->format('Y-m-d') : 'all') . '.xlsx';
+
+        return Excel::download(new AssetsExport($startDate, $endDate), $filename, \Maatwebsite\Excel\Excel::XLSX);
     }
 }

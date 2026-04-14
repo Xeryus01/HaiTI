@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     // Asset CSV/XLS download/import routes must be registered before the resource route to avoid conflict with assets/{asset}
     Route::get('assets/template', [\App\Http\Controllers\AssetViewController::class, 'downloadTemplate'])->name('assets.template');
     Route::post('assets/import', [\App\Http\Controllers\AssetViewController::class, 'import'])->name('assets.import');
+    Route::get('assets/export', [\App\Http\Controllers\AssetViewController::class, 'export'])->name('assets.export');
     Route::resource('assets', \App\Http\Controllers\AssetViewController::class);
 
     Route::resource('reservations', \App\Http\Controllers\ReservationViewController::class);

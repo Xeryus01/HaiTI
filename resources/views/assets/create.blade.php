@@ -65,6 +65,72 @@
                     @enderror
                 </div>
 
+                <!-- Brand -->
+                <div>
+                    <label for="brand" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Merek
+                    </label>
+                    <input id="brand" type="text" name="brand" value="{{ old('brand') }}" placeholder="e.g., Dell, HP, Lenovo" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('brand') border-red-500 @enderror" />
+                    @error('brand')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Model -->
+                <div>
+                    <label for="model" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Model
+                    </label>
+                    <input id="model" type="text" name="model" value="{{ old('model') }}" placeholder="e.g., Vostro 3510, ProBook 450" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('model') border-red-500 @enderror" />
+                    @error('model')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Serial Number -->
+                <div>
+                    <label for="serial_number" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Nomor Seri
+                    </label>
+                    <input id="serial_number" type="text" name="serial_number" value="{{ old('serial_number') }}" placeholder="e.g., SN123456789" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('serial_number') border-red-500 @enderror" />
+                    @error('serial_number')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Specs -->
+                <div>
+                    <label for="specs" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Spesifikasi
+                    </label>
+                    <textarea id="specs" name="specs" rows="3" placeholder='e.g., {"cpu":"i5","ram":"16GB","storage":"512GB SSD"} atau CPU: i5, RAM: 16GB, Storage: 512GB SSD' class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('specs') border-red-500 @enderror">{{ old('specs') }}</textarea>
+                    @error('specs')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Lokasi
+                    </label>
+                    <input id="location" type="text" name="location" value="{{ old('location') }}" placeholder="e.g., Ruang Server, Lantai 2" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('location') border-red-500 @enderror" />
+                    @error('location')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Purchased At -->
+                <div>
+                    <label for="purchased_at" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        Tanggal Dibeli
+                    </label>
+                    <input id="purchased_at" type="date" name="purchased_at" value="{{ old('purchased_at') }}" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('purchased_at') border-red-500 @enderror" />
+                    @error('purchased_at')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Holder -->
                 <div>
                     <label for="holder" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
@@ -82,9 +148,9 @@
                         Kondisi
                     </label>
                     <select id="condition" name="condition" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('condition') border-red-500 @enderror">
-                        <option value="GOOD" {{ old('condition') === 'GOOD' ? 'selected' : '' }}>Good</option>
-                        <option value="FAIR" {{ old('condition') === 'FAIR' ? 'selected' : '' }}>Fair</option>
-                        <option value="POOR" {{ old('condition') === 'POOR' ? 'selected' : '' }}>Poor</option>
+                        <option value="GOOD" {{ old('condition') === 'GOOD' ? 'selected' : '' }}>Baik</option>
+                        <option value="FAIR" {{ old('condition') === 'FAIR' ? 'selected' : '' }}>Cukup</option>
+                        <option value="POOR" {{ old('condition') === 'POOR' ? 'selected' : '' }}>Buruk</option>
                     </select>
                     @error('condition')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -97,10 +163,10 @@
                         Status
                     </label>
                     <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('status') border-red-500 @enderror">
-                        <option value="ACTIVE">Active</option>
-                        <option value="MAINTENANCE">Maintenance</option>
-                        <option value="BROKEN">Broken</option>
-                        <option value="RETIRED">Retired</option>
+                        <option value="ACTIVE">Aktif</option>
+                        <option value="MAINTENANCE">Perawatan</option>
+                        <option value="BROKEN">Rusak</option>
+                        <option value="RETIRED">Pensiun</option>
                     </select>
                     @error('status')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>

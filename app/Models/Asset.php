@@ -26,6 +26,28 @@ class Asset extends Model
         'purchased_at' => 'date',
     ];
 
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'ACTIVE' => 'Aktif',
+            'INACTIVE' => 'Tidak Aktif',
+            'PENDING' => 'Menunggu',
+            'DECOMMISSIONED' => 'Dikeluarkan',
+            default => ucfirst(strtolower($this->status)),
+        };
+    }
+
+    public function getConditionLabelAttribute(): string
+    {
+        return match ($this->condition) {
+            'GOOD' => 'Baik',
+            'FAIR' => 'Cukup',
+            'POOR' => 'Buruk',
+            'DAMAGED' => 'Rusak',
+            default => ucfirst(strtolower($this->condition)),
+        };
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
