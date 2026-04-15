@@ -23,26 +23,34 @@
 
         $layananSelesai = \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
             + \App\Models\Reservation::where('status', 'COMPLETED')->count();
+
+        // Ambil data terbaru untuk ditampilkan
+        $recentTickets = \App\Models\Ticket::latest()->take(5)->get();
+        $recentReservations = \App\Models\Reservation::latest()->take(5)->get();
     } else {
         // User biasa melihat data mereka sendiri
         $ticketCounts = [
-            'Menunggu' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
-            'Diproses Teknisi' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
-            'Selesai + Catatan' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
-            'Selesai' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
-            'Ditolak' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
+            'Menunggu' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
+            'Diproses Teknisi' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
+            'Selesai + Catatan' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
+            'Selesai' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
+            'Ditolak' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
         ];
 
         $zoomCounts = [
-            'Menunggu' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'PENDING')->count(),
-            'Disetujui' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'APPROVED')->count(),
-            'Ditolak' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'REJECTED')->count(),
-            'Selesai' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'COMPLETED')->count(),
-            'Dibatalkan' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'CANCELLED')->count(),
+            'Menunggu' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'PENDING')->count(),
+            'Disetujui' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'APPROVED')->count(),
+            'Ditolak' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'REJECTED')->count(),
+            'Selesai' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'COMPLETED')->count(),
+            'Dibatalkan' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'CANCELLED')->count(),
         ];
 
-        $layananSelesai = \App\Models\Ticket::where('user_id', $user->id)->whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
-            + \App\Models\Reservation::where('user_id', $user->id)->where('status', 'COMPLETED')->count();
+        $layananSelesai = \App\Models\Ticket::where('requester_id', $user->id)->whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
+            + \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'COMPLETED')->count();
+
+        // Ambil data terbaru milik user
+        $recentTickets = \App\Models\Ticket::where('requester_id', $user->id)->latest()->take(5)->get();
+        $recentReservations = \App\Models\Reservation::where('requester_id', $user->id)->latest()->take(5)->get();
     }
 @endphp
 
@@ -124,7 +132,7 @@
                     <h3 class="font-semibold text-gray-900 dark:text-white">Tiket Terbaru</h3>
                 </div>
                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @forelse (\App\Models\Ticket::latest()->take(5)->get() as $ticket)
+                    @forelse ($recentTickets as $ticket)
                         <div class="flex items-center justify-between gap-3 px-5 py-4">
                             <div>
                                 <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $ticket->title }}</p>
@@ -143,7 +151,7 @@
                     <h3 class="font-semibold text-gray-900 dark:text-white">Pengajuan Zoom Terbaru</h3>
                 </div>
                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                    @forelse (\App\Models\Reservation::latest()->take(5)->get() as $reservation)
+                    @forelse ($recentReservations as $reservation)
                         <div class="flex items-center justify-between gap-3 px-5 py-4">
                             <div>
                                 <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $reservation->room_name }}</p>

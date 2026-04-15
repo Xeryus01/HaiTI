@@ -32,12 +32,12 @@
                 </div>
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="bg-brand-600 text-white px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-brand-700 transition-colors">
+                        <a href="{{ url('/dashboard') }}" class="bg-brand-600 text-white px-4 sm:px-5 py-2 rounded-md text-sm font-medium hover:bg-brand-700 transition-colors">
                             Dashboard
                         </a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
-                            <button type="submit" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
+                            <button type="submit" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium border border-gray-300 hover:border-gray-400 transition-colors">
                                 Logout
                             </button>
                         </form>
