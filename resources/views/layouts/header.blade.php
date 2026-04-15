@@ -2,27 +2,23 @@
     <header class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-5.5 py-4 dark:border-gray-700 dark:bg-dark-800 sm:px-7.5 lg:px-9">
     <!-- Left Section -->
     <div class="flex items-center gap-4">
-        <button @click="$store.theme.toggle()" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5">
-            <!-- Sun Icon (shown in dark mode) -->
-            <svg x-show="$store.theme.isDark" class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 2C8.55228 2 9 1.55228 9 1C9 0.447715 8.55228 0 8 0C7.44772 0 7 0.447715 7 1C7 1.55228 7.44772 2 8 2Z"></path>
-                <path d="M8 14C7.44772 14 7 14.4477 7 15C7 15.5523 7.44772 16 8 16C8.55228 16 9 15.5523 9 15C9 14.4477 8.55228 14 8 14Z"></path>
-                <path d="M2.929 1.343C2.54008 1.021 1.96718 1.10898 1.646 1.498C1.32483 1.88681 1.41281 2.45972 1.802 2.781C2.19119 3.10217 2.7641 3.01419 3.08527 2.625C3.40644 2.23618 3.31846 1.66327 2.929 1.343Z"></path>
-                <path d="M12.657 11.929C12.338 11.5401 11.765 11.652 11.438 12.041C11.111 12.4299 11.2236 12.9987 11.619 13.326C12.0084 13.6473 12.5813 13.5393 12.908 13.1505C13.2347 12.7616 13.1227 12.1928 12.657 11.929Z"></path>
-                <path d="M2 8C1.44772 8 1 8.44772 1 9C1 9.55228 1.44772 10 2 10C2.55228 10 3 9.55228 3 9C3 8.44772 2.55228 8 2 8Z"></path>
-                <path d="M14 8C13.4477 8 13 8.44772 13 9C13 9.55228 13.4477 10 14 10C14.5523 10 15 9.55228 15 9C15 8.44772 14.5523 8 14 8Z"></path>
-                <path d="M1.343 12.657C1.021 13.046 1.109 13.619 1.498 13.94C1.88681 14.2612 2.45972 14.1732 2.781 13.784C3.10218 13.3952 3.01419 12.8223 2.625 12.5005C2.23618 12.1793 1.66327 12.2673 1.343 12.657Z"></path>
-                <path d="M11.929 2.929C11.5401 2.54008 10.9672 2.62807 10.646 3.01688C10.3248 3.40569 10.4128 3.9786 10.802 4.30027C11.1908 4.62144 11.7637 4.53346 12.0854 4.14465C12.4066 3.75583 12.3186 3.1829 11.929 2.929Z"></path>
-            </svg>
-            <!-- Moon Icon (shown in light mode) -->
-            <svg x-show="!$store.theme.isDark" class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13.5 2.5C12.1193 2.5 11 3.61929 11 5C11 6.38071 12.1193 7.5 13.5 7.5C14.8807 7.5 16 6.38071 16 5C16 3.61929 14.8807 2.5 13.5 2.5ZM13.5 0C15.9853 0 18 2.01472 18 4.5C18 6.98528 15.9853 9 13.5 9H12.5C12.2239 9 12 9.22386 12 9.5V10C12 14.4183 8.41828 18 4 18C1.23858 18 -0.5 16.2614 -0.5 13.5C-0.5 11.1121 0.995391 9.07629 3.00001 8.29227V8C3.00001 7.72386 3.22387 7.5 3.5 7.5H4.5C8.91828 7.5 12.5 3.91828 12.5 -0.5V-1H13.5Z"></path>
-            </svg>
-        </button>
     </div>
 
     <!-- Right Section -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Theme Toggle Button -->
+        <button @click="$store.theme.toggle()" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5 transition-colors" title="Toggle dark mode">
+            <!-- Moon Icon (shown in light mode - click to enable dark mode) -->
+            <svg x-show="!$store.theme.isDark" class="fill-current" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.64 15.89C21.38 16.54 20.84 17.09 20.16 17.54C22.83 14.63 22.17 9.82 19.22 7.29C16.27 4.76 11.63 5.55 9.36 8.26C7.09 10.97 7.75 15.78 10.7 18.31C13.65 20.84 18.29 20.05 20.56 17.34C19.84 18.15 18.59 18.87 17.5 19.09L17.15 19.15C18.5 20.3 20.78 20.28 22.25 18.78C23.35 17.71 23.9 16.34 21.64 15.89Z" fill="currentColor"/>
+            </svg>
+            <!-- Sun Icon (shown in dark mode - click to enable light mode) -->
+            <svg x-show="$store.theme.isDark" class="fill-current" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z" fill="currentColor"/>
+                <path d="M12 1V3M12 21V23M23 12H21M3 12H1M20.485 3.515L19.071 4.929M4.929 19.071L3.515 20.485M20.485 20.485L19.071 19.071M4.929 4.929L3.515 3.515" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+
         <!-- Notifications Bell -->
         <div x-data="{
             notifOpen: false,
