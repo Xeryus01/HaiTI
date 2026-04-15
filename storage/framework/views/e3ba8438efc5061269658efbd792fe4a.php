@@ -108,10 +108,10 @@
                 <?php
                     $schedule = \App\Models\PiketSchedule::getCurrentMonth();
                     $colorMap = [
-                        'Fadil' => ['dot' => 'bg-blue-400', 'accent' => 'from-blue-400 to-blue-500'],
-                        'Marko' => ['dot' => 'bg-emerald-400', 'accent' => 'from-emerald-400 to-emerald-500'],
-                        'Eji' => ['dot' => 'bg-purple-400', 'accent' => 'from-purple-400 to-purple-500'],
-                        'Mesra' => ['dot' => 'bg-rose-400', 'accent' => 'from-rose-400 to-rose-500'],
+                        'Fadil Rahman' => ['dot' => 'bg-blue-400', 'accent' => 'from-blue-400 to-blue-500'],
+                        'Marko Santoso' => ['dot' => 'bg-emerald-400', 'accent' => 'from-emerald-400 to-emerald-500'],
+                        'Eji Wijaya' => ['dot' => 'bg-purple-400', 'accent' => 'from-purple-400 to-purple-500'],
+                        'Mesra Putri' => ['dot' => 'bg-rose-400', 'accent' => 'from-rose-400 to-rose-500'],
                     ];
                     $piketData = [
                         ['lokasi' => 'Lantai 1', 'nama' => $schedule->lantai_1],
