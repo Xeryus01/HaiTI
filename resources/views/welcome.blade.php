@@ -32,7 +32,7 @@
                 </div>
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="hidden sm:inline-block text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                        <a href="{{ url('/dashboard') }}" class="bg-brand-600 text-white px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-brand-700 transition-colors">
                             Dashboard
                         </a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -69,10 +69,13 @@
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2 mb-8">
                     @auth
-                        <a href="{{ route('tickets.create') }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
+                        <a href="{{ url('/dashboard') }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
+                            Buka Dashboard
+                        </a>
+                        <a href="{{ route('tickets.create') }}" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Ajukan Tiket Baru
                         </a>
-                        <a href="{{ route('reservations.create') }}" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
+                        <a href="{{ route('reservations.create') }}" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg hidden sm:inline-block">
                             Ajukan Ruang Zoom
                         </a>
                     @else
@@ -235,7 +238,7 @@
     <!-- Stats Section -->
     <section class="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10 sm:mb-14 lg:mb-16">
+            <div class="text-center mb-8 sm:mb-14 lg:mb-16">
                 <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 mb-2 sm:mb-3">Statistik</p>
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Dampak TimCare</h2>
                 <p class="max-w-2xl mx-auto text-sm sm:text-base text-gray-600 px-2">
