@@ -1,23 +1,49 @@
 <x-app-layout>
 @php
-    $ticketCounts = [
-        'Menunggu' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
-        'Diproses Teknisi' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
-        'Selesai + Catatan' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
-        'Selesai' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
-        'Ditolak' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
-    ];
+    $user = auth()->user();
+    $isAdminOrTechnician = $user->hasRole(['Admin', 'Teknisi']);
 
-    $zoomCounts = [
-        'Menunggu' => \App\Models\Reservation::where('status', 'PENDING')->count(),
-        'Disetujui' => \App\Models\Reservation::where('status', 'APPROVED')->count(),
-        'Ditolak' => \App\Models\Reservation::where('status', 'REJECTED')->count(),
-        'Selesai' => \App\Models\Reservation::where('status', 'COMPLETED')->count(),
-        'Dibatalkan' => \App\Models\Reservation::where('status', 'CANCELLED')->count(),
-    ];
+    if ($isAdminOrTechnician) {
+        // Admin/Teknisi melihat semua data
+        $ticketCounts = [
+            'Menunggu' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
+            'Diproses Teknisi' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
+            'Selesai + Catatan' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
+            'Selesai' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
+            'Ditolak' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
+        ];
 
-    $layananSelesai = \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
-        + \App\Models\Reservation::where('status', 'COMPLETED')->count();
+        $zoomCounts = [
+            'Menunggu' => \App\Models\Reservation::where('status', 'PENDING')->count(),
+            'Disetujui' => \App\Models\Reservation::where('status', 'APPROVED')->count(),
+            'Ditolak' => \App\Models\Reservation::where('status', 'REJECTED')->count(),
+            'Selesai' => \App\Models\Reservation::where('status', 'COMPLETED')->count(),
+            'Dibatalkan' => \App\Models\Reservation::where('status', 'CANCELLED')->count(),
+        ];
+
+        $layananSelesai = \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
+            + \App\Models\Reservation::where('status', 'COMPLETED')->count();
+    } else {
+        // User biasa melihat data mereka sendiri
+        $ticketCounts = [
+            'Menunggu' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
+            'Diproses Teknisi' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
+            'Selesai + Catatan' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
+            'Selesai' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
+            'Ditolak' => \App\Models\Ticket::where('user_id', $user->id)->where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
+        ];
+
+        $zoomCounts = [
+            'Menunggu' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'PENDING')->count(),
+            'Disetujui' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'APPROVED')->count(),
+            'Ditolak' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'REJECTED')->count(),
+            'Selesai' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'COMPLETED')->count(),
+            'Dibatalkan' => \App\Models\Reservation::where('user_id', $user->id)->where('status', 'CANCELLED')->count(),
+        ];
+
+        $layananSelesai = \App\Models\Ticket::where('user_id', $user->id)->whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
+            + \App\Models\Reservation::where('user_id', $user->id)->where('status', 'COMPLETED')->count();
+    }
 @endphp
 
 <div class="ml-64 min-h-screen">

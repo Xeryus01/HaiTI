@@ -34,11 +34,19 @@
                 <div class="grid gap-6 sm:grid-cols-2">
                     <div>
                         <label for="start_time" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Mulai</label>
-                        <input id="start_time" type="datetime-local" name="start_time_local" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('start_time') border-red-500 @enderror" />
+                        <input id="start_time" type="datetime-local" name="start_time_local" required
+                            @if(!auth()->user()->hasRole('Admin'))
+                                min="{{ date('Y-m-d\TH:i') }}"
+                            @endif
+                            class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('start_time') border-red-500 @enderror" />
                     </div>
                     <div>
                         <label for="end_time" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Selesai</label>
-                        <input id="end_time" type="datetime-local" name="end_time_local" required class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('end_time') border-red-500 @enderror" />
+                        <input id="end_time" type="datetime-local" name="end_time_local" required
+                            @if(!auth()->user()->hasRole('Admin'))
+                                min="{{ date('Y-m-d\TH:i') }}"
+                            @endif
+                            class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('end_time') border-red-500 @enderror" />
                     </div>
                 <div>
                     <label for="nota_dinas" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nota Dinas <span class="text-red-500">*</span></label>

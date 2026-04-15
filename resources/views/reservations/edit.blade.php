@@ -55,6 +55,18 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label for="nota_dinas" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nota Dinas</label>
+                        @if($reservation->nota_dinas_path)
+                            <p class="mb-2 text-sm text-gray-600 dark:text-gray-400">Nota dinas saat ini: <a href="{{ route('reservations.nota-dinas', $reservation) }}" target="_blank" class="text-brand-600 hover:text-brand-700">Lihat PDF</a></p>
+                        @endif
+                        <input id="nota_dinas" type="file" name="nota_dinas" accept=".pdf" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-700 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-brand-700 dark:file:bg-brand-500/10 dark:file:text-brand-300 @error('nota_dinas') border-red-500 @enderror" />
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload nota dinas baru dalam format PDF (maksimal 5MB) - opsional, kosongkan jika tidak ingin mengubah</p>
+                        @error('nota_dinas')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <div class="flex gap-3 pt-6">
                         <a href="{{ route('reservations.show', $reservation) }}" class="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Batal</a>
                         <button type="submit" class="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-center font-medium text-white hover:bg-brand-700">Simpan Perubahan</button>

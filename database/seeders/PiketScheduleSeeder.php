@@ -14,9 +14,9 @@ class PiketScheduleSeeder extends Seeder
     {
         // Create default schedules for all 12 months of 2026
         $technicians = [
-            'lantai_1' => 'Marko',
-            'lantai_2' => 'Fadil',
-            'tu' => 'Eji',
+            'lantai_1' => 'Marko Santoso',
+            'lantai_2' => 'Fadil Rahman',
+            'tu' => 'Eji Wijaya',
         ];
 
         for ($month = 1; $month <= 12; $month++) {

@@ -44,7 +44,7 @@
 
             @if (session('status') === 'password-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-sm text-green-600 dark:text-green-400">
-                    {{ __('Saved successfully.') }}
+                    Password berhasil diubah.
                 </p>
             @endif
         </div>

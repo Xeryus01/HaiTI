@@ -68,7 +68,7 @@ class ReservationViewController extends Controller
         // Send notification
         $this->notificationService->notifyReservationCreated($request->user(), $reservation);
 
-        return redirect()->route('reservations.show', $reservation)->with('success', 'Pengajuan Zoom berhasil dibuat.');
+        return redirect()->route('reservations.index')->with('success', 'Pengajuan Zoom berhasil dibuat.');
     }
 
     public function show(Request $request, Reservation $reservation)
@@ -127,6 +127,18 @@ class ReservationViewController extends Controller
             $data['approver_id'] = $request->user()->id;
         } else {
             unset($data['status'], $data['zoom_link'], $data['zoom_record_link'], $data['notes'], $data['approver_id']);
+        }
+
+        // Handle nota dinas upload if provided
+        if ($request->hasFile('nota_dinas')) {
+            // Delete old file if exists
+            if ($reservation->nota_dinas_path && Storage::disk('public')->exists($reservation->nota_dinas_path)) {
+                Storage::disk('public')->delete($reservation->nota_dinas_path);
+            }
+
+            $file = $request->file('nota_dinas');
+            $path = $file->store('nota_dinas', 'public');
+            $data['nota_dinas_path'] = $path;
         }
 
         $reservation->update($data);

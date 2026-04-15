@@ -29,19 +29,19 @@ class UserSeeder extends Seeder
         // Create Teknisi users
         $technicians = [
             [
-                'name' => 'Fadil',
+                'name' => 'Fadil Rahman',
                 'email' => 'fadil@example.com',
             ],
             [
-                'name' => 'Marko',
+                'name' => 'Marko Santoso',
                 'email' => 'marko@example.com',
             ],
             [
-                'name' => 'Eji',
+                'name' => 'Eji Wijaya',
                 'email' => 'eji@example.com',
             ],
             [
-                'name' => 'Mesra',
+                'name' => 'Mesra Putri',
                 'email' => 'mesra@example.com',
             ],
         ];

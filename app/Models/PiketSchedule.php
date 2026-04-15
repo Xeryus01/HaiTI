@@ -39,9 +39,9 @@ class PiketSchedule extends Model
         return self::create([
             'month' => $month,
             'year' => $year,
-            'lantai_1' => 'Fadil',
-            'lantai_2' => 'Marko',
-            'tu' => 'Eji',
+            'lantai_1' => 'Fadil Rahman',
+            'lantai_2' => 'Marko Santoso',
+            'tu' => 'Eji Wijaya',
         ]);
     }
 
