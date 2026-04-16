@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<aside class="fixed top-0 left-0 z-50 h-screen w-64 overflow-y-auto bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700">
+<aside class="fixed top-0 left-0 z-50 h-screen w-64 overflow-y-auto bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out" :style="{ transform: $store.sidebar.isOpen ? 'translateX(0)' : 'translateX(-100%)', width: '16rem' }">
     <!-- Logo -->
     <div class="flex items-center justify-between px-5.5 py-6.5 lg:py-7.5">
         <a href="{{ route('dashboard') }}" class="block">

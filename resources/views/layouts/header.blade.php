@@ -2,6 +2,21 @@
     <header class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-5.5 py-4 dark:border-gray-700 dark:bg-dark-800 sm:px-7.5 lg:px-9">
     <!-- Left Section -->
     <div class="flex items-center gap-4">
+        <!-- Sidebar Toggle Button -->
+        <button 
+            @click="$store.sidebar.toggle()" 
+            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5 transition-colors"
+            title="Toggle sidebar"
+        >
+            <!-- Hamburger Icon -->
+            <svg x-show="!$store.sidebar.isOpen" class="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6H21V8H3V6ZM3 11H21V13H3V11ZM3 16H21V18H3V16Z" fill="currentColor"/>
+            </svg>
+            <!-- Close Icon -->
+            <svg x-show="$store.sidebar.isOpen" class="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </button>
     </div>
 
     <!-- Right Section -->

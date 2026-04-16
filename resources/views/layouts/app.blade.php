@@ -38,16 +38,36 @@
                     this.updateTheme();
                 }
             });
+
+            Alpine.store('sidebar', {
+                init() {
+                    const savedState = localStorage.getItem('sidebarOpen');
+                    this.isOpen = savedState === null ? true : savedState === 'true';
+                },
+                isOpen: true,
+                toggle() {
+                    this.isOpen = !this.isOpen;
+                    localStorage.setItem('sidebarOpen', this.isOpen);
+                },
+                open() {
+                    this.isOpen = true;
+                    localStorage.setItem('sidebarOpen', 'true');
+                },
+                close() {
+                    this.isOpen = false;
+                    localStorage.setItem('sidebarOpen', 'false');
+                }
+            });
         });
     </script>
 </head>
-<body class="h-full bg-gray-50 dark:bg-dark-900" x-data x-init="$store.theme.init()">
+<body class="h-full bg-gray-50 dark:bg-dark-900" x-data x-init="$store.theme.init(); $store.sidebar.init()">
     <div class="flex h-full bg-gray-50 dark:bg-dark-900">
         <!-- Sidebar -->
         @include('layouts.sidebar')
         
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <div class="flex-1 flex flex-col h-full overflow-hidden transition-all duration-300" :style="{ marginLeft: $store.sidebar.isOpen ? '16rem' : '0' }">
             <!-- Top Header -->
             @include('layouts.header')
             
