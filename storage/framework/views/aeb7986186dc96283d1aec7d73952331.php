@@ -8,7 +8,7 @@
 <?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-<div class="ml-64 min-h-screen">
+<div class="min-h-screen">
     <div class="p-5 sm:p-7.5 lg:p-9">
         <div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>

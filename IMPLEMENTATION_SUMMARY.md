@@ -11,7 +11,7 @@ Berikut adalah ringkasan lengkap semua perbaikan tampilan dan implementasi Whats
 ### 1. Layout Utama ✅
 - **Header**: Fixed Alpine.js conflict dengan separate state (notifOpen vs userOpen)
 - **Sidebar**: Display properly dengan navigation items
-- **Main Container**: ml-64 offset untuk sidebar
+- **Main Container**: offset untuk sidebar
 - **Responsiveness**: Mobile, tablet, desktop all tested
 
 ### 2. Dashboard ✅

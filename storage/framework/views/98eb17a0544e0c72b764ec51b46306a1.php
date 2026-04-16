@@ -9,7 +9,7 @@
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
 <!-- Main Content -->
-<div class="ml-64 min-h-screen">
+<div class="min-h-screen">
     <div class="p-5 sm:p-7.5 lg:p-9">
         <!-- Page Header -->
         <div class="mb-6 flex items-center justify-between">

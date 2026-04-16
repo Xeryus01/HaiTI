@@ -67,7 +67,7 @@
         <?php echo $__env->make('layouts.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col h-full overflow-hidden transition-all duration-300" :style="{ marginLeft: $store.sidebar.isOpen ? '16rem' : '0' }">
+        <div class="flex flex-col h-full overflow-hidden transition-all duration-300" :style="{ marginLeft: $store.sidebar.isOpen ? '16rem' : '0', width: $store.sidebar.isOpen ? 'calc(100% - 16rem)' : '100%' }">
             <!-- Top Header -->
             <?php echo $__env->make('layouts.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             

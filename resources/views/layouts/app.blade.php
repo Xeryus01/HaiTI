@@ -67,7 +67,7 @@
         @include('layouts.sidebar')
         
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col h-full overflow-hidden transition-all duration-300" :style="{ marginLeft: $store.sidebar.isOpen ? '16rem' : '0' }">
+        <div class="flex flex-col h-full overflow-hidden transition-all duration-300" :style="{ marginLeft: $store.sidebar.isOpen ? '16rem' : '0', width: $store.sidebar.isOpen ? 'calc(100% - 16rem)' : '100%' }">
             <!-- Top Header -->
             @include('layouts.header')
             

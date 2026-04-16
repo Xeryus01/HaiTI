@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="ml-64 min-h-screen">
+    <div class="min-h-screen">
         <div class="p-5 sm:p-7.5 lg:p-9">
             <div class="grid grid-cols-12 gap-4 md:gap-5.5 2xl:gap-7.5">
                 <!-- Main Content -->
