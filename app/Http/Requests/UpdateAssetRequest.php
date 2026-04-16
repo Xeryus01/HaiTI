@@ -23,8 +23,8 @@ class UpdateAssetRequest extends FormRequest
             'specs' => 'nullable|json',
             'location' => 'nullable|string|max:120',
             'holder' => 'nullable|string|max:120',
-            'status' => 'sometimes|string|in:ACTIVE,MAINTENANCE,BROKEN,RETIRED,SOLD,INACTIVE',
-            'condition' => 'sometimes|string|in:GOOD,FAIR,POOR',
+            'status' => 'sometimes|string|in:ACTIVE,INACTIVE',
+            'condition' => 'sometimes|string|in:GOOD,FAIR,POOR,DAMAGED',
             'purchased_at' => 'nullable|date',
         ];
     }

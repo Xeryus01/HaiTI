@@ -15,8 +15,8 @@ class WhatsAppService
     {
         // Fonnte.com API configuration
         $this->apiUrl = config('services.whatsapp.fonnte_url', 'https://api.fonnte.com/send');
-        $this->apiKey = config('services.whatsapp.fonnte_key', '9tNyBX4bBh3xSuqEMKVx');
-        $this->enabled = config('services.whatsapp.enabled', true);
+        $this->apiKey = config('services.whatsapp.fonnte_key', '');
+        $this->enabled = config('services.whatsapp.enabled', false);
     }
 
     /**

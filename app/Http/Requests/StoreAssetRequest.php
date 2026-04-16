@@ -23,8 +23,8 @@ class StoreAssetRequest extends FormRequest
             'specs' => 'nullable|json',
             'location' => 'nullable|string|max:120',
             'holder' => 'nullable|string|max:120',
-            'status' => 'required|string|in:ACTIVE,MAINTENANCE,BROKEN,RETIRED,SOLD,INACTIVE',
-            'condition' => 'required|string|in:GOOD,FAIR,POOR',
+            'status' => 'required|string|in:ACTIVE,INACTIVE',
+            'condition' => 'required|string|in:GOOD,FAIR,POOR,DAMAGED',
             'purchased_at' => 'nullable|date',
         ];
     }

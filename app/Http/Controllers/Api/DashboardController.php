@@ -15,8 +15,8 @@ class DashboardController extends Controller
             ->selectRaw("
                 COUNT(*) as total,
                 SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) as active,
-                SUM(CASE WHEN status = 'BROKEN' THEN 1 ELSE 0 END) as broken,
-                SUM(CASE WHEN status IN ('MAINTENANCE', 'REPAIR') THEN 1 ELSE 0 END) as repair
+                SUM(CASE WHEN status = 'INACTIVE' THEN 1 ELSE 0 END) as inactive,
+                SUM(CASE WHEN condition = 'DAMAGED' THEN 1 ELSE 0 END) as damaged
             ")
             ->first();
 
@@ -35,8 +35,8 @@ class DashboardController extends Controller
             'assets' => [
                 'total' => $assetCounts->total,
                 'active' => $assetCounts->active,
-                'broken' => $assetCounts->broken,
-                'repair' => $assetCounts->repair,
+                'inactive' => $assetCounts->inactive,
+                'damaged' => $assetCounts->damaged,
             ],
             'tickets' => [
                 'open' => $ticketCounts->open,
