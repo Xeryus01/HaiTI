@@ -64,112 +64,116 @@
 ?>
 
 <div class="min-h-screen">
-    <div class="p-5 sm:p-7.5 lg:p-9">
+    <div class="p-4 sm:p-5 lg:p-7.5 xl:p-9">
         <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Ringkasan Layanan</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Halo, <?php echo e(auth()->user()->name); ?>. Pantau tiket, pengajuan Zoom, dan performa pelayanan dari sini.</p>
+            <div class="min-w-0">
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white truncate">Ringkasan Layanan</h1>
+                <p class="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Halo, <?php echo e(auth()->user()->name); ?>. Pantau tiket, pengajuan Zoom, dan performa.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="<?php echo e(route('tickets.create')); ?>" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">Ajukan Tiket</a>
-                <a href="<?php echo e(route('reservations.create')); ?>" class="rounded-lg border border-brand-600 px-4 py-2 text-sm font-medium text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-500/10">Ajukan Zoom</a>
+                <a href="<?php echo e(route('tickets.create')); ?>" class="rounded-lg bg-brand-600 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white hover:bg-brand-700 transition-colors whitespace-nowrap">Ajukan Tiket</a>
+                <a href="<?php echo e(route('reservations.create')); ?>" class="rounded-lg border border-brand-600 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors whitespace-nowrap">Ajukan Zoom</a>
             </div>
         </div>
 
-        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Alur Layanan Sederhana</h2>
-            <div class="mt-4 grid gap-3 md:grid-cols-4">
-                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Alur Layanan Sederhana</h2>
+            <div class="mt-4 grid gap-2 sm:gap-3 md:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-lg bg-gray-50 p-3 sm:p-4 dark:bg-white/5">
                     <p class="text-xs font-semibold text-brand-600">1</p>
-                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">User ajukan tiket termasalahan</p>
+                    <p class="mt-1 text-xs sm:text-sm font-medium text-gray-900 dark:text-white line-clamp-2">User ajukan tiket termasalahan</p>
                 </div>
-                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                <div class="rounded-lg bg-gray-50 p-3 sm:p-4 dark:bg-white/5">
                     <p class="text-xs font-semibold text-brand-600">2</p>
-                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">Admin/Teknisi tindak lanjuti keluhan</p>
+                    <p class="mt-1 text-xs sm:text-sm font-medium text-gray-900 dark:text-white line-clamp-2">Admin/Teknisi tindak lanjuti keluhan</p>
                 </div>
-                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                <div class="rounded-lg bg-gray-50 p-3 sm:p-4 dark:bg-white/5">
                     <p class="text-xs font-semibold text-brand-600">3</p>
-                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">User ajukan ruang Zoom dan petugas menambahkan link</p>
+                    <p class="mt-1 text-xs sm:text-sm font-medium text-gray-900 dark:text-white line-clamp-2">User ajukan ruang Zoom</p>
                 </div>
-                <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                <div class="rounded-lg bg-gray-50 p-3 sm:p-4 dark:bg-white/5">
                     <p class="text-xs font-semibold text-brand-600">4</p>
-                    <p class="mt-1 text-sm font-medium text-gray-900 dark:text-white">Data bisa diekspor dan dipantau lewat grafik</p>
+                    <p class="mt-1 text-xs sm:text-sm font-medium text-gray-900 dark:text-white line-clamp-2">Data diekspor & dipantau grafik</p>
                 </div>
             </div>
         </div>
 
-        <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Tiket Menunggu</p>
-                <h3 class="mt-2 text-3xl font-bold text-red-600 dark:text-red-400"><?php echo e($ticketCounts['Menunggu']); ?></h3>
+        <div class="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+            <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Menunggu</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400"><?php echo e($ticketCounts['Menunggu']); ?></h3>
             </div>
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Tiket Diproses</p>
-                <h3 class="mt-2 text-3xl font-bold text-yellow-600 dark:text-yellow-400"><?php echo e($ticketCounts['Diproses Teknisi']); ?></h3>
+            <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Diproses</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400"><?php echo e($ticketCounts['Diproses Teknisi']); ?></h3>
             </div>
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Pengajuan Zoom Menunggu</p>
-                <h3 class="mt-2 text-3xl font-bold text-blue-600 dark:text-blue-400"><?php echo e($zoomCounts['Menunggu']); ?></h3>
+            <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Selesai + Catatan</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400"><?php echo e($ticketCounts['Selesai + Catatan']); ?></h3>
             </div>
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-sm text-gray-500 dark:text-gray-400">Layanan Selesai</p>
-                <h3 class="mt-2 text-3xl font-bold text-green-600 dark:text-green-400"><?php echo e($layananSelesai); ?></h3>
-            </div>
-        </div>
-
-        <div class="mb-6 grid gap-6 xl:grid-cols-2">
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Grafik Tiket Permasalahan</h2>
-                    <a href="<?php echo e(route('exports.tickets')); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700">Ekspor CSV</a>
-                </div>
-                <canvas id="ticketChart" height="220"></canvas>
-            </div>
-
-            <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-dark-800">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Grafik Pengajuan Zoom</h2>
-                    <a href="<?php echo e(route('exports.reservations')); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700">Ekspor CSV</a>
-                </div>
-                <canvas id="zoomChart" height="220"></canvas>
+            <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Pengajuan Zoom Menunggu</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400"><?php echo e($zoomCounts['Menunggu']); ?></h3>
             </div>
         </div>
 
-        <div class="grid gap-6 xl:grid-cols-2">
-            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800">
-                <div class="border-b border-gray-200 px-5 py-4 dark:border-gray-700">
-                    <h3 class="font-semibold text-gray-900 dark:text-white">Tiket Terbaru</h3>
+        <div class="mb-6 grid gap-4 sm:gap-6 lg:grid-cols-2">
+            <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-dark-800 overflow-hidden">
+                <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">Grafik Tiket Permasalahan</h2>
+                    <a href="<?php echo e(route('exports.tickets')); ?>" class="text-xs sm:text-sm font-medium text-brand-600 hover:text-brand-700 whitespace-nowrap">Ekspor CSV</a>
                 </div>
-                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                <div class="overflow-x-auto">
+                    <canvas id="ticketChart" height="200" class="w-full"></canvas>
+                </div>
+            </div>
+
+            <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-dark-800 overflow-hidden">
+                <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">Grafik Pengajuan Zoom</h2>
+                    <a href="<?php echo e(route('exports.reservations')); ?>" class="text-xs sm:text-sm font-medium text-brand-600 hover:text-brand-700 whitespace-nowrap">Ekspor CSV</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <canvas id="zoomChart" height="200" class="w-full"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800 overflow-hidden">
+                <div class="border-b border-gray-200 px-4 sm:px-5 py-3 sm:py-4 dark:border-gray-700">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">Tiket Terbaru</h3>
+                </div>
+                <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto dark:divide-gray-700">
                     <?php $__empty_1 = true; $__currentLoopData = $recentTickets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ticket): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <div class="flex items-center justify-between gap-3 px-5 py-4">
-                            <div>
-                                <p class="text-sm font-semibold text-gray-900 dark:text-white"><?php echo e($ticket->title); ?></p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e($ticket->code); ?> • <?php echo e($ticket->category_label); ?></p>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 sm:px-5 py-3 sm:py-4">
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate"><?php echo e($ticket->title); ?></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 truncate"><?php echo e($ticket->code); ?> • <?php echo e($ticket->category_label); ?></p>
                             </div>
-                            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"><?php echo e($ticket->status_label); ?></span>
+                            <span class="rounded-full bg-gray-100 px-2 sm:px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300 whitespace-nowrap"><?php echo e($ticket->status_label); ?></span>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <div class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada tiket.</div>
+                        <div class="px-4 sm:px-5 py-6 sm:py-8 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">Belum ada tiket.</div>
                     <?php endif; ?>
                 </div>
             </div>
 
-            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800">
-                <div class="border-b border-gray-200 px-5 py-4 dark:border-gray-700">
-                    <h3 class="font-semibold text-gray-900 dark:text-white">Pengajuan Zoom Terbaru</h3>
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800 overflow-hidden">
+                <div class="border-b border-gray-200 px-4 sm:px-5 py-3 sm:py-4 dark:border-gray-700">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">Pengajuan Zoom Terbaru</h3>
                 </div>
-                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto dark:divide-gray-700">
                     <?php $__empty_1 = true; $__currentLoopData = $recentReservations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reservation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <div class="flex items-center justify-between gap-3 px-5 py-4">
-                            <div>
-                                <p class="text-sm font-semibold text-gray-900 dark:text-white"><?php echo e($reservation->room_name); ?></p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e(optional($reservation->start_time)->format('d/m/Y H:i')); ?> • <?php echo e(\Illuminate\Support\Str::limit($reservation->purpose, 50)); ?></p>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-4 sm:px-5 py-3 sm:py-4">
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate"><?php echo e($reservation->room_name); ?></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 truncate"><?php echo e(optional($reservation->start_time)->format('d/m/Y H:i')); ?> • <?php echo e(\Illuminate\Support\Str::limit($reservation->purpose, 40)); ?></p>
                             </div>
-                            <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"><?php echo e($reservation->status_label); ?></span>
+                            <span class="rounded-full bg-gray-100 px-2 sm:px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300 whitespace-nowrap"><?php echo e($reservation->status_label); ?></span>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <div class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada pengajuan Zoom.</div>
+                        <div class="px-4 sm:px-5 py-6 sm:py-8 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">Belum ada pengajuan Zoom.</div>
                     <?php endif; ?>
                 </div>
             </div>

@@ -42,7 +42,15 @@
             Alpine.store('sidebar', {
                 init() {
                     const savedState = localStorage.getItem('sidebarOpen');
-                    this.isOpen = savedState === null ? true : savedState === 'true';
+                    const isMobile = window.innerWidth < 1024;
+                    this.isOpen = isMobile ? false : (savedState === null ? true : savedState === 'true');
+                    
+                    window.addEventListener('resize', () => {
+                        const nowMobile = window.innerWidth < 1024;
+                        if (nowMobile && this.isOpen) {
+                            this.close();
+                        }
+                    });
                 },
                 isOpen: true,
                 toggle() {
@@ -56,6 +64,11 @@
                 close() {
                     this.isOpen = false;
                     localStorage.setItem('sidebarOpen', 'false');
+                },
+                closeOnMobile() {
+                    if (window.innerWidth < 1024) {
+                        this.close();
+                    }
                 }
             });
         });

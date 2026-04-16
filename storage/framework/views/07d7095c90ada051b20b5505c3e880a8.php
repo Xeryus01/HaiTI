@@ -1,9 +1,9 @@
 <!-- Sidebar -->
-<aside class="fixed top-0 left-0 z-50 h-screen w-64 overflow-y-auto bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out" :style="{ transform: $store.sidebar.isOpen ? 'translateX(0)' : 'translateX(-100%)', width: '16rem' }">
+<aside class="fixed top-0 left-0 z-50 h-screen w-64 overflow-y-auto overflow-x-hidden bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out" :style="{ transform: $store.sidebar.isOpen ? 'translateX(0)' : 'translateX(-100%)', width: '16rem' }">
     <!-- Logo -->
-    <div class="flex items-center justify-between px-5.5 py-6.5 lg:py-7.5">
-        <a href="<?php echo e(route('dashboard')); ?>" class="block">
-            <img src="<?php echo e(asset(file_exists(public_path('logo/full-logo.png')) ? 'logo/full-logo.png' : 'logo/logo.png')); ?>" alt="<?php echo e(config('app.name', 'TimCare')); ?>" class="h-14 w-auto object-contain" />
+    <div class="flex items-center justify-between px-4 py-4 sm:px-5.5 sm:py-6.5 lg:py-7.5">
+        <a href="<?php echo e(route('dashboard')); ?>" class="block" @click="$store.sidebar.closeOnMobile()">
+            <img src="<?php echo e(asset(file_exists(public_path('logo/full-logo.png')) ? 'logo/full-logo.png' : 'logo/logo.png')); ?>" alt="<?php echo e(config('app.name', 'TimCare')); ?>" class="h-12 w-auto object-contain sm:h-14" />
         </a>
     </div>
 

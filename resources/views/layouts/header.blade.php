@@ -1,11 +1,11 @@
 <!-- Header -->
-    <header class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-5.5 py-4 dark:border-gray-700 dark:bg-dark-800 sm:px-7.5 lg:px-9">
+    <header class="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 sm:px-5.5 sm:py-4 lg:px-9 dark:border-gray-700 dark:bg-dark-800">
     <!-- Left Section -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3 sm:gap-4">
         <!-- Sidebar Toggle Button -->
         <button 
             @click="$store.sidebar.toggle()" 
-            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5 transition-colors"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5 transition-colors lg:h-9 lg:w-9"
             title="Toggle sidebar"
         >
             <!-- Hamburger Icon -->
@@ -22,7 +22,7 @@
     <!-- Right Section -->
     <div class="flex items-center gap-2 sm:gap-3">
         <!-- Theme Toggle Button -->
-        <button @click="$store.theme.toggle()" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5 transition-colors" title="Toggle dark mode">
+        <button @click="$store.theme.toggle()" class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/5 transition-colors lg:h-9 lg:w-9" title="Toggle dark mode">
             <!-- Moon Icon (shown in light mode - click to enable dark mode) -->
             <svg x-show="!$store.theme.isDark" class="fill-current" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.64 15.89C21.38 16.54 20.84 17.09 20.16 17.54C22.83 14.63 22.17 9.82 19.22 7.29C16.27 4.76 11.63 5.55 9.36 8.26C7.09 10.97 7.75 15.78 10.7 18.31C13.65 20.84 18.29 20.05 20.56 17.34C19.84 18.15 18.59 18.87 17.5 19.09L17.15 19.15C18.5 20.3 20.78 20.28 22.25 18.78C23.35 17.71 23.9 16.34 21.64 15.89Z" fill="currentColor"/>
