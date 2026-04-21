@@ -26,7 +26,9 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // Ensure session is saved before redirect (important for cPanel file-based sessions)
         $request->session()->regenerate();
+        $request->session()->save();
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

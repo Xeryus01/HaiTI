@@ -45,6 +45,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        // Ensure session is saved before redirect (important for cPanel file-based sessions)
+        $request->session()->regenerate();
+        $request->session()->save();
+
         return redirect(route('dashboard', absolute: false))->with('success', 'Akun berhasil dibuat! Selamat datang di TimCare.');
     }
 }
