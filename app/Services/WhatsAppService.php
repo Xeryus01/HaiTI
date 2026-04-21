@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Log;
 class WhatsAppService
 {
     private string $apiUrl;
-    private string $apiKey;
+    private ?string $apiKey;
     private bool $enabled;
 
     public function __construct()
     {
         // Fonnte.com API configuration
         $this->apiUrl = config('services.whatsapp.fonnte_url', 'https://api.fonnte.com/send');
-        $this->apiKey = config('services.whatsapp.fonnte_key', '');
+        $this->apiKey = config('services.whatsapp.fonnte_key') ?? '';
         $this->enabled = config('services.whatsapp.enabled', false);
     }
 

@@ -108,11 +108,20 @@ QUEUE_CONNECTION=sync
 # Masuk ke folder aplikasi
 cd ~/timcare
 
+# ⚠️ CRITICAL: Update .env ke MySQL (copy dari .env.cpanel)
+cp .env.cpanel .env
+# Edit dan pastikan credentials MySQL benar
+nano .env
+
 # Install dependencies
 composer install --no-dev --optimize-autoloader
 
 # Generate application key
 php artisan key:generate
+
+# ⭐ CLEAR CONFIG CACHE (SANGAT PENTING!)
+php artisan config:clear
+php artisan cache:clear
 
 # Jalankan migrations
 php artisan migrate --force
@@ -132,7 +141,17 @@ chmod -R 755 bootstrap/cache
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+# Verifikasi database connection
+php artisan tinker
+# Ketik: DB::connection()->getPdo()
+# Kemudian: exit
 ```
+
+**⚠️ PENTING:**
+1. **Jangan lupa `php artisan config:clear`** - Cache lama bisa menyebabkan error
+2. **Update `.env` dengan MySQL credentials** - Jangan gunakan SQLite di production
+3. **Verify database connection** - Pastikan MySQL terhubung sebelum migrations
 
 ### Atau Via File Manager cPanel
 
@@ -172,19 +191,44 @@ Setup backup otomatis di cPanel untuk database MySQL.
 
 ## Troubleshooting
 
+### ⚠️ ERROR: "Database file at path [...database.sqlite] does not exist"
+**Penyebab:** Aplikasi masih menggunakan SQLite padahal seharusnya MySQL.
+
+**Solusi:**
+```bash
+# 1. Verifikasi .env menggunakan MySQL
+cat .env | grep DB_
+
+# 2. Jika masih SQLite, update:
+nano .env
+# Ubah: DB_CONNECTION=mysql (bukan sqlite)
+
+# 3. CLEAR CACHE (KRITIS!)
+php artisan config:clear
+php artisan cache:clear
+rm bootstrap/cache/config.php 2>/dev/null
+
+# 4. Verify koneksi
+php artisan tinker
+>>> DB::connection()->getPdo()
+>>> exit
+```
+
 ### Error 500
 - Cek file `.env` ada dan benar
 - Jalankan `php artisan config:clear`
 - Cek permissions folder
+- Lihat log: `tail -50 storage/logs/laravel.log`
 
 ### Database Connection Error
-- Pastikan DB credentials benar
+- Pastikan DB credentials benar (cek cPanel MySQL Databases)
 - Cek apakah database dan user sudah dibuat
 - Pastikan user punya privileges
+- Test MySQL: `php -r "$c=new mysqli('localhost','user','pass','db');echo $c->connect_error?:'OK'"`
 
 ### Storage Link Error
 - Jalankan `php artisan storage:link` via SSH
-- Atau buat symbolic link manual di file manager
+- Atau buat symbolic link manual di file manager: `ln -s ../timcare/storage/app/public storage`
 
 ## Performance Optimization
 
