@@ -20,9 +20,7 @@
                 <!-- Logo/Branding -->
                 <div class="mb-8 text-center">
                     <a href="/" class="inline-flex items-center justify-center">
-                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-600">
-                            <span class="text-lg font-bold text-white">IT</span>
-                        </div>
+                        <img src="<?php echo e(asset(file_exists(public_path('logo/full-logo.png')) ? 'logo/full-logo.png' : 'logo/logo.png')); ?>" alt="<?php echo e(config('app.name', 'TimCare')); ?>" class="h-12 w-auto object-contain" />
                     </a>
                     <h1 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white"><?php echo e(config('app.name', 'ITSM Dashboard')); ?></h1>
                 </div>
