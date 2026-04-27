@@ -6,19 +6,21 @@
     if ($isAdminOrTechnician) {
         // Admin/Teknisi melihat semua data
         $ticketCounts = [
-            'Menunggu' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
+            'Dibuka' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
             'Diproses Teknisi' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
+            'Menunggu Ketersediaan Barang' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_WAITING_PARTS)->count(),
             'Selesai + Catatan' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
             'Selesai' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
-            'Ditolak' => \App\Models\Ticket::where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
+            'Batal' => \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_REJECTED, \App\Models\Ticket::STATUS_CANCELLED])->count(),
         ];
 
         $zoomCounts = [
-            'Menunggu' => \App\Models\Reservation::where('status', 'PENDING')->count(),
-            'Disetujui' => \App\Models\Reservation::where('status', 'APPROVED')->count(),
-            'Ditolak' => \App\Models\Reservation::where('status', 'REJECTED')->count(),
-            'Selesai' => \App\Models\Reservation::where('status', 'COMPLETED')->count(),
-            'Dibatalkan' => \App\Models\Reservation::where('status', 'CANCELLED')->count(),
+            'Dibuka' => \App\Models\Reservation::where('status', \App\Models\Reservation::STATUS_PENDING)->count(),
+            'Diproses Teknisi' => \App\Models\Reservation::where('status', \App\Models\Reservation::STATUS_APPROVED)->count(),
+            'Menunggu Monitoring' => \App\Models\Reservation::where('status', \App\Models\Reservation::STATUS_WAITING_MONITORING)->count(),
+            'Selesai' => \App\Models\Reservation::where('status', \App\Models\Reservation::STATUS_COMPLETED)->count(),
+            'Selesai Ditolak' => \App\Models\Reservation::where('status', \App\Models\Reservation::STATUS_REJECTED)->count(),
+            'Batal' => \App\Models\Reservation::where('status', \App\Models\Reservation::STATUS_CANCELLED)->count(),
         ];
 
         $layananSelesai = \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
@@ -30,19 +32,21 @@
     } else {
         // User biasa melihat data mereka sendiri
         $ticketCounts = [
-            'Menunggu' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
+            'Dibuka' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_OPEN)->count(),
             'Diproses Teknisi' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_ASSIGNED_DETECT)->count(),
+            'Menunggu Ketersediaan Barang' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_WAITING_PARTS)->count(),
             'Selesai + Catatan' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)->count(),
             'Selesai' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_SOLVED)->count(),
-            'Ditolak' => \App\Models\Ticket::where('requester_id', $user->id)->where('status', \App\Models\Ticket::STATUS_REJECTED)->count(),
+            'Batal' => \App\Models\Ticket::where('requester_id', $user->id)->whereIn('status', [\App\Models\Ticket::STATUS_REJECTED, \App\Models\Ticket::STATUS_CANCELLED])->count(),
         ];
 
         $zoomCounts = [
-            'Menunggu' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'PENDING')->count(),
-            'Disetujui' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'APPROVED')->count(),
-            'Ditolak' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'REJECTED')->count(),
-            'Selesai' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'COMPLETED')->count(),
-            'Dibatalkan' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', 'CANCELLED')->count(),
+            'Dibuka' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', \App\Models\Reservation::STATUS_PENDING)->count(),
+            'Diproses Teknisi' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', \App\Models\Reservation::STATUS_APPROVED)->count(),
+            'Menunggu Monitoring' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', \App\Models\Reservation::STATUS_WAITING_MONITORING)->count(),
+            'Selesai' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', \App\Models\Reservation::STATUS_COMPLETED)->count(),
+            'Selesai Ditolak' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', \App\Models\Reservation::STATUS_REJECTED)->count(),
+            'Batal' => \App\Models\Reservation::where('requester_id', $user->id)->where('status', \App\Models\Reservation::STATUS_CANCELLED)->count(),
         ];
 
         $layananSelesai = \App\Models\Ticket::where('requester_id', $user->id)->whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count()
@@ -91,20 +95,20 @@
 
         <div class="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Menunggu</p>
-                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400">{{ $ticketCounts['Menunggu'] }}</h3>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Dibuka</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-red-600 dark:text-red-400">{{ $ticketCounts['Dibuka'] }}</h3>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Diproses</p>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Diproses Teknisi</p>
                 <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400">{{ $ticketCounts['Diproses Teknisi'] }}</h3>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Selesai + Catatan</p>
-                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $ticketCounts['Selesai + Catatan'] }}</h3>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Tiket Menunggu Barang</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">{{ $ticketCounts['Menunggu Ketersediaan Barang'] }}</h3>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
-                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Pengajuan Zoom Menunggu</p>
-                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $zoomCounts['Menunggu'] }}</h3>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Pengajuan Zoom Dibuka</p>
+                <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $zoomCounts['Dibuka'] }}</h3>
             </div>
         </div>
 

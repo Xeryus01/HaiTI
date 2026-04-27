@@ -14,8 +14,8 @@
             </div>
         </div>
 
-        <div class="grid gap-6 lg:grid-cols-3">
-            <div class="space-y-6 lg:col-span-2">
+        <div class="grid gap-6 lg:grid-cols-3 min-w-0">
+            <div class="space-y-6 lg:col-span-2 min-w-0">
                 <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
                     <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Detail Pengajuan</h2>
                     <p class="text-sm text-gray-700 dark:text-gray-300">{{ $reservation->purpose }}</p>
@@ -29,14 +29,36 @@
                             <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->end_time->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
+
+                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Tim / Divisi</p>
+                            <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->team_name ?: 'Tidak disertakan' }}</p>
+                        </div>
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Jumlah peserta</p>
+                            <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->participants_count ?: '1' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Operator Zoom</p>
+                            <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->operator_needed ? 'Ya' : 'Tidak' }}</p>
+                        </div>
+                        <div class="rounded-lg bg-gray-50 p-4 dark:bg-white/5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Breakout Room</p>
+                            <p class="mt-1 font-semibold text-gray-900 dark:text-white">{{ $reservation->breakroom_needed ? 'Ya' : 'Tidak' }}</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
                     <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-white">Nota Dinas</h2>
                     @if($reservation->nota_dinas_path)
                         <div class="space-y-4">
-                            <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700">
-                                <div class="mb-3 flex items-center justify-between gap-3">
+                            <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-700 overflow-hidden">
+                                <div class="mb-3 flex items-center justify-between gap-3 min-w-0">
                                     <div>
                                         <p class="text-sm font-semibold text-gray-900 dark:text-white">Nota Dinas Pengajuan</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">File PDF yang diunggah saat pengajuan</p>
@@ -115,12 +137,12 @@
                             <div>
                                 <label for="zoom_link" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                                     Link Zoom 
-                                    @if($reservation->status === 'APPROVED' || request()->input('status') === 'APPROVED')
+                                    @if($reservation->status === \App\Models\Reservation::STATUS_APPROVED || request()->input('status') === \App\Models\Reservation::STATUS_APPROVED)
                                         <span class="text-red-500">*</span>
                                     @endif
                                 </label>
                                 <input id="zoom_link" type="url" name="zoom_link" value="{{ old('zoom_link', $reservation->zoom_link) }}" placeholder="https://zoom.us/j/123456789/..." class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('zoom_link') border-red-500 @enderror" 
-                                       @if($reservation->status === 'APPROVED' || request()->input('status') === 'APPROVED') required @endif />
+                                       @if($reservation->status === \App\Models\Reservation::STATUS_APPROVED || request()->input('status') === \App\Models\Reservation::STATUS_APPROVED) required @endif />
                                 @error('zoom_link')
                                     <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                                 @enderror
@@ -208,7 +230,8 @@
         const zoomLinkLabel = document.querySelector('label[for="zoom_link"]');
 
         function updateZoomLinkRequirement() {
-            const isApproved = statusSelect.value === 'APPROVED';
+            const approvedStatus = '{{ \App\Models\Reservation::STATUS_APPROVED }}';
+            const isApproved = statusSelect.value === approvedStatus;
             const requiredSpan = zoomLinkLabel.querySelector('.text-red-500');
 
             if (isApproved) {

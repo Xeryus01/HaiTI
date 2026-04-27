@@ -69,25 +69,15 @@
         </div>
     </form>
 
-    <!-- Auto-Refresh Script untuk cPanel Compatibility -->
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            // Show loading state
+        document.getElementById('loginForm').addEventListener('submit', function() {
             const btn = document.getElementById('loginBtn');
             const btnText = document.getElementById('btnText');
             const btnSpinner = document.getElementById('btnSpinner');
-            
+
             btn.disabled = true;
             btnText.textContent = '{{ __('Signing in...') }}';
             btnSpinner.classList.remove('hidden');
-            
-            // Auto-refresh setelah submit dengan delay untuk ensure session tersimpan
-            // dan redirect selesai di server
-            setTimeout(() => {
-                // Reload untuk memastikan session dan redirect bekerja sempurna
-                // terutama untuk cPanel file-based sessions
-                window.location.href = window.location.href;
-            }, 1500);
         });
     </script>
 </x-guest-layout>

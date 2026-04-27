@@ -54,7 +54,7 @@ class ReservationController extends Controller
         }
         
         $data['requester_id'] = $request->user()->id;
-        $data['status'] = 'PENDING';
+        $data['status'] = Reservation::STATUS_PENDING;
         $data['code'] = Reservation::generateCode();
 
         // Handle nota dinas upload

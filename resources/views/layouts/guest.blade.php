@@ -33,23 +33,7 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-        <!-- Auto-Refresh Script untuk Logout (cPanel Compatibility) -->
-        <script>
-            // Handle logout forms dengan auto-refresh
-            document.addEventListener('DOMContentLoaded', function() {
-                // Find all logout forms
-                const logoutForms = document.querySelectorAll('form[action*="logout"]');
-                
-                logoutForms.forEach(form => {
-                    form.addEventListener('submit', function(e) {
-                        // Auto-refresh setelah submit dengan delay untuk ensure session invalidated
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 1500);
-                    });
-                });
-            });
-        </script>
+    </body>
+</html>
     </body>
 </html>

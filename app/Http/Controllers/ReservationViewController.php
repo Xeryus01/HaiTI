@@ -22,7 +22,11 @@ class ReservationViewController extends Controller
     {
         $q = Reservation::query()->with(['requester', 'approver']);
 
-        $reservations = $q->latest()->paginate(15);
+        if ($request->filled('status')) {
+            $q->where('status', $request->input('status'));
+        }
+
+        $reservations = $q->latest()->paginate(15)->withQueryString();
         return view('reservations.index', compact('reservations'));
     }
 
@@ -53,8 +57,11 @@ class ReservationViewController extends Controller
         }
         
         $data['requester_id'] = $request->user()->id;
-        $data['status'] = 'PENDING';
+        $data['status'] = Reservation::STATUS_PENDING;
         $data['code'] = Reservation::generateCode();
+        $data['operator_needed'] = $request->boolean('operator_needed');
+        $data['breakroom_needed'] = $request->boolean('breakroom_needed');
+        $data['participants_count'] = $request->input('participants_count', 1);
 
         // Handle nota dinas upload
         if ($request->hasFile('nota_dinas')) {
@@ -123,6 +130,10 @@ class ReservationViewController extends Controller
             $data['end_time'] = $endTime;
         }
 
+        $data['operator_needed'] = $request->boolean('operator_needed');
+        $data['breakroom_needed'] = $request->boolean('breakroom_needed');
+        $data['participants_count'] = $request->input('participants_count', $reservation->participants_count ?? 1);
+
         if ($isApprover) {
             $data['approver_id'] = $request->user()->id;
         } else {
@@ -143,7 +154,7 @@ class ReservationViewController extends Controller
 
         $reservation->update($data);
 
-        if ($oldStatus !== $reservation->status && $reservation->status === 'APPROVED') {
+        if ($oldStatus !== $reservation->status && $reservation->status === Reservation::STATUS_APPROVED) {
             $this->notificationService->notifyReservationApproved($reservation->requester, $reservation);
         }
 

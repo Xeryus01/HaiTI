@@ -12,6 +12,34 @@
             </div>
         </div>
 
+        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Alur Pengajuan Zoom</h2>
+            <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">1. Ajukan</p>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Isi kebutuhan Zoom dan unggah nota dinas.</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">2. Follow up</p>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Admin/Teknisi menyetujui atau menolak.</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">3. Selesai</p>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Link Zoom ditambahkan bila disetujui.</p>
+                </div>
+            </div>
+        </div>
+
+        <form method="GET" class="mb-4 flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
+            <select name="status" class="rounded-lg border-gray-300 px-3 py-2 dark:bg-dark-800 dark:text-white">
+                <option value="">Semua status</option>
+                @foreach(\App\Models\Reservation::statusLabels() as $value => $label)
+                    <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 text-white">Terapkan</button>
+        </form>
+
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-dark-800">
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -42,10 +70,12 @@
                                 <td class="px-5 py-4 sm:px-6 text-sm text-gray-700 dark:text-gray-300">{{ optional($r->requester)->name ?? '-' }}</td>
                                 <td class="px-5 py-4 sm:px-6">
                                     <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
-                                        @if($r->status === 'PENDING') bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                                        @elseif($r->status === 'APPROVED') bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
-                                        @elseif($r->status === 'REJECTED') bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
-                                        @elseif($r->status === 'COMPLETED') bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400
+                                        @if($r->status === \App\Models\Reservation::STATUS_PENDING) bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
+                                        @elseif($r->status === \App\Models\Reservation::STATUS_APPROVED) bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
+                                        @elseif($r->status === \App\Models\Reservation::STATUS_WAITING_MONITORING) bg-purple-100 text-purple-700 dark:bg-purple-500/15 dark:text-purple-400
+                                        @elseif($r->status === \App\Models\Reservation::STATUS_REJECTED) bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
+                                        @elseif($r->status === \App\Models\Reservation::STATUS_COMPLETED) bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400
+                                        @elseif($r->status === \App\Models\Reservation::STATUS_CANCELLED) bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         @else bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         @endif">
                                         {{ $r->status_label }}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Reservation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReservationRequest extends FormRequest
@@ -23,10 +24,14 @@ class UpdateReservationRequest extends FormRequest
     {
         return [
             'room_name' => 'nullable|string|max:100',
+            'team_name' => 'nullable|string|max:100',
             'purpose' => 'nullable|string|max:500',
+            'participants_count' => 'nullable|integer|min:1',
+            'operator_needed' => 'nullable|boolean',
+            'breakroom_needed' => 'nullable|boolean',
             'start_time_local' => 'nullable|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/',
             'end_time_local' => 'nullable|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/',
-            'status' => 'nullable|string|in:PENDING,APPROVED,REJECTED,COMPLETED,CANCELLED',
+            'status' => 'nullable|string|in:' . implode(',', Reservation::statuses()),
             'zoom_link' => 'nullable|url|max:255',
             'zoom_record_link' => 'nullable|url|max:255',
             'notes' => 'nullable|string|max:2000',

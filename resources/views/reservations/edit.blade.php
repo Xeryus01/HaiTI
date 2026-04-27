@@ -6,7 +6,7 @@
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Ubah detail pengajuan Zoom Anda.</p>
         </div>
 
-        <div class="max-w-3xl">
+        <div class="max-w-3xl mx-auto">
             <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800 sm:p-8">
                 @if($errors->any())
                     <div class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-400">
@@ -36,6 +36,34 @@
                         @error('purpose')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+                        <div>
+                            <label for="team_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nama Tim / Divisi</label>
+                            <input id="team_name" type="text" name="team_name" value="{{ old('team_name', $reservation->team_name) }}" placeholder="Contoh: Tim TI" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('team_name') border-red-500 @enderror" />
+                            @error('team_name')
+                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="participants_count" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Jumlah Peserta</label>
+                            <input id="participants_count" type="number" name="participants_count" value="{{ old('participants_count', $reservation->participants_count ?: 1) }}" min="1" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('participants_count') border-red-500 @enderror" />
+                            @error('participants_count')
+                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+                        <div class="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-white/5">
+                            <input id="operator_needed" type="checkbox" name="operator_needed" value="1" class="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:border-gray-600 dark:bg-dark-800" {{ old('operator_needed', $reservation->operator_needed) ? 'checked' : '' }} />
+                            <label for="operator_needed" class="text-sm text-gray-700 dark:text-gray-300">Butuh Operator Zoom</label>
+                        </div>
+                        <div class="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-white/5">
+                            <input id="breakroom_needed" type="checkbox" name="breakroom_needed" value="1" class="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:border-gray-600 dark:bg-dark-800" {{ old('breakroom_needed', $reservation->breakroom_needed) ? 'checked' : '' }} />
+                            <label for="breakroom_needed" class="text-sm text-gray-700 dark:text-gray-300">Butuh Ruang Istirahat</label>
+                        </div>
                     </div>
 
                     <div class="grid gap-6 sm:grid-cols-2">

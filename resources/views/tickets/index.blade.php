@@ -12,6 +12,24 @@
             </div>
         </div>
 
+        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Alur Tiket Permasalahan</h2>
+            <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">1. Ajukan</p>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Isi keluhan dan kategori masalah.</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">2. Diproses</p>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Teknisi memeriksa dan memberi update.</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+                    <p class="text-xs font-semibold text-brand-600">3. Selesai</p>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Tiket ditutup saat permasalahan selesai.</p>
+                </div>
+            </div>
+        </div>
+
         <form method="GET" class="mb-4 flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
             <select name="status" class="rounded-lg border-gray-300 px-3 py-2 dark:bg-dark-800 dark:text-white">
                 <option value="">Semua status</option>
@@ -50,8 +68,10 @@
                                     <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
                                         @if($ticket->status === \App\Models\Ticket::STATUS_OPEN) bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
                                         @elseif($ticket->status === \App\Models\Ticket::STATUS_ASSIGNED_DETECT) bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
+                                        @elseif($ticket->status === \App\Models\Ticket::STATUS_WAITING_PARTS) bg-purple-100 text-purple-700 dark:bg-purple-500/15 dark:text-purple-400
                                         @elseif($ticket->status === \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES) bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-400
                                         @elseif($ticket->status === \App\Models\Ticket::STATUS_SOLVED) bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
+                                        @elseif($ticket->status === \App\Models\Ticket::STATUS_CANCELLED) bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         @else bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         @endif">
                                         {{ $ticket->status_label }}

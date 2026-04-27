@@ -15,7 +15,11 @@ class StoreReservationRequest extends FormRequest
     {
         return [
             'room_name' => 'required|string|max:100',
+            'team_name' => 'nullable|string|max:100',
             'purpose' => 'required|string|max:500',
+            'participants_count' => 'nullable|integer|min:1',
+            'operator_needed' => 'nullable|boolean',
+            'breakroom_needed' => 'nullable|boolean',
             'start_time_local' => 'required|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/|after:now',
             'end_time_local' => 'required|regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/',
             'nota_dinas' => 'required|file|mimes:pdf|max:5120', // 5MB max

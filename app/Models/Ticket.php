@@ -12,9 +12,11 @@ class Ticket extends Model
     // status constants for improved consistency
     public const STATUS_OPEN = 'OPEN';
     public const STATUS_ASSIGNED_DETECT = 'ASSIGNED_DETECT';
+    public const STATUS_WAITING_PARTS = 'WAITING_PARTS';
     public const STATUS_SOLVED_WITH_NOTES = 'SOLVED_WITH_NOTES';
     public const STATUS_SOLVED = 'SOLVED';
     public const STATUS_REJECTED = 'REJECTED';
+    public const STATUS_CANCELLED = 'CANCELLED';
 
     /**
      * All valid ticket statuses, used for validation and dropdowns.
@@ -24,20 +26,24 @@ class Ticket extends Model
         return [
             self::STATUS_OPEN,
             self::STATUS_ASSIGNED_DETECT,
+            self::STATUS_WAITING_PARTS,
             self::STATUS_SOLVED_WITH_NOTES,
             self::STATUS_SOLVED,
             self::STATUS_REJECTED,
+            self::STATUS_CANCELLED,
         ];
     }
 
     public static function statusLabels(): array
     {
         return [
-            self::STATUS_OPEN => 'Menunggu',
+            self::STATUS_OPEN => 'Dibuka',
             self::STATUS_ASSIGNED_DETECT => 'Diproses Teknisi',
+            self::STATUS_WAITING_PARTS => 'Menunggu Ketersediaan Barang',
             self::STATUS_SOLVED_WITH_NOTES => 'Selesai dengan Catatan',
             self::STATUS_SOLVED => 'Selesai',
-            self::STATUS_REJECTED => 'Ditolak',
+            self::STATUS_REJECTED => 'Batal',
+            self::STATUS_CANCELLED => 'Batal',
         ];
     }
 
@@ -60,6 +66,7 @@ class Ticket extends Model
             'SOFTWARE_SUPPORT' => 'Layanan Perangkat Lunak',
             'NETWORK_SUPPORT' => 'Layanan Jaringan',
             'SECURITY_INCIDENT' => 'Insiden Keamanan',
+            'OTHER' => 'Lainnya',
         ];
     }
 
