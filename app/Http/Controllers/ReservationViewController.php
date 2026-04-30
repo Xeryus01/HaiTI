@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Models\Reservation;
+use App\Models\User;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +83,14 @@ class ReservationViewController extends Controller
     {
         $reservation->load(['requester', 'approver']);
 
-        return view('reservations.show', compact('reservation'));
+        $technicians = collect();
+        if ($request->user() && $request->user()->hasRole('Admin')) {
+            $technicians = User::whereHas('roles', function ($q) {
+                $q->where('name', 'Teknisi');
+            })->get();
+        }
+
+        return view('reservations.show', compact('reservation', 'technicians'));
     }
 
     public function edit(Request $request, Reservation $reservation)
@@ -109,9 +117,25 @@ class ReservationViewController extends Controller
             abort(403, 'Anda tidak memiliki izin untuk menyetujui pengajuan Zoom.');
         }
 
+        if ($request->filled('approver_id') && ! $user->hasRole('Admin')) {
+            abort(403, 'Hanya Admin yang dapat menugaskan petugas.');
+        }
+
         $oldStatus = $reservation->status;
         $data = $request->validated();
         $isApprover = $user->hasPermissionTo('approve reservations');
+
+        if ($user->hasRole('Admin')) {
+            if ($request->has('approver_id')) {
+                $data['approver_id'] = $request->input('approver_id') ?: null;
+            } else {
+                unset($data['approver_id']);
+            }
+        } elseif ($isApprover) {
+            $data['approver_id'] = $request->user()->id;
+        } else {
+            unset($data['approver_id']);
+        }
 
         // Add the converted datetime fields if they were provided
         if ($request->filled('start_time_local')) {

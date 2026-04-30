@@ -35,6 +35,7 @@ class UpdateReservationRequest extends FormRequest
             'zoom_link' => 'nullable|url|max:255',
             'zoom_record_link' => 'nullable|url|max:255',
             'notes' => 'nullable|string|max:2000',
+            'approver_id' => 'nullable|integer|exists:users,id',
         ];
     }
 
@@ -82,6 +83,10 @@ class UpdateReservationRequest extends FormRequest
                 if ($this->filled('status') && $this->input('status') === 'APPROVED' && ! $this->filled('zoom_link')) {
                     $validator->errors()->add('zoom_link', 'Link Zoom harus diisi ketika menyetujui pengajuan.');
                 }
+            }
+
+            if ($this->filled('approver_id') && $user && ! $user->hasRole('Admin')) {
+                $validator->errors()->add('approver_id', 'Hanya Admin yang dapat menugaskan petugas.');
             }
 
             // If status is being changed to REJECTED, CANCELLED, or COMPLETED, zoom_link is not required

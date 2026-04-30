@@ -242,6 +242,61 @@ unset($__errorArgs, $__bag); ?>
 
             <div class="space-y-6">
                 <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
+                    <h3 class="mb-3 text-sm font-bold uppercase text-gray-500 dark:text-gray-400">Status Penanganan</h3>
+                    <span class="inline-flex rounded-full px-3 py-1 text-sm font-medium
+                        <?php if($reservation->status === \App\Models\Reservation::STATUS_PENDING): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
+                        <?php elseif($reservation->status === \App\Models\Reservation::STATUS_APPROVED): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
+                        <?php elseif($reservation->status === \App\Models\Reservation::STATUS_WAITING_MONITORING): ?> bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400
+                        <?php elseif($reservation->status === \App\Models\Reservation::STATUS_COMPLETED): ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
+                        <?php elseif($reservation->status === \App\Models\Reservation::STATUS_REJECTED || $reservation->status === \App\Models\Reservation::STATUS_CANCELLED): ?> bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
+                        <?php else: ?> bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
+                        <?php endif; ?>">
+                        <?php echo e($reservation->status_label); ?>
+
+                    </span>
+
+                    <div class="mt-4 space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Dibuat</p>
+                            <p><?php echo e($reservation->created_at->format('d/m/Y H:i')); ?></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">Terakhir diperbarui</p>
+                            <p><?php echo e($reservation->updated_at->format('d/m/Y H:i')); ?></p>
+                        </div>
+                    </div>
+
+                    <?php if(auth()->user()->hasRole('Admin')): ?>
+                        <form method="POST" action="<?php echo e(route('reservations.update', $reservation)); ?>" class="mt-6 space-y-4">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('PATCH'); ?>
+
+                            <div>
+                                <label for="approver_id_sidebar" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Petugas</label>
+                                <select id="approver_id_sidebar" name="approver_id" class="w-full rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-dark-800 dark:text-white">
+                                    <option value="">Belum ditentukan</option>
+                                    <?php $__currentLoopData = $technicians; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $technician): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($technician->id); ?>" <?php echo e($reservation->approver_id == $technician->id ? 'selected' : ''); ?>><?php echo e($technician->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                                <?php $__errorArgs = ['approver_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="mt-1 text-sm text-red-500"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            </div>
+
+                            <button type="submit" class="w-full rounded-lg bg-brand-600 px-4 py-2 text-white">Perbarui Petugas</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+
+                <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800">
                     <h3 class="mb-3 text-sm font-bold uppercase text-gray-500 dark:text-gray-400">Ringkasan</h3>
                     <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
                         <div>
