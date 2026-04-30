@@ -15,6 +15,28 @@
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Sampaikan kendala secara singkat, lalu teknisi atau admin akan menanganinya.</p>
         </div>
 
+        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-base font-semibold text-gray-900 dark:text-white">Alur Permohonan Tiket Masalah IT</h2>
+            <div class="mt-4 text-sm text-gray-700 dark:text-gray-300">
+                <ol class="list-decimal list-inside space-y-2">
+                    <li>Pelaporan masalah oleh pengguna</li>
+                    <li>Pembuatan tiket oleh sistem</li>
+                    <li>Assigmen petugas/admin</li>
+                    <li>Penanganan masalah
+                        <ol class="list-lower-alpha list-inside space-y-1 mt-2 pl-4">
+                            <li>Jika dapat diperbaiki → lanjutkan proses penyelesaian</li>
+                            <li>Jika tidak dapat diperbaiki → tindak lanjut alternatif</li>
+                        </ol>
+                    </li>
+                    <li>Penggantian barang jika diperlukan</li>
+                    <li>Persetujuan hasil penanganan</li>
+                    <li>Penyelesaian tiket</li>
+                    <li>Konfirmasi dengan pengguna</li>
+                    <li>Penutupan tiket</li>
+                </ol>
+            </div>
+        </div>
+
         <div class="max-w-2xl rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-dark-800 sm:p-8">
             <?php if($errors->any()): ?>
                 <div class="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-400">
@@ -116,7 +138,7 @@ unset($__errorArgs, $__bag); ?>">
                 </div>
 
                 <div class="flex gap-3 pt-4">
-                    <a href="<?php echo e(route('tickets.index')); ?>" class="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Batal</a>
+                    <a href="<?php echo e(url()->to(route('tickets.index'))); ?>" class="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Batal</a>
                     <button type="submit" class="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-center font-medium text-white hover:bg-brand-700">Kirim Tiket</button>
                 </div>
             </form>
@@ -133,4 +155,4 @@ unset($__errorArgs, $__bag); ?>">
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
 <?php endif; ?>
-<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views/tickets/create.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\timcare\resources\views/tickets/create.blade.php ENDPATH**/ ?>

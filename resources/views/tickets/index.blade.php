@@ -7,25 +7,34 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">User mengajukan keluhan, lalu teknisi atau admin menindaklanjuti sampai selesai.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('tickets.create') }}" class="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">Ajukan Tiket</a>
-                <a href="{{ route('exports.tickets', request()->query()) }}" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Ekspor CSV</a>
+                <a href="{{ url()->to(route('tickets.create')) }}" class="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">Ajukan Tiket</a>
+                <a href="{{ url()->to(route('exports.tickets', request()->query())) }}" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Ekspor CSV</a>
             </div>
         </div>
 
-        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Alur Tiket Permasalahan</h2>
+        <div class="mb-6 rounded-3xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">Alur Tiket Permasalahan</h2>
             <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <p class="text-xs font-semibold text-brand-600">1. Ajukan</p>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Isi keluhan dan kategori masalah.</p>
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-3 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-semibold text-sky-600">1.</span>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Ajukan tiket</p>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">Isi keluhan, detail, dan kategori.</p>
                 </div>
-                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <p class="text-xs font-semibold text-brand-600">2. Diproses</p>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Teknisi memeriksa dan memberi update.</p>
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-3 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-semibold text-sky-600">2.</span>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Teknisi follow-up</p>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">Assign, verifikasi, dan update status.</p>
                 </div>
-                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <p class="text-xs font-semibold text-brand-600">3. Selesai</p>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Tiket ditutup saat permasalahan selesai.</p>
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-3 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-semibold text-sky-600">3.</span>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Selesai</p>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">Tiket ditutup saat masalah teratasi.</p>
                 </div>
             </div>
         </div>
@@ -79,7 +88,7 @@
                                 </td>
                                 <td class="px-5 py-4 sm:px-6 text-sm text-gray-700 dark:text-gray-300">{{ optional($ticket->assignee)->name ?? '-' }}</td>
                                 <td class="px-5 py-4 text-right sm:px-6">
-                                    <a href="{{ route('tickets.show', $ticket) }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">Detail</a>
+                                    <a href="{{ url()->to(route('tickets.show', $ticket)) }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">Detail</a>
                                 </td>
                             </tr>
                         @empty

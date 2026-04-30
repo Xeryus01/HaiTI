@@ -35,7 +35,7 @@
 
                             <!-- Content -->
                             <div class="flex-1 min-w-0">
-                                <a href="{{ route('notifications.show', $notification) }}" class="block">
+                                <a href="{{ url()->to(route('notifications.show', $notification)) }}" class="block">
                                     <h4 class="font-medium text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition break-words">
                                         {{ $notification->title }}
                                     </h4>
@@ -52,17 +52,17 @@
                                     @if ($notification->action_type && $notification->action_id)
                                         @switch($notification->action_type)
                                             @case('ticket')
-                                                <a href="{{ route('tickets.show', $notification->action_id) }}" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                                                <a href="{{ url()->to(route('tickets.show', $notification->action_id)) }}" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                                                     View Ticket
                                                 </a>
                                                 @break
                                             @case('reservation')
-                                                <a href="{{ route('reservations.show', $notification->action_id) }}" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                                                <a href="{{ url()->to(route('reservations.show', $notification->action_id)) }}" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                                                     View Reservation
                                                 </a>
                                                 @break
                                             @case('asset')
-                                                <a href="{{ route('assets.show', $notification->action_id) }}" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                                                <a href="{{ url()->to(route('assets.show', $notification->action_id)) }}" class="text-xs text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                                                     View Asset
                                                 </a>
                                                 @break

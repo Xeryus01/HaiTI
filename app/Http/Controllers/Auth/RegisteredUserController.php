@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Ensure session is saved before redirect (important for cPanel file-based sessions)
+        // Ensure session is saved before redirect
         $request->session()->regenerate();
         $request->session()->save();
 

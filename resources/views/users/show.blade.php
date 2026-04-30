@@ -8,7 +8,7 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Informasi lengkap user {{ $user->name }}</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('users.index') }}" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700">
+                <a href="{{ url()->to(route('users.index')) }}" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
@@ -64,13 +64,13 @@
 
                 <!-- Action Buttons -->
                 <div class="flex justify-end gap-3 border-t border-gray-200 bg-gray-50 p-5 sm:p-7.5 dark:border-gray-700 dark:bg-dark-700/50">
-                    <a href="{{ route('users.editPassword', $user) }}" class="inline-flex items-center rounded-lg bg-amber-600 px-4 py-2 font-medium text-white hover:bg-amber-700 dark:hover:bg-amber-700">
+                    <a href="{{ url()->to(route('users.editPassword', $user)) }}" class="inline-flex items-center rounded-lg bg-amber-600 px-4 py-2 font-medium text-white hover:bg-amber-700 dark:hover:bg-amber-700">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                         </svg>
                         Ubah Password
                     </a>
-                    <a href="{{ route('users.edit', $user) }}" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700">
+                    <a href="{{ url()->to(route('users.edit', $user)) }}" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>

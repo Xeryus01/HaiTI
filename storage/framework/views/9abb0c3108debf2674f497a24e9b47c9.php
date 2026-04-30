@@ -5,4 +5,4 @@
 ?>
 
 <img src="<?php echo e(asset($logoPath)); ?>" alt="<?php echo e(config('app.name', 'TimCare')); ?>" <?php echo e($attributes->merge(['class' => 'block h-9 w-auto object-contain'])); ?> />
-<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views/components/application-logo.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\timcare\resources\views/components/application-logo.blade.php ENDPATH**/ ?>

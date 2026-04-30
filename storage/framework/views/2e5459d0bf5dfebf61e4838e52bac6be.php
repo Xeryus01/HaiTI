@@ -16,25 +16,41 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">User mengajukan kebutuhan Zoom, lalu teknisi atau admin melakukan follow up dan menambahkan link meeting.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="<?php echo e(route('reservations.create')); ?>" class="rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">Ajukan Zoom</a>
-                <a href="<?php echo e(route('exports.reservations', request()->query())); ?>" class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Ekspor CSV</a>
+                <a href="<?php echo e(url()->to(route('reservations.create'))); ?>" class="rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">Ajukan Zoom</a>
+                <a href="<?php echo e(url()->to(route('exports.reservations', request()->query()))); ?>" class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Ekspor CSV</a>
             </div>
         </div>
 
-        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-dark-800">
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Alur Pengajuan Zoom</h2>
-            <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <p class="text-xs font-semibold text-brand-600">1. Ajukan</p>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Isi kebutuhan Zoom dan unggah nota dinas.</p>
+        <div class="mb-4 rounded-3xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-dark-800">
+            <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">Alur Pengajuan Zoom</h2>
+            <div class="mt-3 grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-sky-600">1.</span>
+                        <p class="text-xs font-semibold text-gray-900 dark:text-white">Ajukan</p>
+                    </div>
+                    <p class="mt-1 text-[11px] leading-4 text-gray-600 dark:text-gray-400">Isi kebutuhan Zoom dan upload nota dinas.</p>
                 </div>
-                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <p class="text-xs font-semibold text-brand-600">2. Follow up</p>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Admin/Teknisi menyetujui atau menolak.</p>
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-sky-600">2.</span>
+                        <p class="text-xs font-semibold text-gray-900 dark:text-white">Assign</p>
+                    </div>
+                    <p class="mt-1 text-[11px] leading-4 text-gray-600 dark:text-gray-400">Admin/teknisi menindaklanjuti permohonan.</p>
                 </div>
-                <div class="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
-                    <p class="text-xs font-semibold text-brand-600">3. Selesai</p>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Link Zoom ditambahkan bila disetujui.</p>
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-sky-600">3.</span>
+                        <p class="text-xs font-semibold text-gray-900 dark:text-white">Cek ID</p>
+                    </div>
+                    <p class="mt-1 text-[11px] leading-4 text-gray-600 dark:text-gray-400">Jika ID tersedia, lanjutkan. Jika tidak, konfirmasi.</p>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-sky-600">4.</span>
+                        <p class="text-xs font-semibold text-gray-900 dark:text-white">Selesai</p>
+                    </div>
+                    <p class="mt-1 text-[11px] leading-4 text-gray-600 dark:text-gray-400">Link Zoom ditambahkan jika disetujui.</p>
                 </div>
             </div>
         </div>
@@ -100,7 +116,7 @@
                                 </td>
                                 <td class="px-5 py-4 sm:px-6 text-sm text-gray-700 dark:text-gray-300"><?php echo e(optional($r->approver)->name ?? '-'); ?></td>
                                 <td class="px-5 py-4 text-right sm:px-6">
-                                    <a href="<?php echo e(route('reservations.show', $r)); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">Detail</a>
+                                    <a href="<?php echo e(url()->to(route('reservations.show', $r))); ?>" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">Detail</a>
                                 </td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
@@ -131,4 +147,4 @@
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
 <?php endif; ?>
-<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views/reservations/index.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\timcare\resources\views/reservations/index.blade.php ENDPATH**/ ?>

@@ -8,7 +8,7 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Kelola pengguna sistem helpdesk IT</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('users.create') }}" class="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">
+                <a href="{{ url()->to(route('users.create')) }}" class="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
@@ -66,9 +66,9 @@
                                 <td class="px-5 py-4 sm:px-6 text-sm text-gray-600 dark:text-gray-400">{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td class="px-5 py-4 sm:px-6 text-right text-sm font-medium">
                                     <div class="flex justify-end gap-3">
-                                        <a href="{{ route('users.show', $user) }}" class="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">Lihat</a>
-                                        <a href="{{ route('users.editPassword', $user) }}" class="text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300">Password</a>
-                                        <a href="{{ route('users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
+                                        <a href="{{ url()->to(route('users.show', $user)) }}" class="text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">Lihat</a>
+                                        <a href="{{ url()->to(route('users.editPassword', $user)) }}" class="text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300">Password</a>
+                                        <a href="{{ url()->to(route('users.edit', $user)) }}" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
                                         @if($user->id !== auth()->id())
                                             <form method="POST" action="{{ route('users.destroy', $user) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
                                                 @csrf

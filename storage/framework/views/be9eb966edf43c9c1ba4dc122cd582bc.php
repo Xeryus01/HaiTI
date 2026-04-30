@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>TimCare - Sistem Helpdesk IT Terintegrasi</title>
     <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket permasalahan, pengajuan ruang Zoom, dan layanan IT lainnya.">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <style>
         .hero-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -26,31 +26,50 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center flex-shrink-0">
-                    <a href="{{ url('/') }}" class="flex items-center gap-2">
-                        <x-application-logo class="h-10 w-auto text-brand-600" />
+                    <a href="<?php echo e(url('/')); ?>" class="flex items-center gap-2">
+                        <?php if (isset($component)) { $__componentOriginal8892e718f3d0d7a916180885c6f012e7 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal8892e718f3d0d7a916180885c6f012e7 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.application-logo','data' => ['class' => 'h-10 w-auto text-brand-600']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('application-logo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'h-10 w-auto text-brand-600']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal8892e718f3d0d7a916180885c6f012e7)): ?>
+<?php $attributes = $__attributesOriginal8892e718f3d0d7a916180885c6f012e7; ?>
+<?php unset($__attributesOriginal8892e718f3d0d7a916180885c6f012e7); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal8892e718f3d0d7a916180885c6f012e7)): ?>
+<?php $component = $__componentOriginal8892e718f3d0d7a916180885c6f012e7; ?>
+<?php unset($__componentOriginal8892e718f3d0d7a916180885c6f012e7); ?>
+<?php endif; ?>
                     </a>
                 </div>
                 <div class="flex items-center space-x-2 sm:space-x-4">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="bg-brand-600 text-white px-4 sm:px-5 py-2 rounded-md text-sm font-medium hover:bg-brand-700 transition-colors">
+                    <?php if(auth()->guard()->check()): ?>
+                        <a href="<?php echo e(url('/dashboard')); ?>" class="bg-brand-600 text-white px-4 sm:px-5 py-2 rounded-md text-sm font-medium hover:bg-brand-700 transition-colors">
                             Dashboard
                         </a>
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
+                        <form method="POST" action="https://digistat.web.bps.go.id/timcare/logout" class="inline">
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium border border-gray-300 hover:border-gray-400 transition-colors">
                                 Logout
                             </button>
                         </form>
-                    @else
-                        <a href="{{ url()->to(route('login')) }}" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
+                    <?php else: ?>
+                        <a href="<?php echo e(url()->to(route('login'))); ?>" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
                             Masuk
                         </a>
-                        @if (Route::has('register'))
-                            <a href="{{ url()->to(route('register')) }}" class="bg-brand-600 text-white px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-brand-700">
+                        <?php if(Route::has('register')): ?>
+                            <a href="<?php echo e(url()->to(route('register'))); ?>" class="bg-brand-600 text-white px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-brand-700">
                                 Daftar
                             </a>
-                        @endif
-                    @endauth
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -68,24 +87,24 @@
                     Kelola tiket permasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2 mb-8">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
+                    <?php if(auth()->guard()->check()): ?>
+                        <a href="<?php echo e(url('/dashboard')); ?>" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Buka Dashboard
                         </a>
-                        <a href="{{ url()->to(route('tickets.create')) }}" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
+                        <a href="<?php echo e(url()->to(route('tickets.create'))); ?>" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Ajukan Tiket Baru
                         </a>
-                        <a href="{{ url()->to(route('reservations.create')) }}" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg hidden sm:inline-block">
+                        <a href="<?php echo e(url()->to(route('reservations.create'))); ?>" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg hidden sm:inline-block">
                             Ajukan Ruang Zoom
                         </a>
-                    @else
-                        <a href="{{ url()->to(route('register')) }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
+                    <?php else: ?>
+                        <a href="<?php echo e(url()->to(route('register'))); ?>" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Mulai Sekarang
                         </a>
                         <a href="#features" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Pelajari Lebih Lanjut
                         </a>
-                    @endauth
+                    <?php endif; ?>
                 </div>
 
                 <!-- Jadwal Piket Clean -->
@@ -108,34 +127,34 @@
                         <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest">Tim Piket Hari Ini</p>
                     </div>
                     <div class="flex flex-wrap justify-center gap-2 sm:gap-3 sm:flex-nowrap">
-                        @foreach($piketData as $item)
+                        <?php $__currentLoopData = $piketData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php 
                                 $colors = $colorMap[$item['nama']] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
                             ?>
                             <div class="group relative">
-                                <div class="absolute inset-0 bg-gradient-to-r {{ $colors['accent'] }} rounded-md blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
+                                <div class="absolute inset-0 bg-gradient-to-r <?php echo e($colors['accent']); ?> rounded-md blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
                                 <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-md px-3 py-3 sm:px-4 sm:py-4 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-20 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                                     <div class="flex flex-col items-center gap-1.5">
-                                        <div class="h-1.5 w-1.5 {{ $colors['dot'] }} rounded-full"></div>
-                                        <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap">{{ $item['lokasi'] }}</p>
-                                        <p class="text-xs sm:text-sm font-bold text-white whitespace-nowrap">{{ $item['nama'] }}</p>
+                                        <div class="h-1.5 w-1.5 <?php echo e($colors['dot']); ?> rounded-full"></div>
+                                        <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap"><?php echo e($item['lokasi']); ?></p>
+                                        <p class="text-xs sm:text-sm font-bold text-white whitespace-nowrap"><?php echo e($item['nama']); ?></p>
                                     </div>
                                 </div>
                             </div>
-                            @if(!$loop->last)
+                            <?php if(!$loop->last): ?>
                                 <div class="hidden sm:block w-px h-14 bg-white/20"></div>
-                            @endif
-                        @endforeach
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                    @auth
-                        @if(auth()->user()->hasRole('Admin'))
+                    <?php if(auth()->guard()->check()): ?>
+                        <?php if(auth()->user()->hasRole('Admin')): ?>
                             <div class="flex justify-center mt-6">
-                                <a href="{{ url()->to(route('piket.index')) }}" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
+                                <a href="<?php echo e(url()->to(route('piket.index'))); ?>" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
                                     Kelola Jadwal Piket
                                 </a>
                             </div>
-                        @endif
-                    @endauth
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -253,7 +272,7 @@
                             <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
-                    <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2">{{ \App\Models\Ticket::count() }}</div>
+                    <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2"><?php echo e(\App\Models\Ticket::count()); ?></div>
                     <p class="text-sm text-gray-500">Tiket Ditangani</p>
                 </div>
 
@@ -263,7 +282,7 @@
                             <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
                     </div>
-                    <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2">{{ \App\Models\Reservation::count() }}</div>
+                    <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2"><?php echo e(\App\Models\Reservation::count()); ?></div>
                     <p class="text-sm text-gray-500">Ruang Zoom Diajukan</p>
                 </div>
 
@@ -273,7 +292,7 @@
                             <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>
-                    <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2">{{ \App\Models\User::count() }}</div>
+                    <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2"><?php echo e(\App\Models\User::count()); ?></div>
                     <p class="text-sm text-gray-500">Pengguna Aktif</p>
                 </div>
 
@@ -284,7 +303,8 @@
                         </svg>
                     </div>
                     <div class="text-3xl sm:text-4xl font-semibold text-gray-900 mb-2">
-                        {{ \App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count() + \App\Models\Reservation::where('status', 'COMPLETED')->count() }}
+                        <?php echo e(\App\Models\Ticket::whereIn('status', [\App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES])->count() + \App\Models\Reservation::where('status', 'COMPLETED')->count()); ?>
+
                     </div>
                     <p class="text-sm text-gray-500">Layanan Selesai</p>
                 </div>
@@ -298,12 +318,12 @@
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Siap Menggunakan TimCare?</h2>
             <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-brand-100">Bergabunglah dengan sistem helpdesk IT terintegrasi untuk kemudahan layanan IT Anda.</p>
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2">
-                @auth
-                    <a href="{{ url()->to(route('tickets.create')) }}" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Ajukan Tiket Sekarang</a>
-                @else
-                    <a href="{{ url()->to(route('register')) }}" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Daftar Akun</a>
-                    <a href="{{ url()->to(route('login')) }}" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors text-sm sm:text-base">Masuk</a>
-                @endauth
+                <?php if(auth()->guard()->check()): ?>
+                    <a href="<?php echo e(url()->to(route('tickets.create'))); ?>" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Ajukan Tiket Sekarang</a>
+                <?php else: ?>
+                    <a href="<?php echo e(url()->to(route('register'))); ?>" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Daftar Akun</a>
+                    <a href="<?php echo e(url()->to(route('login'))); ?>" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors text-sm sm:text-base">Masuk</a>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -314,7 +334,26 @@
             <div class="grid gap-8 sm:gap-12 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                     <div class="flex items-center gap-3 mb-4">
-                        <x-application-logo class="h-10 w-auto text-white" />
+                        <?php if (isset($component)) { $__componentOriginal8892e718f3d0d7a916180885c6f012e7 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal8892e718f3d0d7a916180885c6f012e7 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.application-logo','data' => ['class' => 'h-10 w-auto text-white']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('application-logo'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'h-10 w-auto text-white']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal8892e718f3d0d7a916180885c6f012e7)): ?>
+<?php $attributes = $__attributesOriginal8892e718f3d0d7a916180885c6f012e7; ?>
+<?php unset($__attributesOriginal8892e718f3d0d7a916180885c6f012e7); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal8892e718f3d0d7a916180885c6f012e7)): ?>
+<?php $component = $__componentOriginal8892e718f3d0d7a916180885c6f012e7; ?>
+<?php unset($__componentOriginal8892e718f3d0d7a916180885c6f012e7); ?>
+<?php endif; ?>
                     </div>
                     <p class="text-gray-400 text-sm sm:text-base max-w-md leading-relaxed">
                         Solusi helpdesk IT yang menyatukan tiket, pengajuan Zoom, dan pemantauan layanan dalam satu platform yang mudah digunakan.
@@ -323,10 +362,10 @@
                 <div>
                     <h3 class="text-base sm:text-lg font-semibold mb-4 text-white">Fitur</h3>
                     <ul class="space-y-2 sm:space-y-3 text-gray-400">
-                        <li><a href="{{ url('/tickets/create') }}" class="text-sm sm:text-base transition hover:text-white">Pengajuan Tiket</a></li>
-                        <li><a href="{{ url('/reservations/create') }}" class="text-sm sm:text-base transition hover:text-white">Pengajuan Room Zoom</a></li>
-                        <li><a href="{{ url('/dashboard') }}" class="text-sm sm:text-base transition hover:text-white">Dashboard</a></li>
-                        <li><a href="{{ url('/notifications') }}" class="text-sm sm:text-base transition hover:text-white">Notifikasi</a></li>
+                        <li><a href="<?php echo e(url('/tickets/create')); ?>" class="text-sm sm:text-base transition hover:text-white">Pengajuan Tiket</a></li>
+                        <li><a href="<?php echo e(url('/reservations/create')); ?>" class="text-sm sm:text-base transition hover:text-white">Pengajuan Room Zoom</a></li>
+                        <li><a href="<?php echo e(url('/dashboard')); ?>" class="text-sm sm:text-base transition hover:text-white">Dashboard</a></li>
+                        <li><a href="<?php echo e(url('/notifications')); ?>" class="text-sm sm:text-base transition hover:text-white">Notifikasi</a></li>
                     </ul>
                 </div>
                 <div>
@@ -340,10 +379,11 @@
                 </div>
             </div>
             <div class="mt-8 sm:mt-12 lg:mt-16 border-t border-gray-800 pt-6 sm:pt-8 text-xs sm:text-sm text-gray-500">
-                © {{ date('Y') }} TimCare. All rights reserved.
+                © <?php echo e(date('Y')); ?> TimCare. All rights reserved.
             </div>
         </div>
     </footer>
 
 </body>
 </html>
+<?php /**PATH /home/digistat/timcare/resources/views/welcome.blade.php ENDPATH**/ ?>

@@ -48,7 +48,7 @@
 
         <!-- Register Button & Login Link -->
         <div class="flex items-center justify-between pt-2">
-            <a href="{{ route('login') }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+            <a href="{{ url()->to(route('login')) }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                 {{ __('Already have an account?') }}
             </a>
 

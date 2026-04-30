@@ -9,6 +9,9 @@ use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use Illuminate\Support\Facades\URL;
+use Throwable;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+        
         Event::listen(MigrationsEnded::class, function () {
             $this->syncDefaultRolesAndPermissions();
         });
@@ -34,7 +41,11 @@ class AppServiceProvider extends ServiceProvider
 
     private function syncDefaultRolesAndPermissions(): void
     {
-        if (! Schema::hasTable('roles')) {
+        try {
+            if (! Schema::hasTable('roles')) {
+                return;
+            }
+        } catch (Throwable $e) {
             return;
         }
 

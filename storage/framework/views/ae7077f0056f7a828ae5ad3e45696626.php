@@ -226,7 +226,7 @@
 
                 <!-- Footer -->
                 <div class="border-t border-gray-200 px-4 py-2 dark:border-gray-700">
-                    <a href="<?php echo e(route('notifications.index')); ?>" class="block text-center text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 py-2">
+                    <a href="<?php echo e(url()->to(route('notifications.index'))); ?>" class="block text-center text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 py-2">
                         Lihat semua notifikasi
                     </a>
                 </div>
@@ -251,7 +251,7 @@
 
             <!-- Dropdown Menu -->
             <div x-show="userOpen" @click.outside="userOpen = false" class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-800">
-                <a href="<?php echo e(route('profile.edit')); ?>" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5">Profil Saya</a>
+                <a href="<?php echo e(url()->to(route('profile.edit'))); ?>" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5">Profil Saya</a>
                 <form method="POST" action="<?php echo e(route('logout')); ?>">
                     <?php echo csrf_field(); ?>
                     <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 border-t border-gray-200 dark:border-gray-700">Keluar</button>
@@ -260,4 +260,4 @@
         </div>
     </div>
 </header>
-<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views/layouts/header.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\timcare\resources\views/layouts/header.blade.php ENDPATH**/ ?>

@@ -6,7 +6,7 @@
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Edit Jadwal Piket</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $monthNames[$schedule->month] }} {{ $schedule->year }}</p>
             </div>
-            <a href="{{ route('piket.index') }}" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">
+            <a href="{{ url()->to(route('piket.index')) }}" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">
                 ← Kembali
             </a>
         </div>
@@ -90,7 +90,7 @@
                         <button type="submit" class="inline-flex flex-1 items-center justify-center rounded-lg bg-brand-600 px-6 py-2.5 font-medium text-white hover:bg-brand-700 transition">
                             Simpan Perubahan
                         </button>
-                        <a href="{{ route('piket.index') }}" class="inline-flex flex-1 items-center justify-center rounded-lg border border-gray-300 px-6 py-2.5 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5 transition">
+                        <a href="{{ url()->to(route('piket.index')) }}" class="inline-flex flex-1 items-center justify-center rounded-lg border border-gray-300 px-6 py-2.5 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5 transition">
                             Batal
                         </a>
                     </div>

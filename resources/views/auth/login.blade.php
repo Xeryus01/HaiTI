@@ -42,7 +42,7 @@
         <!-- Forgot Password & Login Button -->
         <div class="flex items-center justify-between">
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                <a href="{{ url()->to(route('password.request')) }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
@@ -62,7 +62,7 @@
         <div class="text-center">
             <p class="text-sm text-gray-600 dark:text-gray-400">
                 {{ __("Don't have an account?") }}
-                <a href="{{ route('register') }}" class="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
+                <a href="{{ url()->to(route('register')) }}" class="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">
                     {{ __('Sign up') }}
                 </a>
             </p>

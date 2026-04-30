@@ -41,7 +41,7 @@
             unreadCount: 0,
             loading: false,
             error: null,
-            csrfToken: '{{ csrf_token() }}',
+            csrfToken: '<?php echo e(csrf_token()); ?>',
             init() {
                 this.requestNotificationPermission();
                 this.fetchUnreadCount();
@@ -226,7 +226,7 @@
 
                 <!-- Footer -->
                 <div class="border-t border-gray-200 px-4 py-2 dark:border-gray-700">
-                    <a href="{{ url()->to(route('notifications.index')) }}" class="block text-center text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 py-2">
+                    <a href="<?php echo e(url()->to(route('notifications.index'))); ?>" class="block text-center text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 py-2">
                         Lihat semua notifikasi
                     </a>
                 </div>
@@ -237,11 +237,12 @@
         <div x-data="{ userOpen: false }" class="relative">
             <button @click="userOpen = !userOpen" class="flex items-center gap-3 rounded-lg px-3.5 py-2 hover:bg-gray-100 dark:hover:bg-white/5">
                 <div class="flex h-9 w-9 items-center justify-center rounded-full bg-brand-500 text-white font-medium">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    <?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?>
+
                 </div>
                 <div class="hidden text-left sm:block">
-                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{ auth()->user()->name }}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->email }}</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-white"><?php echo e(auth()->user()->name); ?></p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e(auth()->user()->email); ?></p>
                 </div>
                 <svg class="fill-current text-gray-500 dark:text-gray-400" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 11.75C7.8125 11.75 7.625 11.6875 7.47187 11.5469L2.34375 6.53906C2.03125 6.25 2.03125 5.78906 2.34375 5.5C2.65625 5.21094 3.15625 5.21094 3.46875 5.5L8 9.75L12.5312 5.5C12.8438 5.21094 13.3438 5.21094 13.6562 5.5C13.9688 5.78906 13.9688 6.25 13.6562 6.53906L8.52812 11.5469C8.375 11.6875 8.1875 11.75 8 11.75Z"></path>
@@ -250,12 +251,13 @@
 
             <!-- Dropdown Menu -->
             <div x-show="userOpen" @click.outside="userOpen = false" class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-dark-800">
-                <a href="{{ url()->to(route('profile.edit')) }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5">Profil Saya</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                <a href="<?php echo e(url()->to(route('profile.edit'))); ?>" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5">Profil Saya</a>
+                <form method="POST" action="https://digistat.web.bps.go.id/timcare/logout">
+                    <?php echo csrf_field(); ?>
                     <button type="submit" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5 border-t border-gray-200 dark:border-gray-700">Keluar</button>
                 </form>
             </div>
         </div>
     </div>
 </header>
+<?php /**PATH /home/digistat/timcare/resources/views/layouts/header.blade.php ENDPATH**/ ?>

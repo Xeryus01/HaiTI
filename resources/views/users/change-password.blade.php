@@ -8,7 +8,7 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Ubah password untuk {{ $user->name }}</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="{{ route('users.show', $user) }}" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700">
+                <a href="{{ url()->to(route('users.show', $user)) }}" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
@@ -85,7 +85,7 @@
 
                     <!-- Form Actions -->
                     <div class="flex gap-3 border-t border-gray-200 bg-gray-50 p-5 sm:p-7.5 dark:border-gray-700 dark:bg-dark-700/50">
-                        <a href="{{ route('users.show', $user) }}" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700">
+                        <a href="{{ url()->to(route('users.show', $user)) }}" class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700">
                             Batal
                         </a>
                         <button type="submit" class="inline-flex items-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700">

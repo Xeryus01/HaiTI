@@ -4,11 +4,11 @@
 Saat login di cPanel, aplikasi tidak langsung redirect ke dashboard tanpa refresh manual.
 
 ## Root Cause
-**Session driver masalah di cPanel shared hosting:**
-- `SESSION_DRIVER=database` - Session files tidak disimpan dengan benar saat redirect
-- `CACHE_STORE=database` - Database cache juga lambat
+**Session driver dan cache store harus dikonfigurasi untuk database storage:**
+- `SESSION_DRIVER=database` - Session disimpan di tabel database dan harus diregenerasi/simpan sebelum redirect
+- `CACHE_STORE=database` - Cache menggunakan tabel database sehingga konsisten di shared hosting
 
-**Solusi: Gunakan file-based session dan cache yang lebih reliable untuk cPanel.**
+**Solusi: Gunakan database-backed session dan cache untuk cPanel.**
 
 ---
 
@@ -19,20 +19,20 @@ Saat login di cPanel, aplikasi tidak langsung redirect ke dashboard tanpa refres
 **Changed in `.env` dan `.env.cpanel`:**
 ```env
 # BEFORE (Masalah)
-SESSION_DRIVER=database
-CACHE_STORE=database
-QUEUE_CONNECTION=database
-
-# AFTER (Fixed)
 SESSION_DRIVER=file
 CACHE_STORE=file
+QUEUE_CONNECTION=sync
+
+# AFTER (Fixed)
+SESSION_DRIVER=database
+CACHE_STORE=database
 QUEUE_CONNECTION=sync
 ```
 
 **Alasan:**
-- `SESSION_DRIVER=file` - Session disimpan di file storage (lebih reliable di cPanel)
-- `CACHE_STORE=file` - Cache juga menggunakan file storage
-- `QUEUE_CONNECTION=sync` - Queue diproses synchronously (cocok untuk shared hosting)
+- `SESSION_DRIVER=database` - Session disimpan di database tabel `sessions`
+- `CACHE_STORE=database` - Cache disimpan di database tabel `cache`
+- `QUEUE_CONNECTION=sync` - Queue tetap sinkron untuk shared hosting atau local deploy
 
 ### 2. **AuthenticatedSessionController Update**
 
@@ -126,19 +126,15 @@ chmod -R 755 storage/framework/sessions
 
 ---
 
-## Session Files Location
+## Session Storage Location
 
-**Local (SQLite):**
-```
-storage/framework/sessions/
-```
+**Local (SQLite / MySQL):**
+- Database table `sessions`
 
-**cPanel (File-based):**
-```
-~/timcare/storage/framework/sessions/
-```
+**cPanel (Database-based):**
+- Database table `sessions`
 
-Session files akan otomatis created ketika user login.
+Session records akan otomatis dibuat ketika user login.
 
 ---
 
@@ -174,8 +170,8 @@ cat .env | grep DB_CONNECTION
 # If still sqlite, update:
 nano .env
 # Change: DB_CONNECTION=mysql
-# Change: SESSION_DRIVER=file
-# Change: CACHE_STORE=file
+# Change: SESSION_DRIVER=database
+# Change: CACHE_STORE=database
 
 # Clear cache
 php artisan config:clear

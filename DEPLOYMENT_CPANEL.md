@@ -95,8 +95,8 @@ MAIL_FROM_ADDRESS="timcare@gmail.com"
 MAIL_FROM_NAME="TimCare ITSM"
 
 # Cache & Session untuk cPanel
-CACHE_STORE=file
-SESSION_DRIVER=file
+CACHE_STORE=database
+SESSION_DRIVER=database
 QUEUE_CONNECTION=sync
 ```
 

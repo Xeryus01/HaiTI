@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('piket.edit', $monthNum) }}" class="inline-flex w-full items-center justify-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 transition">
+                    <a href="{{ url()->to(route('piket.edit', $monthNum)) }}" class="inline-flex w-full items-center justify-center rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 transition">
                         Edit
                     </a>
                 </div>

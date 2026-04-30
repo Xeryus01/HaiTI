@@ -7,9 +7,9 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $reservation->code }} • {{ $reservation->status_label }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('reservations.index') }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Kembali</a>
+                <a href="{{ url()->to(route('reservations.index')) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Kembali</a>
                 @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']) || auth()->id() === $reservation->requester_id)
-                    <a href="{{ route('reservations.edit', $reservation) }}" class="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">Ubah</a>
+                    <a href="{{ url()->to(route('reservations.edit', $reservation)) }}" class="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">Ubah</a>
                 @endif
             </div>
         </div>
@@ -63,10 +63,10 @@
                                         <p class="text-sm font-semibold text-gray-900 dark:text-white">Nota Dinas Pengajuan</p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">File PDF yang diunggah saat pengajuan</p>
                                     </div>
-                                    <a href="{{ route('reservations.nota-dinas', $reservation) }}" target="_blank" class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Buka PDF</a>
+                                    <a href="{{ url()->to(route('reservations.nota-dinas', $reservation)) }}" target="_blank" class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Buka PDF</a>
                                 </div>
 
-                                <iframe src="{{ route('reservations.nota-dinas', $reservation) }}" title="Nota Dinas" class="h-96 w-full rounded-lg border border-gray-200 dark:border-gray-700"></iframe>
+                                <iframe src="{{ url()->to(route('reservations.nota-dinas', $reservation)) }}" title="Nota Dinas" class="h-96 w-full rounded-lg border border-gray-200 dark:border-gray-700"></iframe>
                             </div>
                         </div>
                     @else

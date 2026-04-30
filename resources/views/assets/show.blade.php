@@ -5,7 +5,7 @@
                 Aset {{ $asset->asset_code }}
             </h2>
             <div class="flex space-x-2">
-                <a href="{{ route('assets.edit', $asset) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                <a href="{{ url()->to(route('assets.edit', $asset)) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
                     Ubah
                 </a>
                 <form action="{{ route('assets.destroy', $asset) }}" method="POST" class="inline">

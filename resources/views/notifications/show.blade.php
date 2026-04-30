@@ -42,7 +42,7 @@
                                     @php $ticket = \App\Models\Ticket::findOrFail($notification->action_id) @endphp
                                     <div class="rounded-lg bg-gray-50 dark:bg-white/5 p-4">
                                         <p class="text-sm text-gray-600 dark:text-gray-400">Ticket</p>
-                                        <a href="{{ route('tickets.show', $ticket) }}" class="text-base font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 mt-1">
+                                        <a href="{{ url()->to(route('tickets.show', $ticket)) }}" class="text-base font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 mt-1">
                                             {{ $ticket->title }}
                                         </a>
                                         <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
@@ -55,7 +55,7 @@
                                     @php $reservation = \App\Models\Reservation::findOrFail($notification->action_id) @endphp
                                     <div class="rounded-lg bg-gray-50 dark:bg-white/5 p-4">
                                         <p class="text-sm text-gray-600 dark:text-gray-400">Reservation</p>
-                                        <a href="{{ route('reservations.show', $reservation) }}" class="text-base font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 mt-1">
+                                        <a href="{{ url()->to(route('reservations.show', $reservation)) }}" class="text-base font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 mt-1">
                                             {{ $reservation->room_name }}
                                         </a>
                                         <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
@@ -67,7 +67,7 @@
                                     @php $asset = \App\Models\Asset::findOrFail($notification->action_id) @endphp
                                     <div class="rounded-lg bg-gray-50 dark:bg-white/5 p-4">
                                         <p class="text-sm text-gray-600 dark:text-gray-400">Asset</p>
-                                        <a href="{{ route('assets.show', $asset) }}" class="text-base font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 mt-1">
+                                        <a href="{{ url()->to(route('assets.show', $asset)) }}" class="text-base font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 mt-1">
                                             {{ $asset->name }}
                                         </a>
                                         <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
@@ -95,7 +95,7 @@
 
                 <!-- Footer Actions -->
                 <div class="border-t border-gray-200 px-6.5 py-4 dark:border-gray-700 flex gap-2">
-                    <a href="{{ route('notifications.index') }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-2 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/5">
+                    <a href="{{ url()->to(route('notifications.index')) }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-2 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-white/5">
                         Back to Notifications
                     </a>
                     @if (!$notification->is_read)

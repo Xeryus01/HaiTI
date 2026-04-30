@@ -176,13 +176,12 @@ EOF
 
 echo "🗄️ Running migrations..."
 php artisan migrate --force
-
-echo "🌱 Seeding database..."
 php artisan db:seed --force
 
 echo "⚡ Caching for production..."
 php artisan config:cache
 php artisan route:cache
+php artisan view:clear
 php artisan view:cache
 
 echo "✅ Deployment selesai!"

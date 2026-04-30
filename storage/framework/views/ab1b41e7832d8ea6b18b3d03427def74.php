@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>TimCare - Sistem Helpdesk IT Terintegrasi</title>
-    <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket termasalahan, pengajuan ruang Zoom, dan layanan IT lainnya.">
+    <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket permasalahan, pengajuan ruang Zoom, dan layanan IT lainnya.">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
@@ -61,11 +61,11 @@
                             </button>
                         </form>
                     <?php else: ?>
-                        <a href="<?php echo e(route('login')); ?>" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
+                        <a href="<?php echo e(url()->to(route('login'))); ?>" class="text-gray-700 hover:text-gray-900 px-3 sm:px-4 py-2 rounded-md text-sm font-medium">
                             Masuk
                         </a>
                         <?php if(Route::has('register')): ?>
-                            <a href="<?php echo e(route('register')); ?>" class="bg-brand-600 text-white px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-brand-700">
+                            <a href="<?php echo e(url()->to(route('register'))); ?>" class="bg-brand-600 text-white px-3 sm:px-4 py-2 rounded-md text-sm font-medium hover:bg-brand-700">
                                 Daftar
                             </a>
                         <?php endif; ?>
@@ -84,21 +84,21 @@
                     <span class="text-brand-200">Terintegrasi</span>
                 </h1>
                 <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 sm:mb-12 text-gray-100 max-w-4xl mx-auto px-2 leading-relaxed">
-                    Kelola tiket termasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
+                    Kelola tiket permasalahan IT, ajukan ruang Zoom, dan pantau layanan IT dengan mudah dan efisien.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center px-2 mb-8">
                     <?php if(auth()->guard()->check()): ?>
                         <a href="<?php echo e(url('/dashboard')); ?>" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Buka Dashboard
                         </a>
-                        <a href="<?php echo e(route('tickets.create')); ?>" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
+                        <a href="<?php echo e(url()->to(route('tickets.create'))); ?>" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Ajukan Tiket Baru
                         </a>
-                        <a href="<?php echo e(route('reservations.create')); ?>" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg hidden sm:inline-block">
+                        <a href="<?php echo e(url()->to(route('reservations.create'))); ?>" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg hidden sm:inline-block">
                             Ajukan Ruang Zoom
                         </a>
                     <?php else: ?>
-                        <a href="<?php echo e(route('register')); ?>" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
+                        <a href="<?php echo e(url()->to(route('register'))); ?>" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
                             Mulai Sekarang
                         </a>
                         <a href="#features" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
@@ -149,7 +149,7 @@
                     <?php if(auth()->guard()->check()): ?>
                         <?php if(auth()->user()->hasRole('Admin')): ?>
                             <div class="flex justify-center mt-6">
-                                <a href="<?php echo e(route('piket.index')); ?>" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
+                                <a href="<?php echo e(url()->to(route('piket.index'))); ?>" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
                                     Kelola Jadwal Piket
                                 </a>
                             </div>
@@ -182,7 +182,7 @@
                     </div>
                     <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Tiket Permasalahan IT</h3>
                     <p class="text-gray-600 text-sm sm:text-base">
-                        Ajukan tiket termasalahan hardware, software, jaringan, dan masalah IT lainnya dengan mudah.
+                        Ajukan tiket permasalahan hardware, software, jaringan, dan masalah IT lainnya dengan mudah.
                     </p>
                 </div>
 
@@ -319,10 +319,10 @@
             <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-brand-100">Bergabunglah dengan sistem helpdesk IT terintegrasi untuk kemudahan layanan IT Anda.</p>
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2">
                 <?php if(auth()->guard()->check()): ?>
-                    <a href="<?php echo e(route('tickets.create')); ?>" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Ajukan Tiket Sekarang</a>
+                    <a href="<?php echo e(url()->to(route('tickets.create'))); ?>" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Ajukan Tiket Sekarang</a>
                 <?php else: ?>
-                    <a href="<?php echo e(route('register')); ?>" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Daftar Akun</a>
-                    <a href="<?php echo e(route('login')); ?>" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors text-sm sm:text-base">Masuk</a>
+                    <a href="<?php echo e(url()->to(route('register'))); ?>" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Daftar Akun</a>
+                    <a href="<?php echo e(url()->to(route('login'))); ?>" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors text-sm sm:text-base">Masuk</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -386,4 +386,4 @@
 
 </body>
 </html>
-<?php /**PATH C:\Users\BPS 1900\Documents\HaiTI\resources\views/welcome.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\timcare\resources\views/welcome.blade.php ENDPATH**/ ?>

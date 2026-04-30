@@ -164,8 +164,8 @@ DB_USERNAME=timcare_user
 DB_PASSWORD=your_password
 
 # Cache & Performance
-CACHE_STORE=file
-SESSION_DRIVER=file
+CACHE_STORE=database
+SESSION_DRIVER=database
 QUEUE_CONNECTION=sync
 ```
 
