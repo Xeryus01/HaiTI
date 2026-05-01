@@ -58,6 +58,77 @@
     $openTicketCount = $ticketCounts['Dibuka'] ?? 0;
     $pendingZoomCount = $zoomCounts['Dibuka'] ?? 0;
 
+    $zoomSlotCapacity = 4;
+    $zoomMonitorStatuses = [
+        \App\Models\Reservation::STATUS_PENDING,
+        \App\Models\Reservation::STATUS_APPROVED,
+        \App\Models\Reservation::STATUS_WAITING_MONITORING,
+    ];
+    $activeZoomReservations = \App\Models\Reservation::whereIn('status', $zoomMonitorStatuses)
+        ->where('end_time', '>', now())
+        ->orderBy('start_time')
+        ->get(['start_time', 'end_time', 'room_name', 'purpose']);
+
+    $currentZoomSlotUsage = $activeZoomReservations->filter(function ($reservation) {
+        return $reservation->start_time <= now() && $reservation->end_time > now();
+    })->count();
+    $zoomSlotsRemaining = max(0, $zoomSlotCapacity - $currentZoomSlotUsage);
+
+    $zoomTimeEvents = [];
+    foreach ($activeZoomReservations as $reservation) {
+        $zoomTimeEvents[] = ['time' => $reservation->start_time, 'delta' => 1];
+        $zoomTimeEvents[] = ['time' => $reservation->end_time, 'delta' => -1];
+    }
+    usort($zoomTimeEvents, function ($a, $b) {
+        if ($a['time']->eq($b['time'])) {
+            return $a['delta'] <=> $b['delta'];
+        }
+        return $a['time']->lt($b['time']) ? -1 : 1;
+    });
+
+    $zoomSlotFullIntervals = [];
+    $current = $currentZoomSlotUsage;
+    $lastTime = now();
+
+    foreach ($zoomTimeEvents as $event) {
+        if ($event['time']->lte(now())) {
+            continue;
+        }
+
+        if ($current >= $zoomSlotCapacity) {
+            $zoomSlotFullIntervals[] = ['start' => $lastTime, 'end' => $event['time']];
+        }
+
+        $current += $event['delta'];
+        $lastTime = $event['time'];
+    }
+
+    $zoomSlotFullWindows = array_slice($zoomSlotFullIntervals, 0, 2);
+
+    $calendarStart = now()->startOfDay();
+    $zoomCalendarDays = collect();
+    for ($dayIndex = 0; $dayIndex < 7; $dayIndex++) {
+        $day = $calendarStart->copy()->addDays($dayIndex);
+        $dayEnd = $day->copy()->endOfDay();
+
+        $dayReservations = $activeZoomReservations->filter(function ($reservation) use ($day, $dayEnd) {
+            return $reservation->start_time < $dayEnd && $reservation->end_time > $day;
+        })->sortBy('start_time')->map(function ($reservation) {
+            $title = trim($reservation->room_name ?: $reservation->purpose ?: 'Zoom meeting');
+            return [
+                'time' => $reservation->start_time->format('H:i').' - '.$reservation->end_time->format('H:i'),
+                'label' => \Illuminate\Support\Str::limit($title, 28),
+            ];
+        })->values()->all();
+
+        $zoomCalendarDays->push([
+            'day_label' => $dayIndex === 0 ? 'Hari Ini' : $day->translatedFormat('D'),
+            'date_label' => $day->format('d M'),
+            'reservation_count' => count($dayReservations),
+            'reservations' => $dayReservations,
+        ]);
+    }
+
     $ticketStatusColors = [
         'Dibuka'           => ['dot' => 'bg-amber-400', 'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'],
         'Diproses Teknisi' => ['dot' => 'bg-blue-400',  'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300'],
@@ -168,7 +239,44 @@
                 </div>
             </div>
         </div>
-
+        <div class="mb-5 rounded-3xl border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-lg dark:border-slate-700 dark:bg-slate-900 fade-in" style="animation-delay:.12s">
+            <div class="mb-3 flex items-center justify-between gap-3">
+                <div>
+                    <span class="section-label text-slate-500 dark:text-slate-400">Kalender Zoom</span>
+                    <h2 class="mt-1 text-base font-semibold text-slate-900 dark:text-white">4 hari mendatang</h2>
+                </div>
+                <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600 dark:bg-slate-800 dark:text-slate-300">4 slot / hari</span>
+            </div>
+            <div class="grid gap-2 grid-cols-2 xl:grid-cols-4">
+                @foreach ($zoomCalendarDays->take(4) as $day)
+                    <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-3 shadow-sm hover:shadow-md dark:border-slate-700 dark:from-slate-950 dark:to-slate-900">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">{{ $day['day_label'] }}</p>
+                                <p class="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{{ $day['date_label'] }}</p>
+                            </div>
+                            <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">{{ $day['reservation_count'] }}/4</span>
+                        </div>
+                        <div class="mt-3 space-y-2 text-[11px] text-slate-600 dark:text-slate-300">
+                            @if (count($day['reservations']) > 0)
+                                <div class="space-y-2">
+                                    @foreach ($day['reservations'] as $reservation)
+                                        <div class="rounded-2xl bg-white/90 px-2 py-2 shadow-sm dark:bg-slate-950/80">
+                                            <p class="truncate font-semibold text-slate-900 dark:text-slate-100">{{ $reservation['time'] }}</p>
+                                            <p class="truncate text-slate-600 dark:text-slate-400">{{ $reservation['label'] }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="rounded-2xl border border-dashed border-slate-300 bg-white/80 px-2 py-2 text-center text-[10px] text-slate-500 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-400">
+                                    Kosong
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
         <!-- {{-- ===== STATUS CARDS ===== --}}
         <div class="mb-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3 fade-in" style="animation-delay:.1s">
 

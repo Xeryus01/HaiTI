@@ -32,7 +32,7 @@
                     <?php echo method_field('PATCH'); ?>
 
                     <div>
-                        <label for="room_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nama Kegiatan / Ruang</label>
+                        <label for="room_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nama Kegiatan</label>
                         <input id="room_name" type="text" name="room_name" value="<?php echo e(old('room_name', $reservation->room_name)); ?>" placeholder="Contoh: Workshop Laravel 2026" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white <?php $__errorArgs = ['room_name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

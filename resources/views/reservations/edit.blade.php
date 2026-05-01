@@ -23,7 +23,7 @@
                     @method('PATCH')
 
                     <div>
-                        <label for="room_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nama Kegiatan / Ruang</label>
+                        <label for="room_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Nama Kegiatan</label>
                         <input id="room_name" type="text" name="room_name" value="{{ old('room_name', $reservation->room_name) }}" placeholder="Contoh: Workshop Laravel 2026" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('room_name') border-red-500 @enderror" />
                         @error('room_name')
                             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>

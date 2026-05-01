@@ -85,7 +85,7 @@ class ExportController extends Controller
 
             fputcsv($handle, [
                 'Kode Pengajuan',
-                'Nama Kegiatan / Ruang',
+                'Nama Kegiatan',
                 'Keperluan',
                 'Waktu Mulai',
                 'Waktu Selesai',
