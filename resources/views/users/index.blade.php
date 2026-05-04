@@ -91,11 +91,7 @@
             </div>
 
             <!-- Pagination -->
-            @if($users->hasPages())
-                <div class="border-t border-gray-200 px-5 py-4 dark:border-gray-700 sm:px-6">
-                    {{ $users->links() }}
-                </div>
-            @endif
+            <x-pagination :paginator="$users" />
         </div>
     </div>
 </div>

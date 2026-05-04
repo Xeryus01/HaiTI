@@ -36,7 +36,10 @@ class TicketViewController extends Controller
             $q->where('assignee_id', $request->assignee_id);
         }
 
-        $tickets = $q->paginate(15)->withQueryString();
+        $perPage = $request->input('per_page', 10);
+        $perPage = in_array($perPage, [10, 20, 50]) ? (int)$perPage : 10;
+        
+        $tickets = $q->paginate($perPage)->appends(request()->query());
         return view('tickets.index', compact('tickets'));
     }
 

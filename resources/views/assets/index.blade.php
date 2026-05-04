@@ -213,9 +213,7 @@
 
             <!-- Pagination -->
             @if($assets->hasPages())
-                <div class="border-t border-gray-200 px-5 py-4 dark:border-gray-700 sm:px-6">
-                    {{ $assets->links() }}
-                </div>
+                <x-pagination :paginator="$assets" />
             @endif
         </div>
     </div>

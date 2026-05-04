@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use Illuminate\Http\Request;
 
 class NotificationViewController extends Controller
 {
     /**
      * Display notifications page
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->input('per_page', 10);
+        $perPage = in_array($perPage, [10, 20, 50]) ? (int)$perPage : 10;
+        
         $notifications = auth()->user()->notifications()
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate($perPage)
+            ->appends(request()->query());
 
         return view('notifications.index', compact('notifications'));
     }

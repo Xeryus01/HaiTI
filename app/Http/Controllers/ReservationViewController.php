@@ -27,7 +27,10 @@ class ReservationViewController extends Controller
             $q->where('status', $request->input('status'));
         }
 
-        $reservations = $q->latest()->paginate(15)->withQueryString();
+        $perPage = $request->input('per_page', 10);
+        $perPage = in_array($perPage, [10, 20, 50]) ? (int)$perPage : 10;
+        
+        $reservations = $q->latest()->paginate($perPage)->appends(request()->query());
         return view('reservations.index', compact('reservations'));
     }
 

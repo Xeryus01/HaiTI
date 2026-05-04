@@ -92,8 +92,8 @@
 
                 <!-- Pagination -->
                 @if ($notifications->hasPages())
-                    <div class="mt-6 flex justify-center">
-                        {{ $notifications->links() }}
+                    <div class="mt-6">
+                        <x-pagination :paginator="$notifications" />
                     </div>
                 @endif
             @else

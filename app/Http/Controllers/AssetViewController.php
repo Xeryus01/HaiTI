@@ -25,7 +25,10 @@ class AssetViewController extends Controller
 
     public function index(Request $request)
     {
-        $assets = Asset::paginate(20);
+        $perPage = $request->input('per_page', 10);
+        $perPage = in_array($perPage, [10, 20, 50]) ? (int)$perPage : 10;
+        
+        $assets = Asset::paginate($perPage)->appends(request()->query());
         return view('assets.index', compact('assets'));
     }
 
