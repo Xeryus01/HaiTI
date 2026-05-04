@@ -202,8 +202,8 @@ unset($__errorArgs, $__bag); ?>
                                 <td class="px-5 py-4 sm:px-6">
                                     <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium
                                         <?php if($asset->condition === 'GOOD'): ?> bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400
-                                        <?php elseif($asset->condition === 'FAIR'): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
-                                        <?php elseif($asset->condition === 'POOR'): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
+                                        <?php elseif($asset->condition === 'LIGHT'): ?> bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400
+                                        <?php elseif($asset->condition === 'HEAVY'): ?> bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400
                                         <?php else: ?> bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-400
                                         <?php endif; ?>">
                                         <?php echo e($asset->condition_label); ?>

@@ -33,6 +33,14 @@ Route::middleware([\App\Http\Middleware\ContentSecurityPolicy::class])->group(fu
     Route::get('assets/export', [\App\Http\Controllers\AssetViewController::class, 'export'])->name('assets.export');
     Route::resource('assets', \App\Http\Controllers\AssetViewController::class);
 
+    // Asset management routes (Admin only)
+    Route::middleware('role:Admin')->group(function () {
+        Route::get('assets/{asset}/change-holder', [\App\Http\Controllers\AssetViewController::class, 'changeHolder'])->name('assets.changeHolder');
+        Route::post('assets/{asset}/change-holder', [\App\Http\Controllers\AssetViewController::class, 'storeChangeHolder'])->name('assets.storeChangeHolder');
+        Route::get('assets/{asset}/add-maintenance', [\App\Http\Controllers\AssetViewController::class, 'addMaintenance'])->name('assets.addMaintenance');
+        Route::post('assets/{asset}/add-maintenance', [\App\Http\Controllers\AssetViewController::class, 'storeMaintenance'])->name('assets.storeMaintenance');
+    });
+
     Route::resource('reservations', \App\Http\Controllers\ReservationViewController::class);
     Route::get('reservations/{reservation}/nota-dinas', [\App\Http\Controllers\ReservationViewController::class, 'showNotaDinas'])->name('reservations.nota-dinas');
 

@@ -16,7 +16,8 @@ class DashboardController extends Controller
                 COUNT(*) as total,
                 SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) as active,
                 SUM(CASE WHEN status = 'INACTIVE' THEN 1 ELSE 0 END) as inactive,
-                SUM(CASE WHEN condition = 'DAMAGED' THEN 1 ELSE 0 END) as damaged
+                SUM(CASE WHEN condition = 'HEAVY' THEN 1 ELSE 0 END) as damaged,
+                SUM(CASE WHEN condition = 'LIGHT' THEN 1 ELSE 0 END) as light_damage
             ")
             ->first();
 

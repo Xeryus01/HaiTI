@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Asset extends Model
 {
+    public const CONDITION_GOOD = 'GOOD';
+    public const CONDITION_LIGHT = 'LIGHT';
+    public const CONDITION_HEAVY = 'HEAVY';
+
     protected $fillable = [
         'asset_code',
         'name',
@@ -26,6 +30,31 @@ class Asset extends Model
         'purchased_at' => 'date',
     ];
 
+    public static function conditionOptions(): array
+    {
+        return [
+            self::CONDITION_GOOD => 'Baik',
+            self::CONDITION_LIGHT => 'Rusak Ringan',
+            self::CONDITION_HEAVY => 'Rusak Berat',
+        ];
+    }
+
+    public static function normalizeCondition(?string $condition): string
+    {
+        if ($condition === null) {
+            return self::CONDITION_GOOD;
+        }
+
+        $value = strtoupper(trim((string) $condition));
+
+        return match ($value) {
+            'GOOD', 'BAIK' => self::CONDITION_GOOD,
+            'FAIR', 'CUKUP', 'LIGHT', 'LIGHT_DAMAGE', 'RUSAK_RINGAN', 'RUSAK RINGAN', 'RINGAN' => self::CONDITION_LIGHT,
+            'POOR', 'BURUK', 'DAMAGED', 'RUSAK', 'RUSAK_BERAT', 'RUSAK BERAT', 'HEAVY', 'HEAVY_DAMAGE', 'BERAT' => self::CONDITION_HEAVY,
+            default => self::CONDITION_GOOD,
+        };
+    }
+
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
@@ -39,13 +68,7 @@ class Asset extends Model
 
     public function getConditionLabelAttribute(): string
     {
-        return match ($this->condition) {
-            'GOOD' => 'Baik',
-            'FAIR' => 'Cukup',
-            'POOR' => 'Buruk',
-            'DAMAGED' => 'Rusak',
-            default => ucfirst(strtolower($this->condition)),
-        };
+        return self::conditionOptions()[$this->condition] ?? ucfirst(strtolower($this->condition));
     }
 
     public function tickets()
@@ -66,6 +89,16 @@ class Asset extends Model
     public function attachments()
     {
         return $this->hasMany(Attachment::class);
+    }
+
+    public function holderHistory()
+    {
+        return $this->hasMany(AssetHolderHistory::class)->orderBy('changed_at', 'desc');
+    }
+
+    public function maintenances()
+    {
+        return $this->hasMany(AssetMaintenance::class)->orderBy('maintenance_date', 'desc');
     }
 
     protected static function booted()

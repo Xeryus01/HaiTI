@@ -42,14 +42,20 @@ class AssetController extends Controller
 
     public function update(UpdateAssetRequest $request, Asset $asset)
     {
-        $asset->update($request->validated());
+        $changes = $request->validated();
+        $before = $asset->only(array_keys($changes));
+
+        $asset->update($changes);
 
         Log::create([
             'actor_id' => $request->user()->id,
             'entity_type' => 'Asset',
             'entity_id' => $asset->id,
             'action' => 'UPDATED',
-            'meta' => $asset->getChanges(),
+            'meta' => [
+                'before' => $before,
+                'after' => $asset->only(array_keys($changes)),
+            ],
         ]);
 
         return response()->json($asset);

@@ -36,7 +36,7 @@ class AssetsImport implements ToCollection, WithHeadingRow
             }
 
             $status = strtoupper($this->getValue($row, 'status', 'ACTIVE'));
-            $condition = strtoupper($this->getValue($row, 'condition', 'GOOD'));
+            $condition = $this->getValue($row, 'condition', 'GOOD');
 
             $data = [
                 'name' => trim($this->getValue($row, 'name', '')),
@@ -48,7 +48,7 @@ class AssetsImport implements ToCollection, WithHeadingRow
                 'location' => trim($this->getValue($row, 'location', '')),
                 'holder' => trim($this->getValue($row, 'holder', '')),
                 'status' => in_array($status, ['ACTIVE', 'MAINTENANCE', 'BROKEN', 'RETIRED', 'SOLD', 'INACTIVE'], true) ? $status : 'ACTIVE',
-                'condition' => in_array($condition, ['GOOD', 'FAIR', 'POOR'], true) ? $condition : 'GOOD',
+                'condition' => Asset::normalizeCondition($condition),
                 'purchased_at' => $this->normalizeDate($this->getValue($row, 'purchased_at', null)),
             ];
 

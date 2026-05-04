@@ -67,7 +67,7 @@ class AssetSeeder extends Seeder
                 'location' => 'Gedung B - Lantai 2',
                 'holder' => 'Ratna Dewi',
                 'status' => 'ACTIVE',
-                'condition' => 'FAIR',
+                'condition' => 'LIGHT',
                 'purchased_at' => now()->subYear(),
             ],
 
@@ -141,7 +141,7 @@ class AssetSeeder extends Seeder
                 'location' => 'Network Room',
                 'holder' => 'Tim Network',
                 'status' => 'ACTIVE',
-                'condition' => 'FAIR',
+                'condition' => 'LIGHT',
                 'purchased_at' => now()->subYears(1)->subMonths(6),
             ],
             [

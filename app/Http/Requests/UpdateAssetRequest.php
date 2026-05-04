@@ -24,7 +24,7 @@ class UpdateAssetRequest extends FormRequest
             'location' => 'nullable|string|max:120',
             'holder' => 'nullable|string|max:120',
             'status' => 'sometimes|string|in:ACTIVE,INACTIVE',
-            'condition' => 'sometimes|string|in:GOOD,FAIR,POOR,DAMAGED',
+            'condition' => 'sometimes|string|in:GOOD,LIGHT,HEAVY',
             'purchased_at' => 'nullable|date',
         ];
     }

@@ -12,6 +12,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Requests\StoreAssetRequest;
 use App\Http\Requests\UpdateAssetRequest;
+use App\Http\Requests\ChangeAssetHolderRequest;
+use App\Http\Requests\StoreAssetMaintenanceRequest;
+use App\Models\AssetHolderHistory;
+use App\Models\AssetMaintenance;
+use App\Models\Log;
 use Illuminate\Support\Str;
 
 class AssetViewController extends Controller
@@ -49,6 +54,7 @@ class AssetViewController extends Controller
 
     public function show(Asset $asset)
     {
+        $asset->load(['holderHistory.changedByUser', 'maintenances.performedByUser']);
         return view('assets.show', compact('asset'));
     }
 
@@ -59,7 +65,22 @@ class AssetViewController extends Controller
 
     public function update(UpdateAssetRequest $request, Asset $asset)
     {
-        $asset->update($request->validated());
+        $changes = $request->validated();
+        $before = $asset->only(array_keys($changes));
+
+        $asset->update($changes);
+
+        Log::create([
+            'actor_id' => auth()->id(),
+            'entity_type' => 'Asset',
+            'entity_id' => $asset->id,
+            'action' => 'UPDATED',
+            'meta' => [
+                'before' => $before,
+                'after' => $asset->only(array_keys($changes)),
+            ],
+        ]);
+
         return redirect()->route('assets.show', $asset)->with('success', 'Asset updated');
     }
 
@@ -143,8 +164,75 @@ class AssetViewController extends Controller
         }
 
         $filename = 'aset-' . ($startDate ? \Carbon\Carbon::parse($startDate)->format('Y-m-d') : 'all') .
-                   '-to-' . ($endDate ? \Carbon\Carbon::parse($endDate)->format('Y-m-d') : 'all') . '.xlsx';
+                   '-to-' . ($endDate ? \Carbon\Carbon::parse($endDate)->format('Y-m-d') : 'all') .
+                   '-' . now()->format('Ymd-His') . '.xlsx';
 
         return Excel::download(new AssetsExport($startDate, $endDate), $filename, \Maatwebsite\Excel\Excel::XLSX);
     }
+
+    public function changeHolder(Asset $asset)
+    {
+        abort_unless(auth()->user()->hasRole('Admin'), 403);
+        
+        return view('assets.change-holder', compact('asset'));
+    }
+
+    public function storeChangeHolder(ChangeAssetHolderRequest $request, Asset $asset)
+    {
+        abort_unless(auth()->user()->hasRole('Admin'), 403);
+
+        $previousHolder = $asset->holder;
+        
+        // Create history record
+        AssetHolderHistory::create([
+            'asset_id' => $asset->id,
+            'previous_holder' => $previousHolder,
+            'new_holder' => $request->new_holder,
+            'changed_at' => $request->changed_at,
+            'notes' => $request->notes,
+            'changed_by_user_id' => auth()->id(),
+        ]);
+
+        // Update asset holder
+        $asset->update(['holder' => $request->new_holder]);
+
+        return redirect()->route('assets.show', $asset)
+            ->with('success', 'Pemegang aset berhasil diubah dari ' . ($previousHolder ?? '-') . ' menjadi ' . $request->new_holder);
+    }
+
+    public function addMaintenance(Asset $asset)
+    {
+        abort_unless(auth()->user()->hasRole('Admin'), 403);
+        
+        $maintenanceTypes = AssetMaintenance::types();
+        
+        return view('assets.add-maintenance', compact('asset', 'maintenanceTypes'));
+    }
+
+    public function storeMaintenance(StoreAssetMaintenanceRequest $request, Asset $asset)
+    {
+        abort_unless(auth()->user()->hasRole('Admin'), 403);
+
+        $maintenance = AssetMaintenance::create([
+            'asset_id' => $asset->id,
+            'type' => $request->type,
+            'maintenance_date' => $request->maintenance_date,
+            'description' => $request->description,
+            'findings' => $request->findings,
+            'actions_taken' => $request->actions_taken,
+            'condition_before' => $request->condition_before ?? $asset->condition,
+            'condition_after' => $request->condition_after,
+            'performed_by_user_id' => auth()->id(),
+            'next_maintenance_date' => $request->next_maintenance_date,
+        ]);
+
+        // Update asset condition if condition_after is provided
+        if ($request->condition_after) {
+            $asset->update(['condition' => $request->condition_after]);
+        }
+
+        return redirect()->route('assets.show', $asset)
+            ->with('success', 'Perawatan aset berhasil dicatat');
+    }
 }
+

@@ -24,7 +24,7 @@ class StoreAssetRequest extends FormRequest
             'location' => 'nullable|string|max:120',
             'holder' => 'nullable|string|max:120',
             'status' => 'required|string|in:ACTIVE,INACTIVE',
-            'condition' => 'required|string|in:GOOD,FAIR,POOR,DAMAGED',
+            'condition' => 'required|string|in:GOOD,LIGHT,HEAVY',
             'purchased_at' => 'nullable|date',
         ];
     }

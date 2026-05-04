@@ -149,7 +149,7 @@
                         Kondisi
                     </label>
                     <select id="condition" name="condition" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('condition') border-red-500 @enderror">
-                        @foreach(['GOOD' => 'Baik','FAIR' => 'Cukup','POOR' => 'Buruk'] as $value => $label)
+                        @foreach(\App\Models\Asset::conditionOptions() as $value => $label)
                             <option value="{{ $value }}" {{ old('condition', $asset->condition) === $value ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>

@@ -21,13 +21,46 @@ class AssetsExport implements FromCollection, WithHeadings
 
     public function collection(): Collection
     {
-        $query = Asset::query();
+        $query = Asset::with(['holderHistory.changedByUser', 'maintenances.performedByUser', 'logs.actor']);
 
         if ($this->startDate && $this->endDate) {
             $query->whereBetween('purchased_at', [$this->startDate, $this->endDate]);
         }
 
         return $query->get()->map(function ($asset) {
+            $holderHistory = $asset->holderHistory->map(function ($history) {
+                return [
+                    'changed_at' => $history->changed_at ? $history->changed_at->format('Y-m-d H:i:s') : null,
+                    'previous_holder' => $history->previous_holder,
+                    'new_holder' => $history->new_holder,
+                    'changed_by' => optional($history->changedByUser)->name,
+                    'notes' => $history->notes,
+                ];
+            });
+
+            $maintenanceHistory = $asset->maintenances->map(function ($maintenance) {
+                return [
+                    'maintenance_date' => $maintenance->maintenance_date ? $maintenance->maintenance_date->format('Y-m-d H:i:s') : null,
+                    'type' => $maintenance->type,
+                    'description' => $maintenance->description,
+                    'findings' => $maintenance->findings,
+                    'actions_taken' => $maintenance->actions_taken,
+                    'performed_by' => optional($maintenance->performedByUser)->name,
+                    'condition_before' => $maintenance->condition_before,
+                    'condition_after' => $maintenance->condition_after,
+                    'next_maintenance_date' => $maintenance->next_maintenance_date ? $maintenance->next_maintenance_date->format('Y-m-d H:i:s') : null,
+                ];
+            });
+
+            $changeHistory = $asset->logs->map(function ($log) {
+                return [
+                    'action' => $log->action,
+                    'actor' => optional($log->actor)->name,
+                    'meta' => $log->meta,
+                    'created_at' => $log->created_at ? $log->created_at->format('Y-m-d H:i:s') : null,
+                ];
+            });
+
             return [
                 'asset_code' => $asset->asset_code,
                 'name' => $asset->name,
@@ -40,7 +73,13 @@ class AssetsExport implements FromCollection, WithHeadings
                 'holder' => $asset->holder,
                 'status' => $asset->status_label,
                 'condition' => $asset->condition_label,
-                'purchased_at' => $asset->purchased_at ? $asset->purchased_at->format('Y-m-d') : '',
+                'purchased_at' => $asset->purchased_at ? $asset->purchased_at->format('Y-m-d H:i:s') : '',
+                'created_at' => $asset->created_at ? $asset->created_at->format('Y-m-d H:i:s') : '',
+                'updated_at' => $asset->updated_at ? $asset->updated_at->format('Y-m-d H:i:s') : '',
+                'exported_at' => now()->format('Y-m-d H:i:s'),
+                'holder_history' => $holderHistory->isNotEmpty() ? json_encode($holderHistory, JSON_UNESCAPED_UNICODE) : '',
+                'maintenance_history' => $maintenanceHistory->isNotEmpty() ? json_encode($maintenanceHistory, JSON_UNESCAPED_UNICODE) : '',
+                'change_history' => $changeHistory->isNotEmpty() ? json_encode($changeHistory, JSON_UNESCAPED_UNICODE) : '',
             ];
         });
     }
@@ -60,6 +99,12 @@ class AssetsExport implements FromCollection, WithHeadings
             'Status',
             'Kondisi',
             'Tanggal Dibeli',
+            'Dibuat Pada',
+            'Diubah Pada',
+            'Diekspor Pada',
+            'Riwayat Pemegang',
+            'Riwayat Perawatan',
+            'Riwayat Perubahan',
         ];
     }
 }
