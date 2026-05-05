@@ -90,7 +90,7 @@
 
                 <!-- Jadwal Piket Clean -->
                 <?php
-                    $schedule = \App\Models\PiketSchedule::getCurrentMonth();
+                    $schedule = \App\Models\PiketSchedule::getCurrentWeek();
                     $colorMap = [
                         'Fadil Rahman' => ['dot' => 'bg-blue-400', 'accent' => 'from-blue-400 to-blue-500'],
                         'Marko Santoso' => ['dot' => 'bg-emerald-400', 'accent' => 'from-emerald-400 to-emerald-500'],
@@ -98,9 +98,9 @@
                         'Mesra Putri' => ['dot' => 'bg-rose-400', 'accent' => 'from-rose-400 to-rose-500'],
                     ];
                     $piketData = [
-                        ['lokasi' => 'Lantai 1', 'nama' => $schedule->lantai_1],
-                        ['lokasi' => 'Lantai 2', 'nama' => $schedule->lantai_2],
-                        ['lokasi' => 'TU', 'nama' => $schedule->tu],
+                        ['lokasi' => 'Petugas 1', 'nama' => $schedule->technician_1],
+                        ['lokasi' => 'Petugas 2', 'nama' => $schedule->technician_2],
+                        ['lokasi' => 'Petugas 3', 'nama' => $schedule->technician_3],
                     ];
                 ?>
                 <div class="pt-8 mb-8 border-t border-white/20">

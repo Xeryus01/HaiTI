@@ -42,7 +42,12 @@
             ->where('zoom_link', '!=', '')
             ->where('start_time', '>=', now()->startOfMonth())
             ->where('end_time', '<=', now()->endOfMonth())
-            ->get(['start_time', 'end_time', 'room_name', 'purpose', 'status', 'code', 'participants_count', 'operator_needed', 'breakroom_needed']);
+            ->get(['start_time', 'end_time', 'room_name', 'purpose', 'status', 'code', 'participants_count', 'operator_needed', 'breakroom_needed', 'id']);
+
+        // Data untuk kalender piket - semua jadwal piket dalam bulan ini
+        $piketEvents = \App\Models\PiketSchedule::where('week_start_date', '>=', now()->startOfMonth()->toDateString())
+            ->where('week_start_date', '<=', now()->endOfMonth()->toDateString())
+            ->get(['id', 'week_start_date', 'technician_1', 'technician_2', 'technician_3']);
 
         $zoomEventsArray = $zoomEvents->map(function($event) {
             $statusColors = [
@@ -67,6 +72,7 @@
                 'title' => $event->room_name . ' - ' . $event->code,
                 'start' => $event->start_time->toISOString(),
                 'end' => $event->end_time->toISOString(),
+                'url' => route('reservations.edit', $event),
                 'display' => 'block',
                 'backgroundColor' => $statusColors[$event->status] ?? '#6b7280',
                 'borderColor' => $statusColors[$event->status] ?? '#6b7280',
@@ -78,6 +84,8 @@
                     'breakroom' => $event->breakroom_needed ? 'Ya' : 'Tidak',
                     'status' => $statusLabels[$event->status] ?? 'Unknown',
                     'room' => $event->room_name,
+                    'start' => $event->start_time->format('d/m/Y H:i'),
+                    'end' => $event->end_time->format('d/m/Y H:i'),
                 ]
             ];
         })->toArray();
@@ -146,6 +154,7 @@
                 'title' => $event->room_name . ' - ' . $event->code,
                 'start' => $event->start_time->toISOString(),
                 'end' => $event->end_time->toISOString(),
+                'url' => route('reservations.edit', $event),
                 'display' => 'block',
                 'backgroundColor' => $statusColors[$event->status] ?? '#6b7280',
                 'borderColor' => $statusColors[$event->status] ?? '#6b7280',
@@ -157,6 +166,8 @@
                     'breakroom' => $event->breakroom_needed ? 'Ya' : 'Tidak',
                     'status' => $statusLabels[$event->status] ?? 'Unknown',
                     'room' => $event->room_name,
+                    'start' => $event->start_time->format('d/m/Y H:i'),
+                    'end' => $event->end_time->format('d/m/Y H:i'),
                 ]
             ];
         })->toArray();
@@ -371,6 +382,12 @@
                     meridiem: false
                 },
                 eventOverlap: false,
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    if (info.event.url) {
+                        window.location.href = info.event.url;
+                    }
+                },
                 eventMouseEnter: function(info) {
                     removeTooltip();
                     const props = info.event.extendedProps;
@@ -383,7 +400,8 @@
                                 <div><strong>Peserta:</strong> ${props.participants}</div>
                                 <div><strong>Operator:</strong> ${props.operator}</div>
                                 <div><strong>Breakroom:</strong> ${props.breakroom}</div>
-                                <div><strong>Waktu:</strong> ${info.event.start.toLocaleString()} - ${info.event.end.toLocaleString()}</div>
+                                <div><strong>Mulai:</strong> ${props.start}</div>
+                                <div><strong>Selesai:</strong> ${props.end}</div>
                             </div>
                         </div>
                     `;

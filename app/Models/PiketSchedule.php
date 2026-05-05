@@ -10,39 +10,39 @@ class PiketSchedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'month',
-        'year',
-        'lantai_1',
-        'lantai_2',
-        'tu',
+        'week_start_date',
+        'technician_1',
+        'technician_2',
+        'technician_3',
     ];
 
     protected $casts = [
-        'month' => 'integer',
-        'year' => 'integer',
+        'week_start_date' => 'date:Y-m-d',
     ];
 
-    // Get current month schedule
-    public static function getCurrentMonth()
+    // Get current week schedule
+    public static function getCurrentWeek()
     {
-        $currentMonth = date('n');
-        $currentYear = date('Y');
+        $currentDate = now();
+        $weekStart = $currentDate->copy()->startOfWeek(); // Monday
 
-        return self::where('month', $currentMonth)
-            ->where('year', $currentYear)
-            ->first() ?? self::createDefault($currentMonth, $currentYear);
+        return self::whereDate('week_start_date', $weekStart->toDateString())
+            ->first() ?? self::createDefault($weekStart);
     }
 
     // Create default schedule if not exists
-    public static function createDefault($month, $year)
+    public static function createDefault($weekStart)
     {
-        return self::create([
-            'month' => $month,
-            'year' => $year,
-            'lantai_1' => 'Fadil Rahman',
-            'lantai_2' => 'Marko Santoso',
-            'tu' => 'Eji Wijaya',
-        ]);
+        $technicians = self::getTechnicians();
+        
+        return self::firstOrCreate(
+            ['week_start_date' => $weekStart->toDateString()],
+            [
+                'technician_1' => $technicians[0] ?? 'Fadil Rahman',
+                'technician_2' => $technicians[1] ?? 'Marko Santoso',
+                'technician_3' => $technicians[2] ?? 'Eji Wijaya',
+            ]
+        );
     }
 
     // Get list of all technicians from users with Teknisi role

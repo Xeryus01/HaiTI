@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             AttachmentSeeder::class,
             
             // Scheduling and sequences
-            PiketScheduleSeeder::class,
+            WeeklyPiketScheduleSeeder::class,
             CodeSequenceSeeder::class,
             
             // Notifications and logs

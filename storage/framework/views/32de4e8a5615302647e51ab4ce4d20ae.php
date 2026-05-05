@@ -1,4 +1,13 @@
-<x-app-layout>
+<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
+<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('app-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
 <div class="min-h-screen">
     <div class="p-5 sm:p-7.5 lg:p-9">
         <div class="mb-6">
@@ -6,20 +15,21 @@
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Kelola jadwal piket tim IT untuk setiap minggu</p>
         </div>
 
-        @if (session('success'))
+        <?php if(session('success')): ?>
             <div class="mb-4 rounded-lg border border-green-400 bg-green-100 p-4 text-green-700 dark:border-green-500/30 dark:bg-green-500/15 dark:text-green-400">
-                {{ session('success') }}
-            </div>
-        @endif
+                <?php echo e(session('success')); ?>
 
-        @if (count($schedules) === 0)
+            </div>
+        <?php endif; ?>
+
+        <?php if(count($schedules) === 0): ?>
             <div class="mb-4 rounded-lg border border-yellow-400 bg-yellow-100 p-4 text-yellow-700 dark:border-yellow-500/30 dark:bg-yellow-500/15 dark:text-yellow-400">
                 <p class="font-semibold">Belum ada jadwal piket.</p>
                 <p class="text-sm mt-1">Mulai dengan menambahkan jadwal piket baru menggunakan tombol "+ Tambah Jadwal".</p>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @php
+        <?php
             $currentDate = now();
             $calendarEvents = collect($schedules)->map(function ($schedule) {
                 $start = \Carbon\Carbon::parse($schedule->week_start_date);
@@ -43,7 +53,7 @@
                     ],
                 ];
             })->toArray();
-        @endphp
+        ?>
 
         <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-dark-800">
             <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -52,7 +62,7 @@
                     <h2 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">Manajemen Jadwal Piket</h2>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <a href="{{ route('piket.create') }}" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-700 dark:text-white font-medium">+ Tambah Jadwal</a>
+                    <a href="<?php echo e(route('piket.create')); ?>" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-dark-700 dark:text-white font-medium">+ Tambah Jadwal</a>
                 </div>
             </div>
 
@@ -92,7 +102,7 @@
                     height: '100%',
                     contentHeight: 'auto',
                     aspectRatio: 1.35,
-                    events: @json($calendarEvents),
+                    events: <?php echo json_encode($calendarEvents, 15, 512) ?>,
                     eventDisplay: 'block',
                     dayMaxEventRows: 2,
                     dayMaxEvents: true,
@@ -147,4 +157,14 @@
         </script>
     </div>
 </div>
-</x-app-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
+<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
+<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
+<?php endif; ?>
+<?php /**PATH C:\Users\BPS 1900\Documents\timcare\resources\views/admin/piket/index.blade.php ENDPATH**/ ?>

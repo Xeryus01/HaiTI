@@ -67,8 +67,10 @@ Route::middleware([\App\Http\Middleware\ContentSecurityPolicy::class])->group(fu
 
         // Piket schedule management - Admin only
         Route::get('admin/piket', [\App\Http\Controllers\PiketScheduleController::class, 'index'])->name('piket.index');
-        Route::get('admin/piket/{month}/edit', [\App\Http\Controllers\PiketScheduleController::class, 'edit'])->name('piket.edit');
-        Route::put('admin/piket/{month}', [\App\Http\Controllers\PiketScheduleController::class, 'update'])->name('piket.update');
+        Route::get('admin/piket/create', [\App\Http\Controllers\PiketScheduleController::class, 'create'])->name('piket.create');
+        Route::post('admin/piket', [\App\Http\Controllers\PiketScheduleController::class, 'store'])->name('piket.store');
+        Route::get('admin/piket/{weekStart}/edit', [\App\Http\Controllers\PiketScheduleController::class, 'edit'])->name('piket.edit');
+        Route::put('admin/piket/{weekStart}', [\App\Http\Controllers\PiketScheduleController::class, 'update'])->name('piket.update');
     });
 
     // Get current piket schedule (public API)

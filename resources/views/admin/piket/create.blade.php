@@ -3,10 +3,10 @@
     <div class="p-5 sm:p-7.5 lg:p-9">
         <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Edit Jadwal Piket</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ \Carbon\Carbon::parse($schedule->week_start_date)->format('d M Y') }} - {{ \Carbon\Carbon::parse($schedule->week_start_date)->endOfWeek()->format('d M Y') }}</p>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Tambah Jadwal Piket</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Buat jadwal piket baru untuk satu minggu penuh.</p>
             </div>
-            <a href="{{ url()->to(route('piket.index')) }}" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">
+            <a href="{{ route('piket.index') }}" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">
                 ← Kembali
             </a>
         </div>
@@ -22,77 +22,48 @@
         @endif
 
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-dark-800">
-            <form action="{{ route('piket.update', $schedule->week_start_date) }}" method="POST" class="p-5 sm:p-7.5 lg:p-9">
+            <form action="{{ route('piket.store') }}" method="POST" class="p-5 sm:p-7.5 lg:p-9">
                 @csrf
-                @method('PUT')
 
                 <div class="space-y-6">
-                    <!-- Technician 1 -->
+                    <div>
+                        <label for="week_start_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Tanggal Mulai Minggu</label>
+                        <input id="week_start_date" name="week_start_date" type="date" required value="{{ old('week_start_date', now()->startOfWeek()->toDateString()) }}" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
+                    </div>
+
                     <div>
                         <label for="technician_1" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Petugas 1</label>
                         <select id="technician_1" name="technician_1" required class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
                             <option value="">-- Pilih Teknisi --</option>
                             @foreach($technicians as $name)
-                                <option value="{{ $name }}" {{ $schedule->technician_1 === $name ? 'selected' : '' }}>
-                                    {{ $name }}
-                                </option>
+                                <option value="{{ $name }}" {{ old('technician_1') === $name ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Technician 2 -->
                     <div>
                         <label for="technician_2" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Petugas 2</label>
                         <select id="technician_2" name="technician_2" required class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
                             <option value="">-- Pilih Teknisi --</option>
                             @foreach($technicians as $name)
-                                <option value="{{ $name }}" {{ $schedule->technician_2 === $name ? 'selected' : '' }}>
-                                    {{ $name }}
-                                </option>
+                                <option value="{{ $name }}" {{ old('technician_2') === $name ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Technician 3 -->
                     <div>
                         <label for="technician_3" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Petugas 3</label>
                         <select id="technician_3" name="technician_3" required class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
                             <option value="">-- Pilih Teknisi --</option>
                             @foreach($technicians as $name)
-                                <option value="{{ $name }}" {{ $schedule->technician_3 === $name ? 'selected' : '' }}>
-                                    {{ $name }}
-                                </option>
+                                <option value="{{ $name }}" {{ old('technician_3') === $name ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Current Schedule Preview -->
-                    <div class="rounded-lg border border-brand-200 bg-brand-50 p-4 dark:border-brand-500/30 dark:bg-brand-500/15">
-                        <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Preview</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-300">Petugas 1:</span>
-                                <span class="font-semibold text-gray-900 dark:text-white" id="preview_technician_1">{{ $schedule->technician_1 }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-300">Petugas 2:</span>
-                                <span class="font-semibold text-gray-900 dark:text-white" id="preview_technician_2">{{ $schedule->technician_2 }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-300">Petugas 3:</span>
-                                <span class="font-semibold text-gray-900 dark:text-white" id="preview_technician_3">{{ $schedule->technician_3 }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
                     <div class="flex gap-4 pt-4">
-                        <button type="submit" class="inline-flex flex-1 items-center justify-center rounded-lg bg-brand-600 px-6 py-2.5 font-medium text-white hover:bg-brand-700 transition" id="submitBtn">
-                            Simpan Perubahan
-                        </button>
-                        <a href="{{ url()->to(route('piket.index')) }}" class="inline-flex flex-1 items-center justify-center rounded-lg border border-gray-300 px-6 py-2.5 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5 transition">
-                            Batal
-                        </a>
+                        <button type="submit" class="inline-flex flex-1 items-center justify-center rounded-lg bg-brand-600 px-6 py-2.5 font-medium text-white hover:bg-brand-700 transition" id="submitBtn">Tambah Jadwal</button>
+                        <a href="{{ route('piket.index') }}" class="inline-flex flex-1 items-center justify-center rounded-lg border border-gray-300 px-6 py-2.5 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5 transition">Batal</a>
                     </div>
                 </div>
             </form>
@@ -140,16 +111,5 @@
     tech2.addEventListener('change', updateSelects);
     tech3.addEventListener('change', updateSelects);
     updateSelects();
-
-    // Update preview in real-time
-    document.getElementById('technician_1').addEventListener('change', function() {
-        document.getElementById('preview_technician_1').textContent = this.value || '-';
-    });
-    document.getElementById('technician_2').addEventListener('change', function() {
-        document.getElementById('preview_technician_2').textContent = this.value || '-';
-    });
-    document.getElementById('technician_3').addEventListener('change', function() {
-        document.getElementById('preview_technician_3').textContent = this.value || '-';
-    });
 </script>
 </x-app-layout>

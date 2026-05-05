@@ -2,7 +2,7 @@
 
 ## 📋 Ringkasan Sistem
 
-Sistem manajemen jadwal piket yang terintegrasi dengan dashboard admin TimCare. Admin dapat mengelola jadwal piket bulanan melalui menu dashboard, dan jadwal akan ditampilkan secara real-time di landing page.
+Sistem manajemen jadwal piket mingguan yang terintegrasi dengan dashboard admin TimCare. Admin dapat mengelola jadwal piket mingguan melalui menu dashboard, dan jadwal akan ditampilkan secara real-time di landing page. Sistem sekarang menggunakan jadwal mingguan dengan 3 petugas yang dipilih dari teknisi untuk setiap minggu.
 
 ## 🚀 Setup & Instalasi
 
@@ -13,40 +13,41 @@ php artisan migrate
 
 ### 2. Jalankan Seeder untuk Data Awal
 ```bash
-php artisan db:seed --class=PiketScheduleSeeder
+php artisan db:seed --class=WeeklyPiketScheduleSeeder
 ```
 
-Seeder akan membuat jadwal default untuk 12 bulan dengan:
-- **Lantai 1**: Marko
-- **Lantai 2**: Fadil
-- **TU**: Eji
+Seeder akan membuat jadwal default untuk 12 minggu ke depan dengan rotasi petugas:
+- **Minggu 1**: Fadil Rahman, Marko Santoso, Eji Wijaya
+- **Minggu 2**: Marko Santoso, Eji Wijaya, Mesra Putri
+- Dan seterusnya dengan rotasi
 
 ## 📁 Struktur File
 
 ### Models
 - **`app/Models/PiketSchedule.php`** - Model utama untuk manajemen jadwal
-  - `getCurrentMonth()` - Mendapatkan jadwal bulan saat ini
-  - `createDefault($month, $year)` - Membuat jadwal default
+  - `getCurrentWeek()` - Mendapatkan jadwal minggu saat ini
+  - `createDefault($weekStart)` - Membuat jadwal default untuk minggu tertentu
   - `getTechnicians()` - Daftar teknisi yang tersedia
 
 ### Controllers
 - **`app/Http/Controllers/PiketScheduleController.php`** - Controller untuk semua operasi CRUD
-  - `index()` - Menampilkan grid 12 bulan
-  - `edit($month)` - Form edit jadwal bulan tertentu
+  - `index()` - Menampilkan grid 12 minggu
+  - `edit($weekStart)` - Form edit jadwal minggu tertentu
   - `update()` - Menyimpan perubahan jadwal
-  - `show()` - API endpoint untuk data bulan saat ini
+  - `show()` - API endpoint untuk data minggu saat ini
 
 ### Middleware
 - **`app/Http/Middleware/Admin.php`** - Proteksi akses admin-only
 
 ### Views
-- **`resources/views/admin/piket/index.blade.php`** - Dashboard admin jadwal piket
-- **`resources/views/admin/piket/edit.blade.php`** - Form edit jadwal piket
+- **`resources/views/admin/piket/index.blade.php`** - Dashboard admin jadwal piket mingguan
+- **`resources/views/admin/piket/edit.blade.php`** - Form edit jadwal piket mingguan
 - **`resources/views/layouts/sidebar.blade.php`** - Menu sidebar (sudah ditambahkan)
 
 ### Database
-- **`database/migrations/2026_04_08_130000_create_piket_schedules_table.php`** - Schema tabel
-- **`database/seeders/PiketScheduleSeeder.php`** - Seeder data awal
+- **`database/migrations/2026_04_08_130000_create_piket_schedules_table.php`** - Schema tabel asli
+- **`database/migrations/2026_05_05_041811_alter_piket_schedules_table_for_weekly_schedule.php`** - Migration untuk mengubah ke jadwal mingguan
+- **`database/seeders/WeeklyPiketScheduleSeeder.php`** - Seeder data awal mingguan
 
 ## 🔐 Akses & Keamanan
 
@@ -58,8 +59,8 @@ Seeder akan membuat jadwal default untuk 12 bulan dengan:
 ### Routes yang Dilindungi
 ```php
 GET  /admin/piket              - Admin only (role:Admin)
-GET  /admin/piket/{month}/edit - Admin only (role:Admin)
-PUT  /admin/piket/{month}      - Admin only (role:Admin)
+GET  /admin/piket/{weekStart}/edit - Admin only (role:Admin)
+PUT  /admin/piket/{weekStart}      - Admin only (role:Admin)
 GET  /api/piket/current        - Public access
 ```
 
@@ -69,10 +70,10 @@ GET  /api/piket/current        - Public access
 Menu "Jadwal Piket" ditambahkan di sidebar admin dengan ikon kalender.
 
 ### 2. Halaman Index Admin
-- Grid 12 bulan responsive (1 kolom mobile → 3 kolom desktop)
-- Bulan saat ini diberi highlight dengan ring biru
-- Menampilkan teknisi untuk Lantai 1, Lantai 2, dan TU
-- Tombol "Edit" untuk setiap bulan
+- Grid 12 minggu responsive (1 kolom mobile → 3 kolom desktop)
+- Minggu saat ini diberi highlight dengan ring biru
+- Menampilkan 3 petugas untuk setiap minggu
+- Tombol "Edit" untuk setiap minggu
 
 ### 3. Halaman Edit
 - Form dengan 3 dropdown untuk memilih teknisi
@@ -81,7 +82,7 @@ Menu "Jadwal Piket" ditambahkan di sidebar admin dengan ikon kalender.
 - Tombol "Kembali" dan "Simpan Perubahan"
 
 ### 4. Landing Page
-- Tampilan jadwal piket sesuai desain sebelumnya
+- Tampilan jadwal piket mingguan sesuai desain sebelumnya
 - Data diambil dari database secara real-time
 - Tombol "Atur" hanya muncul untuk admin yang login
 
@@ -90,14 +91,13 @@ Menu "Jadwal Piket" ditambahkan di sidebar admin dengan ikon kalender.
 ```sql
 CREATE TABLE piket_schedules (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    month INT NOT NULL,           -- 1-12
-    year INT DEFAULT 2026,        -- Tahun
-    lantai_1 VARCHAR(255),        -- Teknisi Lantai 1
-    lantai_2 VARCHAR(255),        -- Teknisi Lantai 2
-    tu VARCHAR(255),              -- Teknisi TU
+    week_start_date DATE NOT NULL,        -- Tanggal Senin minggu tersebut
+    technician_1 VARCHAR(255),            -- Petugas 1
+    technician_2 VARCHAR(255),            -- Petugas 2
+    technician_3 VARCHAR(255),            -- Petugas 3
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    UNIQUE KEY unique_month_year (month, year)
+    UNIQUE KEY unique_week_start_date (week_start_date)
 );
 ```
 
