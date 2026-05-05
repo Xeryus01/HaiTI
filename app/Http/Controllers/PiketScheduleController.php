@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PiketSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PiketScheduleController extends Controller
 {
@@ -33,15 +34,6 @@ class PiketScheduleController extends Controller
     // Update piket schedule
     public function update(Request $request, $weekStart)
     {
-        $request->validate([
-            'technician_1' => 'required|string',
-            'technician_2' => 'required|string|different:technician_1',
-            'technician_3' => 'required|string|different:technician_1,technician_2',
-        ], [
-            'technician_2.different' => 'Petugas 2 tidak boleh sama dengan Petugas 1',
-            'technician_3.different' => 'Petugas 3 tidak boleh sama dengan Petugas 1 atau Petugas 2',
-        ]);
-
         $weekStartDate = \Carbon\Carbon::parse($weekStart)->startOfWeek();
         $schedule = PiketSchedule::whereDate('week_start_date', $weekStartDate->toDateString())
             ->first();
@@ -50,7 +42,19 @@ class PiketScheduleController extends Controller
             $schedule = PiketSchedule::createDefault($weekStartDate);
         }
 
-        $schedule->update($request->only(['technician_1', 'technician_2', 'technician_3']));
+        $request->validate([
+            'week_start_date' => ['required', 'date', Rule::unique('piket_schedules', 'week_start_date')->ignore($schedule->id)],
+            'week_end_date' => 'required|date|after_or_equal:week_start_date',
+            'technician_1' => 'required|string',
+            'technician_2' => 'required|string|different:technician_1',
+            'technician_3' => 'required|string|different:technician_1,technician_2',
+        ], [
+            'week_end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
+            'technician_2.different' => 'Petugas 2 tidak boleh sama dengan Petugas 1',
+            'technician_3.different' => 'Petugas 3 tidak boleh sama dengan Petugas 1 atau Petugas 2',
+        ]);
+
+        $schedule->update($request->only(['week_start_date', 'week_end_date', 'technician_1', 'technician_2', 'technician_3']));
 
         return redirect()->route('piket.index')->with('success', 'Jadwal piket berhasil diperbarui');
     }
@@ -68,26 +72,30 @@ class PiketScheduleController extends Controller
     {
         $request->validate([
             'week_start_date' => 'required|date',
+            'week_end_date' => 'required|date|after_or_equal:week_start_date',
             'technician_1' => 'required|string',
             'technician_2' => 'required|string|different:technician_1',
             'technician_3' => 'required|string|different:technician_1,technician_2',
         ], [
+            'week_end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
             'technician_2.different' => 'Petugas 2 tidak boleh sama dengan Petugas 1',
             'technician_3.different' => 'Petugas 3 tidak boleh sama dengan Petugas 1 atau Petugas 2',
         ]);
 
-        $weekStartDate = \Carbon\Carbon::parse($request->input('week_start_date'))->startOfWeek();
+        $weekStartDate = \Carbon\Carbon::parse($request->input('week_start_date'));
+        $weekEndDate = \Carbon\Carbon::parse($request->input('week_end_date'));
 
         $schedule = PiketSchedule::firstOrCreate([
             'week_start_date' => $weekStartDate->toDateString(),
         ], [
+            'week_end_date' => $weekEndDate->toDateString(),
             'technician_1' => $request->input('technician_1'),
             'technician_2' => $request->input('technician_2'),
             'technician_3' => $request->input('technician_3'),
         ]);
 
         if (! $schedule->wasRecentlyCreated) {
-            $schedule->update($request->only(['technician_1', 'technician_2', 'technician_3']));
+            $schedule->update($request->only(['week_start_date', 'week_end_date', 'technician_1', 'technician_2', 'technician_3']));
         }
 
         return redirect()->route('piket.index')->with('success', 'Jadwal piket berhasil ditambahkan');
@@ -103,6 +111,7 @@ class PiketScheduleController extends Controller
             'technician_2' => $schedule->technician_2,
             'technician_3' => $schedule->technician_3,
             'week_start' => $schedule->week_start_date,
+            'week_end' => $schedule->week_end_date,
         ]);
     }
 }

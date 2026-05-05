@@ -13,7 +13,7 @@
         <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">Edit Jadwal Piket</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?php echo e(\Carbon\Carbon::parse($schedule->week_start_date)->format('d M Y')); ?> - <?php echo e(\Carbon\Carbon::parse($schedule->week_start_date)->endOfWeek()->format('d M Y')); ?></p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?php echo e(\Carbon\Carbon::parse($schedule->week_start_date)->format('d M Y')); ?> - <?php echo e($schedule->week_end_date ? \Carbon\Carbon::parse($schedule->week_end_date)->format('d M Y') : \Carbon\Carbon::parse($schedule->week_start_date)->endOfWeek()->format('d M Y')); ?></p>
             </div>
             <a href="<?php echo e(url()->to(route('piket.index'))); ?>" class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">
                 ← Kembali
@@ -36,6 +36,17 @@
                 <?php echo method_field('PUT'); ?>
 
                 <div class="space-y-6">
+                    <div class="grid gap-4 lg:grid-cols-2">
+                        <div>
+                            <label for="week_start_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Tanggal Mulai</label>
+                            <input id="week_start_date" name="week_start_date" type="date" required value="<?php echo e(old('week_start_date', $schedule->week_start_date->toDateString())); ?>" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
+                        </div>
+                        <div>
+                            <label for="week_end_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Tanggal Selesai</label>
+                            <input id="week_end_date" name="week_end_date" type="date" required value="<?php echo e(old('week_end_date', $schedule->week_end_date ? $schedule->week_end_date->toDateString() : $schedule->week_start_date->endOfWeek()->toDateString())); ?>" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
+                        </div>
+                    </div>
+
                     <!-- Technician 1 -->
                     <div>
                         <label for="technician_1" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Petugas 1</label>
@@ -114,9 +125,23 @@
 
 <script>
     document.getElementById('submitBtn').addEventListener('click', function(e) {
+        const startDate = document.getElementById('week_start_date').value;
+        const endDate = document.getElementById('week_end_date').value;
         const tech1 = document.getElementById('technician_1').value;
         const tech2 = document.getElementById('technician_2').value;
         const tech3 = document.getElementById('technician_3').value;
+
+        if (!startDate || !endDate) {
+            alert('Tanggal mulai dan selesai harus diisi.');
+            e.preventDefault();
+            return;
+        }
+
+        if (endDate < startDate) {
+            alert('Tanggal selesai harus sama atau setelah tanggal mulai.');
+            e.preventDefault();
+            return;
+        }
 
         if (!tech1 || !tech2 || !tech3) {
             alert('Semua petugas harus dipilih!');

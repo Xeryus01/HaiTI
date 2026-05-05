@@ -33,11 +33,13 @@
             $currentDate = now();
             $calendarEvents = collect($schedules)->map(function ($schedule) {
                 $start = \Carbon\Carbon::parse($schedule->week_start_date);
-                $end = $start->copy()->addDays(6); // 6 days after start = end of week
+                $end = $schedule->week_end_date
+                    ? \Carbon\Carbon::parse($schedule->week_end_date)
+                    : $start->copy()->addDays(6);
                 return [
                     'title' => "Piket: {$start->format('d/m')} - {$end->format('d/m')}",
                     'start' => $start->toDateString(),
-                    'end' => $start->copy()->addDays(7)->toDateString(), // FullCalendar end is exclusive
+                    'end' => $end->copy()->addDay()->toDateString(), // FullCalendar end is exclusive
                     'url' => route('piket.edit', $start->toDateString()),
                     'allDay' => true,
                     'backgroundColor' => '#8b5cf6',
@@ -76,6 +78,7 @@
             #piketCalendar .fc .fc-daygrid-event { padding: 0.4rem 0.45rem; font-size: 0.75rem; border-radius: 0.55rem; }
             #piketCalendar .fc .fc-daygrid-more-link { font-size: 0.75rem; }
             #piketCalendar .fc .fc-event-title { white-space: normal; line-height: 1.15; }
+            #piketCalendar .fc .fc-event-crew { color: rgba(255,255,255,0.85); font-size: 0.65rem; line-height: 1.15; }
         </style>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
         <script>
@@ -107,6 +110,18 @@
                     dayMaxEventRows: 2,
                     dayMaxEvents: true,
                     eventTimeFormat: { hour: '2-digit', minute: '2-digit', meridiem: false },
+                    eventContent: function(arg) {
+                        const props = arg.event.extendedProps;
+                        const names = [props.technician_1, props.technician_2, props.technician_3].filter(Boolean).join(', ');
+                        const title = arg.event.title;
+
+                        return {
+                            html: `
+                                <div class="fc-event-title">${title}</div>
+                                <div class="fc-event-crew text-[0.68rem] mt-1">${names}</div>
+                            `
+                        };
+                    },
                     eventDidMount: function(info) {
                         info.el.style.padding = '0.45rem';
                         info.el.style.borderRadius = '0.85rem';

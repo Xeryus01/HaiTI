@@ -28,6 +28,7 @@ class WeeklyPiketScheduleSeeder extends Seeder
                 \App\Models\PiketSchedule::updateOrCreate(
                     ['week_start_date' => $weekStart->toDateString()],
                     [
+                        'week_end_date' => $weekStart->copy()->endOfWeek()->toDateString(),
                         'technician_1' => $tech1,
                         'technician_2' => $tech2,
                         'technician_3' => $tech3,

@@ -26,9 +26,15 @@
                 @csrf
 
                 <div class="space-y-6">
-                    <div>
-                        <label for="week_start_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Tanggal Mulai Minggu</label>
-                        <input id="week_start_date" name="week_start_date" type="date" required value="{{ old('week_start_date', now()->startOfWeek()->toDateString()) }}" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
+                    <div class="grid gap-4 lg:grid-cols-2">
+                        <div>
+                            <label for="week_start_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Tanggal Mulai</label>
+                            <input id="week_start_date" name="week_start_date" type="date" required value="{{ old('week_start_date', now()->startOfWeek()->toDateString()) }}" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
+                        </div>
+                        <div>
+                            <label for="week_end_date" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Tanggal Selesai</label>
+                            <input id="week_end_date" name="week_end_date" type="date" required value="{{ old('week_end_date', now()->endOfWeek()->toDateString()) }}" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-500 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-brand-600 dark:focus:ring-brand-900/20">
+                        </div>
                     </div>
 
                     <div>
@@ -73,9 +79,23 @@
 
 <script>
     document.getElementById('submitBtn').addEventListener('click', function(e) {
+        const startDate = document.getElementById('week_start_date').value;
+        const endDate = document.getElementById('week_end_date').value;
         const tech1 = document.getElementById('technician_1').value;
         const tech2 = document.getElementById('technician_2').value;
         const tech3 = document.getElementById('technician_3').value;
+
+        if (!startDate || !endDate) {
+            alert('Tanggal mulai dan selesai harus diisi.');
+            e.preventDefault();
+            return;
+        }
+
+        if (endDate < startDate) {
+            alert('Tanggal selesai harus sama atau setelah tanggal mulai.');
+            e.preventDefault();
+            return;
+        }
 
         if (!tech1 || !tech2 || !tech3) {
             alert('Semua petugas harus dipilih!');

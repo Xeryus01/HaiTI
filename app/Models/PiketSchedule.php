@@ -11,6 +11,7 @@ class PiketSchedule extends Model
 
     protected $fillable = [
         'week_start_date',
+        'week_end_date',
         'technician_1',
         'technician_2',
         'technician_3',
@@ -18,6 +19,7 @@ class PiketSchedule extends Model
 
     protected $casts = [
         'week_start_date' => 'date:Y-m-d',
+        'week_end_date' => 'date:Y-m-d',
     ];
 
     // Get current week schedule
@@ -38,6 +40,7 @@ class PiketSchedule extends Model
         return self::firstOrCreate(
             ['week_start_date' => $weekStart->toDateString()],
             [
+                'week_end_date' => $weekStart->copy()->endOfWeek()->toDateString(),
                 'technician_1' => $technicians[0] ?? 'Fadil Rahman',
                 'technician_2' => $technicians[1] ?? 'Marko Santoso',
                 'technician_3' => $technicians[2] ?? 'Eji Wijaya',
