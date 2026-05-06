@@ -222,7 +222,7 @@
             </div>
         </div>
 
-        <!-- Layanan Belum Dilayani -->
+        <!-- Layanan Belum Dilayani
         <div class="mb-6 grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
             <div class="rounded-xl border border-gray-200 bg-white p-3 sm:p-5 dark:border-gray-700 dark:bg-dark-800">
                 <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Layanan Belum Dilayani</p>
@@ -236,7 +236,7 @@
                 <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">Total Semua Layanan</p>
                 <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ $totalLayanan }}</h3>
             </div>
-        </div>
+        </div> -->
 
         <div class="mb-6 grid gap-4 sm:gap-6 lg:grid-cols-2">
             <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-dark-800 overflow-hidden">

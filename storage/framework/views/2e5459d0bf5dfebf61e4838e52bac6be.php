@@ -41,9 +41,9 @@
                 <div class="rounded-2xl border border-gray-100 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-semibold text-sky-600">3.</span>
-                        <p class="text-xs font-semibold text-gray-900 dark:text-white">Cek ID</p>
+                        <p class="text-xs font-semibold text-gray-900 dark:text-white">Cek ID Meeting</p>
                     </div>
-                    <p class="mt-1 text-[11px] leading-4 text-gray-600 dark:text-gray-400">Jika ID tersedia, lanjutkan. Jika tidak, konfirmasi.</p>
+                    <p class="mt-1 text-[11px] leading-4 text-gray-600 dark:text-gray-400">Jika ruang id meeting zoom masih tersedia, lanjutkan. Jika tidak, konfirmasi.</p>
                 </div>
                 <div class="rounded-2xl border border-gray-100 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
                     <div class="flex items-center gap-2">
