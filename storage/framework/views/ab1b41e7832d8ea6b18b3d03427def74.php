@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>TimCare - Sistem Helpdesk IT Terintegrasi</title>
     <meta name="description" content="Sistem helpdesk IT terintegrasi untuk pengelolaan tiket permasalahan, pengajuan ruang Zoom, dan layanan IT lainnya.">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('logo/logo.png')); ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo e(asset('logo/logo.png')); ?>">
+    <link rel="apple-touch-icon" href="<?php echo e(asset('logo/logo.png')); ?>">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
