@@ -18,6 +18,8 @@ Route::middleware([\App\Http\Middleware\ContentSecurityPolicy::class])->group(fu
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/api/dashboard/charts', [\App\Http\Controllers\Api\DashboardController::class, 'charts'])->name('api.dashboard.charts');
+
     Route::get('/exports/tickets', [ExportController::class, 'tickets'])->name('exports.tickets');
     Route::get('/exports/reservations', [ExportController::class, 'reservations'])->name('exports.reservations');
 

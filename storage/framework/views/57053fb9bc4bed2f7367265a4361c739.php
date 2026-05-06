@@ -251,7 +251,18 @@
             <div class="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-dark-800 overflow-hidden">
                 <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">Grafik Tiket Permasalahan</h2>
-                    <a href="<?php echo e(url()->to(route('exports.tickets'))); ?>" class="text-xs sm:text-sm font-medium text-brand-600 hover:text-brand-700 whitespace-nowrap">Ekspor CSV</a>
+                    <div class="flex items-center gap-2">
+                        <select id="monthFilter" class="text-xs sm:text-sm border border-gray-300 rounded px-2 py-1 dark:border-gray-600 dark:bg-dark-700 dark:text-white">
+                            <option value="all">Semua</option>
+                            <?php for($i = 1; $i <= 12; $i++): ?>
+                                <option value="<?php echo e(date('Y')); ?>-<?php echo e(str_pad($i, 2, '0', STR_PAD_LEFT)); ?>" <?php echo e($i == date('n') ? 'selected' : ''); ?>>
+                                    <?php echo e(\Carbon\Carbon::create(date('Y'), $i, 1)->locale('id')->format('F Y')); ?>
+
+                                </option>
+                            <?php endfor; ?>
+                        </select>
+                        <a href="<?php echo e(url()->to(route('exports.tickets'))); ?>" class="text-xs sm:text-sm font-medium text-brand-600 hover:text-brand-700 whitespace-nowrap">Ekspor CSV</a>
+                    </div>
                 </div>
                 <div class="relative h-72">
                     <canvas id="ticketChart" class="w-full h-full"></canvas>
@@ -433,53 +444,81 @@
             calendar.render();
         }
 
-        const ticketCtx = document.getElementById('ticketChart');
-        const zoomCtx = document.getElementById('zoomChart');
+        let ticketChart, zoomChart;
 
-        if (ticketCtx) {
-            new Chart(ticketCtx, {
-                type: 'bar',
-                data: {
-                    labels: <?php echo json_encode(array_keys($ticketCounts), 15, 512) ?>,
-                    datasets: [{
-                        label: 'Jumlah tiket',
-                        data: <?php echo json_encode(array_values($ticketCounts), 15, 512) ?>,
-                        backgroundColor: ['#ef4444', '#f59e0b', '#6366f1', '#10b981', '#3b82f6', '#6b7280'],
-                        borderRadius: 8,
-                        barPercentage: 0.65,
-                        categoryPercentage: 0.7,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { beginAtZero: true, ticks: { precision: 0, stepSize: 1 } }
-                    }
-                }
-            });
-        }
+        const initCharts = function(ticketData, zoomData) {
+            const ticketCtx = document.getElementById('ticketChart');
+            const zoomCtx = document.getElementById('zoomChart');
 
-        if (zoomCtx) {
-            new Chart(zoomCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: <?php echo json_encode(array_keys($zoomCounts), 15, 512) ?>,
-                    datasets: [{
-                        data: <?php echo json_encode(array_values($zoomCounts), 15, 512) ?>,
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6'],
-                        hoverOffset: 8,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } }
+            if (ticketCtx) {
+                if (ticketChart) ticketChart.destroy();
+                ticketChart = new Chart(ticketCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(ticketData),
+                        datasets: [{
+                            label: 'Jumlah tiket',
+                            data: Object.values(ticketData),
+                            backgroundColor: ['#ef4444', '#f59e0b', '#6366f1', '#10b981', '#3b82f6', '#6b7280'],
+                            borderRadius: 8,
+                            barPercentage: 0.65,
+                            categoryPercentage: 0.7,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: { beginAtZero: true, ticks: { precision: 0, stepSize: 1 } }
+                        }
                     }
-                }
+                });
+            }
+
+            if (zoomCtx) {
+                if (zoomChart) zoomChart.destroy();
+                zoomChart = new Chart(zoomCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(zoomData),
+                        datasets: [{
+                            data: Object.values(zoomData),
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6'],
+                            hoverOffset: 8,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } }
+                        }
+                    }
+                });
+            }
+        };
+
+        // Initial load
+        initCharts(<?php echo json_encode($ticketCounts, 15, 512) ?>, <?php echo json_encode($zoomCounts, 15, 512) ?>);
+
+        // Month filter
+        const monthFilter = document.getElementById('monthFilter');
+        if (monthFilter) {
+            monthFilter.addEventListener('change', function() {
+                const month = this.value;
+                fetch(`/api/dashboard/charts?month=${month}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    initCharts(data.ticketCounts, data.zoomCounts);
+                })
+                .catch(error => console.error('Error fetching chart data:', error));
             });
         }
     });
