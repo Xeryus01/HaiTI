@@ -114,7 +114,7 @@
                                 </label>
                                 <select id="assignee_id" name="assignee_id" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('assignee_id') border-red-500 @enderror">
                                     <option value="">-- Belum Ditugaskan --</option>
-                                    @foreach(\App\Models\User::whereHas('roles', function($q){ $q->where('name','Teknisi'); })->get() as $user)
+                                    @foreach($technicians as $user)
                                         <option value="{{ $user->id }}" {{ $ticket->assignee_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                                     @endforeach
                                 </select>

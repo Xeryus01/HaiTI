@@ -92,7 +92,12 @@ class TicketViewController extends Controller
     {
         $ticket->load('requester', 'assignee', 'asset', 'comments.user', 'comments.attachments', 'attachments.uploader');
 
-        return view('tickets.show', compact('ticket'));
+        $technicians = \App\Models\PiketSchedule::scheduledTechniciansForDate(now());
+        if ($ticket->assignee && !$technicians->contains('id', $ticket->assignee->id)) {
+            $technicians->push($ticket->assignee);
+        }
+
+        return view('tickets.show', compact('ticket', 'technicians'));
     }
 
     public function edit(Request $request, Ticket $ticket)
@@ -104,7 +109,11 @@ class TicketViewController extends Controller
         }
 
         $assets = Asset::all();
-        return view('tickets.edit', compact('ticket','assets'));
+        $technicians = \App\Models\PiketSchedule::getCurrentWeek()->scheduledUsers();
+        if ($ticket->assignee && !$technicians->contains('id', $ticket->assignee->id)) {
+            $technicians->push($ticket->assignee);
+        }
+        return view('tickets.edit', compact('ticket', 'assets', 'technicians'));
     }
 
     public function update(UpdateTicketRequest $request, Ticket $ticket)

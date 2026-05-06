@@ -266,7 +266,7 @@ unset($__errorArgs, $__bag); ?>
                                     <label for="assignee_id" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Petugas</label>
                                     <select id="assignee_id" name="assignee_id" class="w-full rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-dark-800 dark:text-white">
                                         <option value="">Belum ditentukan</option>
-                                        <?php $__currentLoopData = \App\Models\User::whereHas('roles', function ($q) { $q->where('name', 'Teknisi'); })->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php $__currentLoopData = $technicians; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($user->id); ?>" <?php echo e($ticket->assignee_id == $user->id ? 'selected' : ''); ?>><?php echo e($user->name); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>

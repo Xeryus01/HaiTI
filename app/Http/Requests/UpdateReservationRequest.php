@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\PiketSchedule;
 use App\Models\Reservation;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -87,6 +88,19 @@ class UpdateReservationRequest extends FormRequest
 
             if ($this->filled('approver_id') && $user && ! $user->hasRole('Admin')) {
                 $validator->errors()->add('approver_id', 'Hanya Admin yang dapat menugaskan petugas.');
+            }
+
+            if ($this->filled('approver_id')) {
+                $reservation = $this->route('reservation');
+                $date = $this->input('start_time') ?: ($reservation?->start_time ?? now());
+                $scheduledIds = PiketSchedule::scheduledTechniciansForDate($date)->pluck('id')->all();
+                $currentApproverId = optional($reservation?->approver)->id;
+
+                if (! in_array($this->input('approver_id'), $scheduledIds, true)
+                    && $this->input('approver_id') !== $currentApproverId
+                ) {
+                    $validator->errors()->add('approver_id', 'Petugas harus merupakan teknisi piket pada minggu pengajuan Zoom tersebut.');
+                }
             }
 
             // If status is being changed to REJECTED, CANCELLED, or COMPLETED, zoom_link is not required

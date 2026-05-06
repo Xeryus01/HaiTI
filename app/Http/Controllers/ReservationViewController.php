@@ -88,9 +88,10 @@ class ReservationViewController extends Controller
 
         $technicians = collect();
         if ($request->user() && $request->user()->hasRole('Admin')) {
-            $technicians = User::whereHas('roles', function ($q) {
-                $q->where('name', 'Teknisi');
-            })->get();
+            $technicians = \App\Models\PiketSchedule::scheduledTechniciansForDate($reservation->start_time ?? now());
+            if ($reservation->approver && !$technicians->contains('id', $reservation->approver->id)) {
+                $technicians->push($reservation->approver);
+            }
         }
 
         return view('reservations.show', compact('reservation', 'technicians'));

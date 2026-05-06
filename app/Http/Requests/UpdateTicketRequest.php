@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\PiketSchedule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -33,5 +34,21 @@ class UpdateTicketRequest extends FormRequest
             'assignee_id' => 'nullable|integer|exists:users,id',
             'attachment' => 'nullable|file|max:10240',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->filled('assignee_id')) {
+                $scheduledIds = PiketSchedule::getCurrentWeek()->scheduledUsers()->pluck('id')->all();
+                $currentAssigneeId = optional($this->route('ticket')->assignee)->id;
+
+                if (! in_array($this->input('assignee_id'), $scheduledIds, true)
+                    && $this->input('assignee_id') !== $currentAssigneeId
+                ) {
+                    $validator->errors()->add('assignee_id', 'Petugas harus merupakan teknisi piket minggu ini.');
+                }
+            }
+        });
     }
 }
