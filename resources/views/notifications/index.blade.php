@@ -7,7 +7,7 @@
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Lihat semua notifikasi dan tindakan yang diperlukan pada layanan IT.</p>
                 </div>
                 @if (auth()->user()->notifications()->where('is_read', false)->exists())
-                    <button type="button" onclick="fetch('/api/notifications/mark-all-as-read', {method: 'PATCH'}).then(r => location.reload())" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-center font-medium text-white hover:bg-brand-700">
+                    <button type="button" onclick="fetch('{{ url('/api/notifications/mark-all-as-read') }}', {method: 'PATCH'}).then(r => location.reload())" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-center font-medium text-white hover:bg-brand-700">
                         Tandai Semua Dibaca
                     </button>
                 @endif
@@ -74,13 +74,13 @@
                             <!-- Actions -->
                             <div class="flex items-center gap-2">
                                 @if (!$notification->is_read)
-                                    <button onclick="fetch('/api/notifications/{{ $notification->id }}/mark-as-read', {method: 'PATCH'}).then(r => location.reload())" class="inline-flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5" title="Mark as read">
+                                    <button onclick="fetch('{{ url('/api/notifications/' . $notification->id . '/mark-as-read') }}', {method: 'PATCH'}).then(r => location.reload())" class="inline-flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5" title="Mark as read">
                                         <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M13.8333 4.16667L6 12L2.16667 8.16667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
                                     </button>
                                 @endif
-                                <button onclick="if(confirm('Delete this notification?')) fetch('/api/notifications/{{ $notification->id }}', {method: 'DELETE'}).then(r => location.reload())" class="inline-flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-red-600 dark:hover:text-red-400" title="Delete">
+                                <button onclick="if(confirm('Delete this notification?')) fetch('{{ url('/api/notifications/' . $notification->id) }}', {method: 'DELETE'}).then(r => location.reload())" class="inline-flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-red-600 dark:hover:text-red-400" title="Delete">
                                     <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12.5 3.5L3.5 12.5M3.5 3.5L12.5 12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                     </svg>

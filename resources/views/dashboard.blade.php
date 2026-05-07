@@ -497,7 +497,8 @@
         if (monthFilter) {
             monthFilter.addEventListener('change', function() {
                 const month = this.value;
-                fetch(`/api/dashboard/charts?month=${month}`, {
+                const chartUrl = '{{ url('/api/dashboard/charts') }}';
+                fetch(`${chartUrl}?month=${encodeURIComponent(month)}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

@@ -15,6 +15,10 @@
         <script>window.Auth = { user: {!! json_encode(auth()->user()) !!} };</script>
     @endauth
     <script>
+        window.baseUrl = '{{ url('') }}';
+        window.apiBaseUrl = '{{ url('/api') }}';
+    </script>
+    <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('theme', {
                 init() {

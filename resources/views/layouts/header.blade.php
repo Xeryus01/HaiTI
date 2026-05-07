@@ -54,7 +54,7 @@
             },
             fetchUnreadCount() {
                 const previousCount = this.unreadCount;
-                fetch('/api/notifications/unread-count', {
+                fetch(`${window.apiBaseUrl}/notifications/unread-count`, {
                     credentials: 'same-origin',
                     headers: {
                         'Accept': 'application/json',
@@ -82,7 +82,7 @@
             fetchLatestUnread() {
                 this.loading = true;
                 this.error = null;
-                fetch('/api/notifications/latest-unread', {
+                fetch(`${window.apiBaseUrl}/notifications/latest-unread`, {
                     credentials: 'same-origin',
                     headers: {
                         'Accept': 'application/json',
@@ -104,7 +104,7 @@
                     });
             },
             markAsRead(notification) {
-                fetch(`/api/notifications/${notification.id}/mark-as-read`, {
+                fetch(`${window.apiBaseUrl}/notifications/${notification.id}/mark-as-read`, {
                     method: 'PATCH',
                     credentials: 'same-origin',
                     headers: {
@@ -134,7 +134,7 @@
                 if ('Notification' in window && Notification.permission === 'granted') {
                     new Notification('TimCare - Notifikasi Baru', {
                         body: 'Anda memiliki notifikasi baru',
-                        icon: '/logo/logo.png'
+                        icon: '{{ asset('logo/logo.png') }}'
                     });
                 }
             }

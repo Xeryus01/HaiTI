@@ -99,11 +99,11 @@
                         Back to Notifications
                     </a>
                     @if (!$notification->is_read)
-                        <button onclick="fetch('/api/notifications/{{ $notification->id }}/mark-as-read', {method: 'PATCH'}).then(r => location.reload())" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-2.5 text-center font-medium text-white hover:bg-brand-700">
+                        <button onclick="fetch('{{ url('/api/notifications/' . $notification->id . '/mark-as-read') }}', {method: 'PATCH'}).then(r => location.reload())" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-2.5 text-center font-medium text-white hover:bg-brand-700">
                             Mark as Read
                         </button>
                     @endif
-                    <button onclick="if(confirm('Delete this notification?')) fetch('/api/notifications/{{ $notification->id }}', {method: 'DELETE'}).then(r => window.location.href = '/notifications')" class="inline-flex items-center justify-center rounded-lg border border-red-300 px-5 py-2.5 text-center font-medium text-red-600 hover:bg-red-50 dark:border-red-600/50 dark:text-red-400 dark:hover:bg-red-600/10">
+                    <button onclick="if(confirm('Delete this notification?')) fetch('{{ url('/api/notifications/' . $notification->id) }}', {method: 'DELETE'}).then(r => window.location.href = '{{ url('/notifications') }}')" class="inline-flex items-center justify-center rounded-lg border border-red-300 px-5 py-2.5 text-center font-medium text-red-600 hover:bg-red-50 dark:border-red-600/50 dark:text-red-400 dark:hover:bg-red-600/10">
                         Delete
                     </button>
                 </div>
