@@ -130,6 +130,14 @@ class ReservationViewController extends Controller
             abort(403, 'Hanya Admin yang dapat menugaskan petugas.');
         }
 
+        // Allow users to cancel their own reservations
+        if (isset($data['status']) && $data['status'] === Reservation::STATUS_CANCELLED && $reservation->requester_id === $user->id) {
+            // User is cancelling their own reservation - allow it
+        } elseif (! $user->hasPermissionTo('approve reservations')) {
+            // Regular users cannot change status except to cancel
+            unset($data['status'], $data['zoom_link'], $data['zoom_record_link'], $data['notes'], $data['approver_id']);
+        }
+
         $oldStatus = $reservation->status;
         $data = $request->validated();
         $isApprover = $user->hasPermissionTo('approve reservations');
@@ -166,6 +174,28 @@ class ReservationViewController extends Controller
         $data['operator_needed'] = $request->boolean('operator_needed');
         $data['breakroom_needed'] = $request->boolean('breakroom_needed');
         $data['participants_count'] = $request->input('participants_count', $reservation->participants_count ?? 1);
+
+        // Automatic status changes for reservations
+        if ($isApprover) {
+            // When zoom_link is added by technician
+            if ($request->filled('zoom_link') && empty($reservation->zoom_link)) {
+                $data['status'] = Reservation::STATUS_APPROVED;
+            }
+            // When zoom_record_link is added
+            if ($request->filled('zoom_record_link') && empty($reservation->zoom_record_link)) {
+                $data['status'] = Reservation::STATUS_COMPLETED;
+            }
+        }
+
+        // When approver_id is set by admin (technician assigned)
+        if ($user->hasRole('Admin') && $request->filled('approver_id') && empty($reservation->approver_id)) {
+            $data['status'] = Reservation::STATUS_APPROVED;
+        }
+
+        // When user cancels
+        if (isset($data['status']) && $data['status'] === Reservation::STATUS_CANCELLED) {
+            $data['status'] = Reservation::STATUS_CANCELLED;
+        }
 
         if ($isApprover) {
             $data['approver_id'] = $request->user()->id;

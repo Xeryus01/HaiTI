@@ -152,6 +152,22 @@
                             @enderror
                         </div>
                     @endif
+                @else
+                    <!-- Regular User: Cancel Option Only -->
+                    @if($ticket->status !== \App\Models\Ticket::STATUS_CANCELLED && $ticket->status !== \App\Models\Ticket::STATUS_SOLVED && $ticket->status !== \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES)
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                Aksi
+                            </label>
+                            <select id="status" name="status" class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:border-gray-600 dark:bg-dark-800 dark:text-white dark:focus:border-brand-600 dark:focus:ring-brand-900/20 @error('status') border-red-500 @enderror">
+                                <option value="">-- Pilih Aksi --</option>
+                                <option value="{{ \App\Models\Ticket::STATUS_CANCELLED }}">Batalkan Tiket</option>
+                            </select>
+                            @error('status')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endif
                 @endif
 
                 <!-- Form Actions -->

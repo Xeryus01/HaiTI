@@ -134,8 +134,26 @@ class TicketViewController extends Controller
             abort(403, 'Hanya Admin yang dapat menugaskan petugas.');
         }
 
+        // Allow users to cancel their own tickets
+        if (isset($data['status']) && $data['status'] === Ticket::STATUS_CANCELLED && $ticket->requester_id === $user->id) {
+            // User is cancelling their own ticket - allow it
+        } elseif (isset($data['status']) && ! $user->hasAnyRole(['Admin', 'Teknisi'])) {
+            // Regular users cannot change status except to cancel
+            unset($data['status']);
+        }
+
         $oldStatus = $ticket->status;
         $data = $request->validated();
+
+        // Automatic status changes for tickets
+        if (isset($data['assignee_id']) && $data['assignee_id'] !== null && $ticket->status === Ticket::STATUS_OPEN) {
+            $data['status'] = Ticket::STATUS_ASSIGNED_DETECT;
+        }
+
+        if (isset($data['status']) && $data['status'] === Ticket::STATUS_CANCELLED) {
+            // User is cancelling the ticket
+            $data['status'] = Ticket::STATUS_CANCELLED;
+        }
 
         $ticket->fill($data);
         if (isset($data['status']) && in_array($data['status'], [Ticket::STATUS_SOLVED, Ticket::STATUS_SOLVED_WITH_NOTES], true)) {

@@ -95,6 +95,20 @@
                         @enderror
                     </div>
 
+                    <!-- Cancel Option for Regular Users -->
+                    @if(!auth()->user()->hasPermissionTo('approve reservations') && $reservation->status !== \App\Models\Reservation::STATUS_CANCELLED && $reservation->status !== \App\Models\Reservation::STATUS_COMPLETED && $reservation->status !== \App\Models\Reservation::STATUS_REJECTED)
+                        <div>
+                            <label for="status" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Aksi</label>
+                            <select id="status" name="status" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 dark:border-gray-600 dark:bg-dark-800 dark:text-white @error('status') border-red-500 @enderror">
+                                <option value="">-- Pilih Aksi --</option>
+                                <option value="{{ \App\Models\Reservation::STATUS_CANCELLED }}">Batalkan Pengajuan</option>
+                            </select>
+                            @error('status')
+                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endif
+
                     <div class="flex gap-3 pt-6">
                         <a href="{{ url()->to(route('reservations.show', $reservation)) }}" class="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-center font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Batal</a>
                         <button type="submit" class="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-center font-medium text-white hover:bg-brand-700">Simpan Perubahan</button>
