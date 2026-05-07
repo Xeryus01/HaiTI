@@ -97,13 +97,20 @@
                     </div>
 
                     <!-- Actions -->
-                    <div class="flex gap-4 pt-4">
-                        <button type="submit" class="inline-flex flex-1 items-center justify-center rounded-lg bg-brand-600 px-6 py-2.5 font-medium text-white hover:bg-brand-700 transition" id="submitBtn">
-                            Simpan Perubahan
+                    <div class="grid gap-2 pt-3 sm:grid-cols-3">
+                        <button type="submit" class="w-full inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition" id="submitBtn">
+                            Simpan
                         </button>
-                        <a href="{{ url()->to(route('piket.index')) }}" class="inline-flex flex-1 items-center justify-center rounded-lg border border-gray-300 px-6 py-2.5 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5 transition">
+                        <a href="{{ url()->to(route('piket.index')) }}" class="w-full inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5 transition">
                             Batal
                         </a>
+                        <form method="POST" action="{{ route('piket.destroy', $schedule->week_start_date) }}" class="w-full">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Hapus jadwal piket ini? Tindakan ini tidak dapat dibatalkan.')" class="w-full inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition">
+                                Hapus
+                            </button>
+                        </form>
                     </div>
                 </div>
             </form>

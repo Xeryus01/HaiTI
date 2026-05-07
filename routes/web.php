@@ -74,6 +74,7 @@ Route::get('/dashboard', function () {
         Route::post('admin/piket', [\App\Http\Controllers\PiketScheduleController::class, 'store'])->name('piket.store');
         Route::get('admin/piket/{weekStart}/edit', [\App\Http\Controllers\PiketScheduleController::class, 'edit'])->name('piket.edit');
         Route::put('admin/piket/{weekStart}', [\App\Http\Controllers\PiketScheduleController::class, 'update'])->name('piket.update');
+        Route::delete('admin/piket/{weekStart}', [\App\Http\Controllers\PiketScheduleController::class, 'destroy'])->name('piket.destroy');
     });
 
     // Get current piket schedule (public API)

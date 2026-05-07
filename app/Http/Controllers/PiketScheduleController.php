@@ -59,6 +59,19 @@ class PiketScheduleController extends Controller
         return redirect()->route('piket.index')->with('success', 'Jadwal piket berhasil diperbarui');
     }
 
+    public function destroy($weekStart)
+    {
+        $weekStartDate = \Carbon\Carbon::parse($weekStart)->startOfWeek();
+        $schedule = PiketSchedule::whereDate('week_start_date', $weekStartDate->toDateString())->first();
+
+        if ($schedule) {
+            $schedule->delete();
+            return redirect()->route('piket.index')->with('success', 'Jadwal piket berhasil dihapus');
+        }
+
+        return redirect()->route('piket.index')->with('error', 'Jadwal piket tidak ditemukan');
+    }
+
     // Show create form for new week schedule
     public function create()
     {
