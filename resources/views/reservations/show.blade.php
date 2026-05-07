@@ -6,10 +6,18 @@
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">{{ $reservation->room_name }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $reservation->code }} • {{ $reservation->status_label }}</p>
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
                 <a href="{{ url()->to(route('reservations.index')) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Kembali</a>
                 @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']) || auth()->id() === $reservation->requester_id)
                     <a href="{{ url()->to(route('reservations.edit', $reservation)) }}" class="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">Ubah</a>
+                @endif
+                @if(auth()->id() === $reservation->requester_id && ! in_array($reservation->status, [\App\Models\Reservation::STATUS_CANCELLED, \App\Models\Reservation::STATUS_COMPLETED, \App\Models\Reservation::STATUS_REJECTED]))
+                    <form method="POST" action="{{ route('reservations.update', $reservation) }}" class="inline">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="status" value="{{ \App\Models\Reservation::STATUS_CANCELLED }}" />
+                        <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">Batalkan Pengajuan</button>
+                    </form>
                 @endif
             </div>
         </div>

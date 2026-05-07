@@ -6,10 +6,18 @@
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">{{ $ticket->title }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $ticket->code }} • dibuat {{ $ticket->created_at->format('d/m/Y H:i') }}</p>
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
                 <a href="{{ url()->to(route('tickets.index')) }}" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Kembali</a>
                 @if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']) || auth()->id() === $ticket->requester_id)
                     <a href="{{ url()->to(route('tickets.edit', $ticket)) }}" class="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">Ubah</a>
+                @endif
+                @if(auth()->id() === $ticket->requester_id && ! in_array($ticket->status, [\App\Models\Ticket::STATUS_CANCELLED, \App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES, \App\Models\Ticket::STATUS_REJECTED]))
+                    <form method="POST" action="{{ route('tickets.update', $ticket) }}" class="inline">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="status" value="{{ \App\Models\Ticket::STATUS_CANCELLED }}" />
+                        <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">Batalkan Tiket</button>
+                    </form>
                 @endif
             </div>
         </div>

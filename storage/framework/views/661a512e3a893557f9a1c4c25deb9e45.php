@@ -15,10 +15,18 @@
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl"><?php echo e($ticket->title); ?></h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><?php echo e($ticket->code); ?> • dibuat <?php echo e($ticket->created_at->format('d/m/Y H:i')); ?></p>
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
                 <a href="<?php echo e(url()->to(route('tickets.index'))); ?>" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-white/5">Kembali</a>
                 <?php if(auth()->user()->hasAnyRole(['Admin', 'Teknisi']) || auth()->id() === $ticket->requester_id): ?>
                     <a href="<?php echo e(url()->to(route('tickets.edit', $ticket))); ?>" class="rounded-lg bg-yellow-600 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-700">Ubah</a>
+                <?php endif; ?>
+                <?php if(auth()->id() === $ticket->requester_id && ! in_array($ticket->status, [\App\Models\Ticket::STATUS_CANCELLED, \App\Models\Ticket::STATUS_SOLVED, \App\Models\Ticket::STATUS_SOLVED_WITH_NOTES, \App\Models\Ticket::STATUS_REJECTED])): ?>
+                    <form method="POST" action="<?php echo e(route('tickets.update', $ticket)); ?>" class="inline">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PATCH'); ?>
+                        <input type="hidden" name="status" value="<?php echo e(\App\Models\Ticket::STATUS_CANCELLED); ?>" />
+                        <button type="submit" class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">Batalkan Tiket</button>
+                    </form>
                 <?php endif; ?>
             </div>
         </div>
