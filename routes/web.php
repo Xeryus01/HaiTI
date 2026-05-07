@@ -8,10 +8,11 @@ Route::middleware([\App\Http\Middleware\ContentSecurityPolicy::class])->group(fu
     Route::get('/', function () {
         return view('welcome');
     });
+});
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -77,7 +78,9 @@ Route::middleware([\App\Http\Middleware\ContentSecurityPolicy::class])->group(fu
 
     // Get current piket schedule (public API)
     Route::get('api/piket/current', [\App\Http\Controllers\PiketScheduleController::class, 'show'])->name('api.piket.show');
+
+    // Piket schedule view for technicians (read-only)
+    Route::get('piket', [\App\Http\Controllers\PiketScheduleController::class, 'view'])->name('piket.view')->middleware('role:Teknisi');
 });
 
     require __DIR__.'/auth.php';
-});

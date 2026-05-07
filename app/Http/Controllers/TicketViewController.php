@@ -26,7 +26,12 @@ class TicketViewController extends Controller
 
     public function index(Request $request)
     {
+        $user = $request->user();
         $q = Ticket::query()->with(['requester', 'assignee', 'asset'])->latest();
+
+        if (! $user->hasAnyRole(['Admin', 'Teknisi'])) {
+            $q->where('requester_id', $user->id);
+        }
 
         // allow filtering by status, priority or assignee for all users
         if ($request->filled('status')) {

@@ -21,7 +21,12 @@ class ReservationViewController extends Controller
 
     public function index(Request $request)
     {
+        $user = $request->user();
         $q = Reservation::query()->with(['requester', 'approver']);
+
+        if (! $user->hasAnyRole(['Admin', 'Teknisi'])) {
+            $q->where('requester_id', $user->id);
+        }
 
         if ($request->filled('status')) {
             $q->where('status', $request->input('status'));

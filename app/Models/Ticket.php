@@ -42,8 +42,8 @@ class Ticket extends Model
             self::STATUS_WAITING_PARTS => 'Menunggu Ketersediaan Barang',
             self::STATUS_SOLVED_WITH_NOTES => 'Selesai dengan Catatan',
             self::STATUS_SOLVED => 'Selesai',
-            self::STATUS_REJECTED => 'Batal',
-            self::STATUS_CANCELLED => 'Batal',
+            self::STATUS_REJECTED => 'Ditolak',
+            self::STATUS_CANCELLED => 'Dibatalkan',
         ];
     }
 

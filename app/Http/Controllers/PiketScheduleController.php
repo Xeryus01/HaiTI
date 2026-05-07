@@ -101,6 +101,17 @@ class PiketScheduleController extends Controller
         return redirect()->route('piket.index')->with('success', 'Jadwal piket berhasil ditambahkan');
     }
 
+    // View piket schedule for technicians (read-only)
+    public function view()
+    {
+        // Get all schedules from database, ordered by week_start_date
+        $schedules = PiketSchedule::orderBy('week_start_date', 'asc')->get();
+        
+        $technicians = PiketSchedule::getTechnicians();
+
+        return view('piket.view', compact('schedules', 'technicians'));
+    }
+
     // Show current piket schedule (for display on welcome page)
     public function show()
     {
