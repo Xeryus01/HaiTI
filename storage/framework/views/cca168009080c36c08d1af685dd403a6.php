@@ -15,6 +15,10 @@
         <script>window.Auth = { user: <?php echo json_encode(auth()->user()); ?> };</script>
     <?php endif; ?>
     <script>
+        window.baseUrl = '<?php echo e(url('')); ?>';
+        window.apiBaseUrl = '<?php echo e(url('/api')); ?>';
+    </script>
+    <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('theme', {
                 init() {

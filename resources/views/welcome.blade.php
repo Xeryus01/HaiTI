@@ -82,9 +82,11 @@
                             Ajukan Ruang Zoom
                         </a>
                     @else
-                        <a href="{{ url()->to(route('register')) }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
-                            Mulai Sekarang
-                        </a>
+                        @if (Route::has('register'))
+                            <a href="{{ url()->to(route('register')) }}" class="bg-white text-gray-900 px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-base sm:text-lg">
+                                Mulai Sekarang
+                            </a>
+                        @endif
                         <a href="#features" class="border-2 border-white text-white px-8 sm:px-10 py-3 sm:py-4 rounded-lg font-bold hover:bg-white hover:text-gray-900 transition-colors text-base sm:text-lg">
                             Pelajari Lebih Lanjut
                         </a>
@@ -304,7 +306,9 @@
                 @auth
                     <a href="{{ url()->to(route('tickets.create')) }}" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Ajukan Tiket Sekarang</a>
                 @else
-                    <a href="{{ url()->to(route('register')) }}" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Daftar Akun</a>
+                    @if (Route::has('register'))
+                        <a href="{{ url()->to(route('register')) }}" class="bg-white text-brand-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm sm:text-base">Daftar Akun</a>
+                    @endif
                     <a href="{{ url()->to(route('login')) }}" class="border-2 border-white text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-white hover:text-brand-600 transition-colors text-sm sm:text-base">Masuk</a>
                 @endauth
             </div>
