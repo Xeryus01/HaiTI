@@ -118,6 +118,13 @@ class UserController extends Controller
                 ->with('error', 'Anda tidak dapat menghapus akun sendiri.');
         }
 
+
+        // Hapus semua attachment milik user sebelum hapus user
+        \App\Models\Attachment::where('uploader_id', $user->id)->delete();
+        // Hapus semua log milik user sebelum hapus user
+        \App\Models\Log::where('actor_id', $user->id)->delete();
+        // Hapus semua tiket milik user sebelum hapus user
+        \App\Models\Ticket::where('requester_id', $user->id)->delete();
         $user->delete();
 
         return redirect()->route('users.index')

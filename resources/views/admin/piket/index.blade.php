@@ -59,6 +59,41 @@
             </div>
 
             <div class="h-[650px] w-full" id="piketCalendar"></div>
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold mb-3">Daftar Jadwal Piket</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Minggu Mulai</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Minggu Selesai</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Petugas 1</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Petugas 2</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Petugas 3</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($schedules as $schedule)
+                                    <tr class="bg-white dark:bg-dark-800">
+                                        <td class="px-4 py-2">{{ \Carbon\Carbon::parse($schedule->week_start_date)->format('d M Y') }}</td>
+                                        <td class="px-4 py-2">{{ $schedule->week_end_date ? \Carbon\Carbon::parse($schedule->week_end_date)->format('d M Y') : \Carbon\Carbon::parse($schedule->week_start_date)->endOfWeek()->format('d M Y') }}</td>
+                                        <td class="px-4 py-2">{{ $schedule->technician_1 }}</td>
+                                        <td class="px-4 py-2">{{ $schedule->technician_2 }}</td>
+                                        <td class="px-4 py-2">{{ $schedule->technician_3 }}</td>
+                                        <td class="px-4 py-2">
+                                            <form method="POST" action="{{ route('piket.destroy', $schedule->week_start_date) }}" onsubmit="return confirm('Hapus jadwal piket ini? Tindakan ini tidak dapat dibatalkan.')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded bg-red-600 text-white text-xs font-medium hover:bg-red-700">Hapus</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
         </div>
 
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">

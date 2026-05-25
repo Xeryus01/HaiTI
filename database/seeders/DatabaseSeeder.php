@@ -12,29 +12,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // Roles and permissions first
+            // Only system seeders
             RoleSeeder::class,
             PermissionSeeder::class,
-            
-            // Core data
             UserSeeder::class,
-            AssetSeeder::class,
-            
-            // Main entities
-            TicketSeeder::class,
-            ReservationSeeder::class,
-            
-            // Supporting data
-            TicketCommentSeeder::class,
-            AttachmentSeeder::class,
-            
-            // Scheduling and sequences
-            WeeklyPiketScheduleSeeder::class,
-            CodeSequenceSeeder::class,
-            
-            // Notifications and logs
-            NotificationSeeder::class,
-            LogSeeder::class,
         ]);
     }
 }

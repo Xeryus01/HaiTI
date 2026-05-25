@@ -138,16 +138,10 @@ class SsoController extends Controller
         // redirect to Keycloak logout if configured
         if (!empty($config['url']) && !empty($config['realm'])) {
             $logoutUrl = $this->getBaseUrlWithAuth($config) . '/realms/' . $config['realm'] . '/protocol/openid-connect/logout';
-            $params = [];
-            if (!empty($config['redirect'])) {
-                $params['redirect_uri'] = $config['redirect'];
-            } else {
-                $params['redirect_uri'] = url('/');
-            }
-            if (!empty($config['client_id'])) {
-                $params['client_id'] = $config['client_id'];
-            }
-
+            $params = [
+                'client_id' => $config['client_id'] ?? '',
+                'post_logout_redirect_uri' => $config['redirect'] ?? url('/')
+            ];
             $url = $logoutUrl . '?' . http_build_query($params);
             return redirect()->away($url);
         }

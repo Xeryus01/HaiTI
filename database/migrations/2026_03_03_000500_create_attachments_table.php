@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ticket_id')->nullable()->constrained('tickets')->cascadeOnDelete();
-            $table->foreignId('comment_id')->nullable()->constrained('ticket_comments')->cascadeOnDelete();
-            $table->foreignId('uploader_id')->constrained('users');
+            $table->foreignId('ticket_id')->nullable()->constrained('tickets')->onDelete('cascade');
+            $table->foreignId('comment_id')->nullable()->constrained('ticket_comments')->onDelete('cascade');
+            $table->foreignId('uploader_id')->constrained('users')->onDelete('cascade');
             $table->string('file_path', 255);
             $table->string('file_name', 255);
             $table->string('mime_type', 120)->nullable();

@@ -113,24 +113,25 @@
                         <p class="text-xs font-semibold text-gray-200 uppercase tracking-widest">Tim Piket Hari Ini</p>
                     </div>
                     <div class="flex flex-wrap justify-center gap-2 sm:gap-3 sm:flex-nowrap">
-                        @foreach($piketData as $item)
-                            <?php 
-                                $colors = $colorMap[$item['nama']] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
-                            ?>
-                            <div class="group relative">
-                                <div class="absolute inset-0 bg-gradient-to-r {{ $colors['accent'] }} rounded-md blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
-                                <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-md px-3 py-3 sm:px-4 sm:py-4 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-20 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
-                                    <div class="flex flex-col items-center gap-1.5">
-                                        <div class="h-1.5 w-1.5 {{ $colors['dot'] }} rounded-full"></div>
-                                        <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap">{{ $item['lokasi'] }}</p>
-                                        <p class="text-xs sm:text-sm font-bold text-white whitespace-nowrap">{{ $item['nama'] }}</p>
+                        <div class="flex flex-col items-center gap-4 w-full max-w-xs mx-auto">
+                            @foreach($piketData as $item)
+                                <?php 
+                                    $colors = $colorMap[$item['nama']] ?? ['dot' => 'bg-indigo-400', 'accent' => 'from-indigo-400 to-indigo-500'];
+                                ?>
+                                <div class="group relative w-full">
+                                    <div class="absolute inset-0 bg-gradient-to-r {{ $colors['accent'] }} rounded-md blur opacity-20 group-hover:opacity-40 transition-all duration-300"></div>
+                                    <div class="relative bg-white/5 backdrop-blur-sm border border-white/20 rounded-md px-3 py-3 sm:px-4 sm:py-4 hover:border-white/40 hover:bg-white/10 transition-all duration-300 w-full flex items-center justify-center">
+                                        <div class="flex flex-col items-center gap-1.5 w-full">
+                                            <div class="h-1.5 w-1.5 {{ $colors['dot'] }} rounded-full"></div>
+                                            <p class="text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider whitespace-nowrap">{{ $item['lokasi'] }}</p>
+                                            <p class="text-xs sm:text-sm font-bold text-white text-center w-full truncate" style="max-width: 8.5rem; word-break: break-word; line-height: 1.1;" title="{{ $item['nama'] }}">
+                                                {{ $item['nama'] }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            @if(!$loop->last)
-                                <div class="hidden sm:block w-px h-14 bg-white/20"></div>
-                            @endif
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                     @auth
                         @if(auth()->user()->hasRole('Admin'))
